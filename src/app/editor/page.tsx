@@ -1,10 +1,14 @@
 "use client";
 
-import { useCreateEditor } from "@/components/editor/use-create-editor";
 import RichEditor from "@/components/rich-editor";
 
+import { EditorKit } from "@/components/editor/editor-kit";
+import { usePlateEditor } from "platejs/react";
+
 export default function Page() {
-  const editor = useCreateEditor();
+  const editor = usePlateEditor({
+    plugins: EditorKit,
+  });
 
   return (
     <div className="h-screen w-full" data-registry="plate">

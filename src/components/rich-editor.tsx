@@ -1,4 +1,4 @@
-import { Plate, PlateEditor } from "@udecode/plate/react";
+import { Plate, PlateEditor } from "platejs/react";
 
 import { Editor, EditorContainer } from "@/components/plate-ui/editor";
 

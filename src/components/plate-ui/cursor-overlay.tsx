@@ -1,24 +1,42 @@
 'use client';
 
-import React from 'react';
+import * as React from 'react';
 
-import { cn } from '@udecode/cn';
-import { RangeApi } from '@udecode/plate';
+import { AIChatPlugin } from '@platejs/ai/react';
 import {
   type CursorData,
   type CursorOverlayState,
   useCursorOverlay,
-} from '@udecode/plate-selection/react';
+} from '@platejs/selection/react';
+import { RangeApi } from 'platejs';
+import { usePluginOption } from 'platejs/react';
 
-export function Cursor({
+import { cn } from '@/lib/utils';
+
+export function CursorOverlay() {
+  const { cursors } = useCursorOverlay();
+
+  return (
+    <>
+      {cursors.map((cursor) => (
+        <Cursor key={cursor.id} {...cursor} />
+      ))}
+    </>
+  );
+}
+
+function Cursor({
   id,
   caretPosition,
   data,
   selection,
   selectionRects,
 }: CursorOverlayState<CursorData>) {
+  const streaming = usePluginOption(AIChatPlugin, 'streaming');
   const { style, selectionStyle = style } = data ?? ({} as CursorData);
   const isCursor = RangeApi.isCollapsed(selection);
+
+  if (streaming) return null;
 
   return (
     <>
@@ -47,18 +65,6 @@ export function Cursor({
           style={{ ...caretPosition, ...style }}
         />
       )}
-    </>
-  );
-}
-
-export function CursorOverlay() {
-  const { cursors } = useCursorOverlay();
-
-  return (
-    <>
-      {cursors.map((cursor) => (
-        <Cursor key={cursor.id} {...cursor} />
-      ))}
     </>
   );
 }
