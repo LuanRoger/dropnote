@@ -119,7 +119,7 @@ export function EmojiPicker({
     <div
       className={cn(
         "flex flex-col rounded-xl bg-popover text-popover-foreground",
-        "h-[23rem] w-80 border shadow-md"
+        "h-[23rem] w-80 border shadow-md",
       )}
     >
       <EmojiPickerNavigation
@@ -257,7 +257,7 @@ function EmojiPickerContent({
         ? visibleCategories.get(categoryId)
         : false;
     },
-    [visibleCategories]
+    [visibleCategories],
   );
 
   const EmojiList = React.useCallback(() => {
@@ -344,7 +344,7 @@ function EmojiPickerContent({
         "[&::-webkit-scrollbar]:w-4",
         "[&::-webkit-scrollbar-button]:hidden [&::-webkit-scrollbar-button]:size-0",
         "[&::-webkit-scrollbar-thumb]:min-h-11 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-muted [&::-webkit-scrollbar-thumb]:hover:bg-muted-foreground/25",
-        "[&::-webkit-scrollbar-thumb]:border-4 [&::-webkit-scrollbar-thumb]:border-solid [&::-webkit-scrollbar-thumb]:border-popover [&::-webkit-scrollbar-thumb]:bg-clip-padding"
+        "[&::-webkit-scrollbar-thumb]:border-4 [&::-webkit-scrollbar-thumb]:border-solid [&::-webkit-scrollbar-thumb]:border-popover [&::-webkit-scrollbar-thumb]:bg-clip-padding",
       )}
       data-id="scroll"
     >
@@ -391,7 +391,7 @@ function EmojiPickerSearchAndClear({
     <div className="flex items-center text-foreground">
       <div
         className={cn(
-          "absolute top-1/2 left-2.5 z-10 flex size-5 -translate-y-1/2 items-center justify-center text-foreground"
+          "absolute top-1/2 left-2.5 z-10 flex size-5 -translate-y-1/2 items-center justify-center text-foreground",
         )}
       >
         {emojiSearchIcons.loupe}
@@ -401,7 +401,7 @@ function EmojiPickerSearchAndClear({
           size="icon"
           variant="ghost"
           className={cn(
-            "absolute top-1/2 right-0.5 flex size-8 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border-none bg-transparent text-popover-foreground hover:bg-transparent"
+            "absolute top-1/2 right-0.5 flex size-8 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border-none bg-transparent text-popover-foreground hover:bg-transparent",
           )}
           onClick={clearSearch}
           title={i18n.clear}
@@ -505,7 +505,7 @@ function EmojiPickerNavigation({
                     className={cn(
                       "h-fit rounded-full fill-current p-1.5 text-muted-foreground hover:bg-muted hover:text-muted-foreground",
                       id === focusedCategory &&
-                        "pointer-events-none bg-accent fill-current text-accent-foreground"
+                        "pointer-events-none bg-accent fill-current text-accent-foreground",
                     )}
                     onClick={() => {
                       onClick(id);

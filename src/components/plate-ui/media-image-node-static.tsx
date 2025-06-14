@@ -1,20 +1,20 @@
-import * as React from 'react';
+import * as React from "react";
 
 import type {
   SlateElementProps,
   TCaptionProps,
   TImageElement,
   TResizableProps,
-} from 'platejs';
+} from "platejs";
 
-import { NodeApi, SlateElement } from 'platejs';
+import { NodeApi, SlateElement } from "platejs";
 
-import { cn } from '@/lib/utils';
+import { cn } from "@/lib/utils";
 
 export function ImageElementStatic(
-  props: SlateElementProps<TImageElement & TCaptionProps & TResizableProps>
+  props: SlateElementProps<TImageElement & TCaptionProps & TResizableProps>,
 ) {
-  const { align = 'center', caption, url, width } = props.element;
+  const { align = "center", caption, url, width } = props.element;
 
   return (
     <SlateElement {...props} className="py-2.5">
@@ -25,8 +25,8 @@ export function ImageElementStatic(
         >
           <img
             className={cn(
-              'w-full max-w-full cursor-default object-cover px-0',
-              'rounded-sm'
+              "w-full max-w-full cursor-default object-cover px-0",
+              "rounded-sm",
             )}
             alt={(props.attributes as any).alt}
             src={url}

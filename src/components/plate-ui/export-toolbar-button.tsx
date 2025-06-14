@@ -36,14 +36,14 @@ export function ExportToolbarButton(props: DropdownMenuProps) {
     const canvas = await html2canvas(editor.api.toDOMNode(editor)!, {
       onclone: (document: Document) => {
         const editorElement = document.querySelector(
-          '[contenteditable="true"]'
+          '[contenteditable="true"]',
         );
         if (editorElement) {
           Array.from(editorElement.querySelectorAll("*")).forEach((element) => {
             const existingStyle = element.getAttribute("style") || "";
             element.setAttribute(
               "style",
-              `${existingStyle}; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important`
+              `${existingStyle}; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important`,
             );
           });
         }

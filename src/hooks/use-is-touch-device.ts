@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import * as React from 'react';
+import * as React from "react";
 
 export function useIsTouchDevice() {
   const [isTouchDevice, setIsTouchDevice] = React.useState(false);
@@ -8,17 +8,17 @@ export function useIsTouchDevice() {
   React.useEffect(() => {
     function onResize() {
       setIsTouchDevice(
-        'ontouchstart' in window ||
+        "ontouchstart" in window ||
           navigator.maxTouchPoints > 0 ||
-          navigator.maxTouchPoints > 0
+          navigator.maxTouchPoints > 0,
       );
     }
 
-    window.addEventListener('resize', onResize);
+    window.addEventListener("resize", onResize);
     onResize();
 
     return () => {
-      window.removeEventListener('resize', onResize);
+      window.removeEventListener("resize", onResize);
     };
   }, []);
 

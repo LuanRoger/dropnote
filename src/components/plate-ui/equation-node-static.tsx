@@ -1,15 +1,15 @@
-import * as React from 'react';
+import * as React from "react";
 
-import type { SlateElementProps, TEquationElement } from 'platejs';
+import type { SlateElementProps, TEquationElement } from "platejs";
 
-import { getEquationHtml } from '@platejs/math';
-import { RadicalIcon } from 'lucide-react';
-import { SlateElement } from 'platejs';
+import { getEquationHtml } from "@platejs/math";
+import { RadicalIcon } from "lucide-react";
+import { SlateElement } from "platejs";
 
-import { cn } from '@/lib/utils';
+import { cn } from "@/lib/utils";
 
 export function EquationElementStatic(
-  props: SlateElementProps<TEquationElement>
+  props: SlateElementProps<TEquationElement>,
 ) {
   const { element } = props;
 
@@ -17,12 +17,12 @@ export function EquationElementStatic(
     element,
     options: {
       displayMode: true,
-      errorColor: '#cc0000',
+      errorColor: "#cc0000",
       fleqn: false,
       leqno: false,
-      macros: { '\\f': '#1f(#2)' },
-      output: 'htmlAndMathml',
-      strict: 'warn',
+      macros: { "\\f": "#1f(#2)" },
+      output: "htmlAndMathml",
+      strict: "warn",
       throwOnError: false,
       trust: false,
     },
@@ -32,8 +32,10 @@ export function EquationElementStatic(
     <SlateElement className="my-1" {...props}>
       <div
         className={cn(
-          'group flex items-center justify-center rounded-sm select-none hover:bg-primary/10 data-[selected=true]:bg-primary/10',
-          element.texExpression.length === 0 ? 'bg-muted p-3 pr-9' : 'px-2 py-1'
+          "group flex items-center justify-center rounded-sm select-none hover:bg-primary/10 data-[selected=true]:bg-primary/10",
+          element.texExpression.length === 0
+            ? "bg-muted p-3 pr-9"
+            : "px-2 py-1",
         )}
       >
         {element.texExpression.length > 0 ? (
@@ -55,18 +57,18 @@ export function EquationElementStatic(
 }
 
 export function InlineEquationElementStatic(
-  props: SlateElementProps<TEquationElement>
+  props: SlateElementProps<TEquationElement>,
 ) {
   const html = getEquationHtml({
     element: props.element,
     options: {
       displayMode: true,
-      errorColor: '#cc0000',
+      errorColor: "#cc0000",
       fleqn: false,
       leqno: false,
-      macros: { '\\f': '#1f(#2)' },
-      output: 'htmlAndMathml',
-      strict: 'warn',
+      macros: { "\\f": "#1f(#2)" },
+      output: "htmlAndMathml",
+      strict: "warn",
       throwOnError: false,
       trust: false,
     },
@@ -80,15 +82,15 @@ export function InlineEquationElementStatic(
       <div
         className={cn(
           'after:absolute after:inset-0 after:-top-0.5 after:-left-1 after:z-1 after:h-[calc(100%)+4px] after:w-[calc(100%+8px)] after:rounded-sm after:content-[""]',
-          'h-6',
+          "h-6",
           props.element.texExpression.length === 0 &&
-            'text-muted-foreground after:bg-neutral-500/10'
+            "text-muted-foreground after:bg-neutral-500/10",
         )}
       >
         <span
           className={cn(
-            props.element.texExpression.length === 0 && 'hidden',
-            'font-mono leading-none'
+            props.element.texExpression.length === 0 && "hidden",
+            "font-mono leading-none",
           )}
           dangerouslySetInnerHTML={{ __html: html }}
         />

@@ -32,7 +32,7 @@ const insertList = (editor: PlateEditor, type: string) => {
       indent: 1,
       listStyleType: type,
     }),
-    { select: true }
+    { select: true },
   );
 };
 
@@ -101,7 +101,7 @@ export const insertInlineElement = (editor: PlateEditor, type: string) => {
 const setList = (
   editor: PlateEditor,
   type: string,
-  entry: NodeEntry<TElement>
+  entry: NodeEntry<TElement>,
 ) => {
   editor.tf.setNodes(
     editor.api.create.block({
@@ -110,7 +110,7 @@ const setList = (
     }),
     {
       at: entry[1],
-    }
+    },
   );
 };
 
@@ -127,7 +127,7 @@ const setBlockMap: Record<
 export const setBlockType = (
   editor: PlateEditor,
   type: string,
-  { at }: { at?: Path } = {}
+  { at }: { at?: Path } = {},
 ) => {
   editor.tf.withoutNormalizing(() => {
     const setEntry = (entry: NodeEntry<TElement>) => {

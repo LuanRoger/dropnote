@@ -32,11 +32,11 @@ import { buttonVariants } from "./button";
 import { Separator } from "./separator";
 
 const popoverVariants = cva(
-  "z-50 w-auto rounded-md border bg-popover p-1 text-popover-foreground shadow-md outline-hidden"
+  "z-50 w-auto rounded-md border bg-popover p-1 text-popover-foreground shadow-md outline-hidden",
 );
 
 const inputVariants = cva(
-  "flex h-[28px] w-full rounded-md border-none bg-transparent px-1.5 py-1 text-base placeholder:text-muted-foreground focus-visible:ring-transparent focus-visible:outline-none md:text-sm"
+  "flex h-[28px] w-full rounded-md border-none bg-transparent px-1.5 py-1 text-base placeholder:text-muted-foreground focus-visible:ring-transparent focus-visible:outline-none md:text-sm",
 );
 
 export function LinkFloatingToolbar({
@@ -47,7 +47,7 @@ export function LinkFloatingToolbar({
   const activeCommentId = usePluginOption({ key: KEYS.comment }, "activeId");
   const activeSuggestionId = usePluginOption(
     { key: KEYS.suggestion },
-    "activeId"
+    "activeId",
   );
 
   const floatingOptions: UseVirtualFloatingOptions = React.useMemo(() => {
@@ -185,7 +185,7 @@ function LinkOpenButton() {
       return getLinkAttributes(editor, element);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [editor, selection]
+    [editor, selection],
   );
 
   return (

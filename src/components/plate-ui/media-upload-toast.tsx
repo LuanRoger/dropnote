@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import * as React from 'react';
+import * as React from "react";
 
-import { PlaceholderPlugin, UploadErrorCode } from '@platejs/media/react';
-import { usePluginOption } from 'platejs/react';
-import { toast } from 'sonner';
+import { PlaceholderPlugin, UploadErrorCode } from "@platejs/media/react";
+import { usePluginOption } from "platejs/react";
+import { toast } from "sonner";
 
 export function MediaUploadToast() {
   useUploadErrorToast();
@@ -13,7 +13,7 @@ export function MediaUploadToast() {
 }
 
 const useUploadErrorToast = () => {
-  const uploadError = usePluginOption(PlaceholderPlugin, 'error');
+  const uploadError = usePluginOption(PlaceholderPlugin, "error");
 
   React.useEffect(() => {
     if (!uploadError) return;
@@ -25,7 +25,7 @@ const useUploadErrorToast = () => {
         toast.error(
           `The size of files ${data.files
             .map((f) => f.name)
-            .join(', ')} is invalid`
+            .join(", ")} is invalid`,
         );
 
         break;
@@ -34,7 +34,7 @@ const useUploadErrorToast = () => {
         toast.error(
           `The type of files ${data.files
             .map((f) => f.name)
-            .join(', ')} is invalid`
+            .join(", ")} is invalid`,
         );
 
         break;
@@ -43,14 +43,14 @@ const useUploadErrorToast = () => {
         toast.error(
           `The size of files ${data.files
             .map((f) => f.name)
-            .join(', ')} is too large than ${data.maxFileSize}`
+            .join(", ")} is too large than ${data.maxFileSize}`,
         );
 
         break;
       }
       case UploadErrorCode.TOO_LESS_FILES: {
         toast.error(
-          `The mini um number of files is ${data.minFileCount} for ${data.fileType}`
+          `The mini um number of files is ${data.minFileCount} for ${data.fileType}`,
         );
 
         break;
@@ -58,8 +58,8 @@ const useUploadErrorToast = () => {
       case UploadErrorCode.TOO_MANY_FILES: {
         toast.error(
           `The maximum number of files is ${data.maxFileCount} ${
-            data.fileType ? `for ${data.fileType}` : ''
-          }`
+            data.fileType ? `for ${data.fileType}` : ""
+          }`,
         );
 
         break;

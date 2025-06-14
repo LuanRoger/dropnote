@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import type { LucideProps } from 'lucide-react';
+import type { LucideProps } from "lucide-react";
 
 export function BorderAllIcon(props: LucideProps) {
   return (

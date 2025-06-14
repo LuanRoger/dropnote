@@ -84,12 +84,12 @@ const toolbarButtonVariants = cva(
           "border border-input bg-transparent shadow-xs hover:bg-accent hover:text-accent-foreground",
       },
     },
-  }
+  },
 );
 
 const dropdownArrowVariants = cva(
   cn(
-    "inline-flex items-center justify-center rounded-r-md text-sm font-medium text-foreground transition-colors disabled:pointer-events-none disabled:opacity-50"
+    "inline-flex items-center justify-center rounded-r-md text-sm font-medium text-foreground transition-colors disabled:pointer-events-none disabled:opacity-50",
   ),
   {
     defaultVariants: {
@@ -109,7 +109,7 @@ const dropdownArrowVariants = cva(
           "border border-l-0 border-input bg-transparent hover:bg-accent hover:text-accent-foreground",
       },
     },
-  }
+  },
 );
 
 type ToolbarButtonProps = {
@@ -139,7 +139,7 @@ export const ToolbarButton = withTooltip(function ToolbarButton({
             variant,
           }),
           isDropdown && "justify-between gap-1 pr-1",
-          className
+          className,
         )}
         value={pressed ? "single" : ""}
         {...props}
@@ -169,7 +169,7 @@ export const ToolbarButton = withTooltip(function ToolbarButton({
           variant,
         }),
         isDropdown && "pr-1",
-        className
+        className,
       )}
       {...props}
     >
@@ -212,7 +212,7 @@ export function ToolbarSplitButtonPrimary({
         }),
         "rounded-r-none",
         "group-data-[pressed=true]:bg-accent group-data-[pressed=true]:text-accent-foreground",
-        className
+        className,
       )}
       {...props}
     >
@@ -236,7 +236,7 @@ export function ToolbarSplitButtonSecondary({
           variant,
         }),
         "group-data-[pressed=true]:bg-accent group-data-[pressed=true]:text-accent-foreground",
-        className
+        className,
       )}
       onClick={(e) => e.stopPropagation()}
       role="button"
@@ -271,7 +271,7 @@ export function ToolbarGroup({
       className={cn(
         "group/toolbar-group",
         "relative hidden has-[button]:flex",
-        className
+        className,
       )}
     >
       <div className="flex items-center">{children}</div>
@@ -340,7 +340,7 @@ function TooltipContent({
       <TooltipPrimitive.Content
         className={cn(
           "z-50 w-fit origin-(--radix-tooltip-content-transform-origin) rounded-md bg-primary px-3 py-1.5 text-xs text-balance text-primary-foreground",
-          className
+          className,
         )}
         data-slot="tooltip-content"
         sideOffset={sideOffset}
@@ -365,7 +365,7 @@ export function ToolbarMenuGroup({
       <DropdownMenuSeparator
         className={cn(
           "hidden",
-          "mb-0 shrink-0 peer-has-[[role=menuitem]]/menu-group:block peer-has-[[role=menuitemradio]]/menu-group:block peer-has-[[role=option]]/menu-group:block"
+          "mb-0 shrink-0 peer-has-[[role=menuitem]]/menu-group:block peer-has-[[role=menuitemradio]]/menu-group:block peer-has-[[role=option]]/menu-group:block",
         )}
       />
 
@@ -374,7 +374,7 @@ export function ToolbarMenuGroup({
         className={cn(
           "hidden",
           "peer/menu-group group/menu-group my-1.5 has-[[role=menuitem]]:block has-[[role=menuitemradio]]:block has-[[role=option]]:block",
-          className
+          className,
         )}
       >
         {label && (

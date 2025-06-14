@@ -55,7 +55,7 @@ export function EquationElement(props: PlateElementProps<TEquationElement>) {
               "group flex cursor-pointer items-center justify-center rounded-sm select-none hover:bg-primary/10 data-[selected=true]:bg-primary/10",
               props.element.texExpression.length === 0
                 ? "bg-muted p-3 pr-9"
-                : "px-2 py-1"
+                : "px-2 py-1",
             )}
             data-selected={selected}
             contentEditable={false}
@@ -86,14 +86,14 @@ export function EquationElement(props: PlateElementProps<TEquationElement>) {
 }
 
 export function InlineEquationElement(
-  props: PlateElementProps<TEquationElement>
+  props: PlateElementProps<TEquationElement>,
 ) {
   const element = props.element;
   const katexRef = React.useRef<HTMLDivElement | null>(null);
   const selected = useSelected();
   const isCollapsed = useEditorSelector(
     (editor) => editor.api.isCollapsed(),
-    []
+    [],
   );
   const [open, setOpen] = React.useState(selected && isCollapsed);
 
@@ -123,7 +123,7 @@ export function InlineEquationElement(
     <PlateElement
       {...props}
       className={cn(
-        "mx-1 inline-block rounded-sm select-none [&_.katex-display]:my-0!"
+        "mx-1 inline-block rounded-sm select-none [&_.katex-display]:my-0!",
       )}
     >
       <Popover open={open} onOpenChange={setOpen} modal={false}>
@@ -135,7 +135,7 @@ export function InlineEquationElement(
               ((element.texExpression.length > 0 && open) || selected) &&
                 "after:bg-brand/15",
               element.texExpression.length === 0 &&
-                "text-muted-foreground after:bg-neutral-500/10"
+                "text-muted-foreground after:bg-neutral-500/10",
             )}
             contentEditable={false}
           >
@@ -143,7 +143,7 @@ export function InlineEquationElement(
               ref={katexRef}
               className={cn(
                 element.texExpression.length === 0 && "hidden",
-                "font-mono leading-none"
+                "font-mono leading-none",
               )}
             />
             {element.texExpression.length === 0 && (

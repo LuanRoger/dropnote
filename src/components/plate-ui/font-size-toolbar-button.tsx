@@ -94,7 +94,7 @@ export function FontSizeToolbarButton() {
         <PopoverTrigger asChild>
           <input
             className={cn(
-              "h-full w-10 shrink-0 bg-transparent px-1 text-center text-sm hover:bg-muted"
+              "h-full w-10 shrink-0 bg-transparent px-1 text-center text-sm hover:bg-muted",
             )}
             value={displayValue}
             onBlur={() => {
@@ -124,7 +124,7 @@ export function FontSizeToolbarButton() {
             <button
               key={size}
               className={cn(
-                "flex h-8 w-full items-center justify-center text-sm hover:bg-accent data-[highlighted=true]:bg-accent"
+                "flex h-8 w-full items-center justify-center text-sm hover:bg-accent data-[highlighted=true]:bg-accent",
               )}
               onClick={() => {
                 tf.fontSize.addMark(`${size}px`);

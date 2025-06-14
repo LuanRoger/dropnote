@@ -1,22 +1,22 @@
-'use client';
+"use client";
 
-import React from 'react';
+import React from "react";
 
-import type { TListElement } from 'platejs';
+import type { TListElement } from "platejs";
 
-import { isOrderedList } from '@platejs/list';
+import { isOrderedList } from "@platejs/list";
 import {
   useTodoListElement,
   useTodoListElementState,
-} from '@platejs/list/react';
+} from "@platejs/list/react";
 import {
   type PlateElementProps,
   type RenderNodeWrapper,
   useReadOnly,
-} from 'platejs/react';
+} from "platejs/react";
 
-import { Checkbox } from './checkbox';
-import { cn } from '@/lib/utils';
+import { Checkbox } from "./checkbox";
+import { cn } from "@/lib/utils";
 
 const config: Record<
   string,
@@ -40,7 +40,7 @@ export const BlockList: RenderNodeWrapper = (props) => {
 function List(props: PlateElementProps) {
   const { listStart, listStyleType } = props.element as TListElement;
   const { Li, Marker } = config[listStyleType] ?? {};
-  const List = isOrderedList(props.element) ? 'ol' : 'ul';
+  const List = isOrderedList(props.element) ? "ol" : "ul";
 
   return (
     <List
@@ -63,8 +63,8 @@ function TodoMarker(props: PlateElementProps) {
     <div contentEditable={false}>
       <Checkbox
         className={cn(
-          'absolute top-1 -left-6',
-          readOnly && 'pointer-events-none'
+          "absolute top-1 -left-6",
+          readOnly && "pointer-events-none",
         )}
         {...checkboxProps}
       />
@@ -76,9 +76,9 @@ function TodoLi(props: PlateElementProps) {
   return (
     <li
       className={cn(
-        'list-none',
+        "list-none",
         (props.element.checked as boolean) &&
-          'text-muted-foreground line-through'
+          "text-muted-foreground line-through",
       )}
     >
       {props.children}
