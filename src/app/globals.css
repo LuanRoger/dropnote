@@ -45,6 +45,9 @@
   --radius-xl: calc(var(--radius) + 4px);
   --color-highlight: var(--highlight);
   --color-brand: var(--brand);
+
+  --font-geist-sans: var(--font-geist-sans);
+  --font-geist-mono: var(--font-geist-mono);
 }
 
 :root {
@@ -125,6 +128,9 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-geist-sans;
+  }
+  code {
+    @apply font-geist-mono;
   }
 }
