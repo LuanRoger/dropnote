@@ -37,7 +37,6 @@ import {
 } from "./list-toolbar-button";
 import { MarkToolbarButton } from "./mark-toolbar-button";
 import { MediaToolbarButton } from "./media-toolbar-button";
-import { ModeToolbarButton } from "./mode-toolbar-button";
 import { MoreToolbarButton } from "./more-toolbar-button";
 import { TableToolbarButton } from "./table-toolbar-button";
 import { ToggleToolbarButton } from "./toggle-toolbar-button";
@@ -149,10 +148,6 @@ export function FixedToolbarButtons() {
         <MarkToolbarButton nodeType={KEYS.highlight} tooltip="Highlight">
           <HighlighterIcon />
         </MarkToolbarButton>
-      </ToolbarGroup>
-
-      <ToolbarGroup>
-        <ModeToolbarButton />
       </ToolbarGroup>
     </div>
   );
