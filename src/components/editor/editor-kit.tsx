@@ -12,8 +12,6 @@ import { BlockPlaceholderKit } from "@/components/editor/plugins/block-placehold
 import { CalloutKit } from "@/components/editor/plugins/callout-kit";
 import { CodeBlockKit } from "@/components/editor/plugins/code-block-kit";
 import { ColumnKit } from "@/components/editor/plugins/column-kit";
-import { CommentKit } from "@/components/editor/plugins/comment-kit";
-import { CopilotKit } from "@/components/editor/plugins/copilot-kit";
 import { CursorOverlayKit } from "@/components/editor/plugins/cursor-overlay-kit";
 import { DateKit } from "@/components/editor/plugins/date-kit";
 import { DndKit } from "@/components/editor/plugins/dnd-kit";
@@ -29,15 +27,12 @@ import { ListKit } from "@/components/editor/plugins/list-kit";
 import { MarkdownKit } from "@/components/editor/plugins/markdown-kit";
 import { MathKit } from "@/components/editor/plugins/math-kit";
 import { MediaKit } from "@/components/editor/plugins/media-kit";
-import { MentionKit } from "@/components/editor/plugins/mention-kit";
 import { SlashKit } from "@/components/editor/plugins/slash-kit";
 import { TableKit } from "@/components/editor/plugins/table-kit";
 import { TocKit } from "@/components/editor/plugins/toc-kit";
 import { ToggleKit } from "@/components/editor/plugins/toggle-kit";
 
 export const EditorKit = [
-  ...CopilotKit,
-
   // Elements
   ...BasicBlocksKit,
   ...CodeBlockKit,
@@ -50,7 +45,6 @@ export const EditorKit = [
   ...MathKit,
   ...DateKit,
   ...LinkKit,
-  ...MentionKit,
 
   // Marks
   ...BasicMarksKit,
@@ -60,9 +54,6 @@ export const EditorKit = [
   ...ListKit,
   ...AlignKit,
   ...LineHeightKit,
-
-  // Collaboration
-  ...CommentKit,
 
   // Editing
   ...SlashKit,
