@@ -6,7 +6,7 @@ import { getEquationHtml } from "@platejs/math";
 import { RadicalIcon } from "lucide-react";
 import { SlateElement } from "platejs";
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/tailwind";
 
 export function EquationElementStatic(
   props: SlateElementProps<TEquationElement>,

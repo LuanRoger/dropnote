@@ -14,7 +14,7 @@ import {
 } from "./dropdown-menu";
 import { Separator } from "./separator";
 import { Tooltip, TooltipTrigger } from "./tooltip";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/tailwind";
 
 export function Toolbar({
   className,

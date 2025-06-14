@@ -16,7 +16,7 @@ import {
 } from "platejs/react";
 
 import { Checkbox } from "./checkbox";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/tailwind";
 
 const config: Record<
   string,

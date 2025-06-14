@@ -25,7 +25,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "./tooltip";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/tailwind";
 
 import { ToolbarButton, ToolbarMenuGroup } from "./toolbar";
 

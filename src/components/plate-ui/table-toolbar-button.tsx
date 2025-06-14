@@ -30,7 +30,7 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "./dropdown-menu";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/tailwind";
 
 import { ToolbarButton } from "./toolbar";
 

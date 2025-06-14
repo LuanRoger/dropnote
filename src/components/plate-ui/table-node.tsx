@@ -70,7 +70,7 @@ import {
   DropdownMenuTrigger,
 } from "./dropdown-menu";
 import { Popover, PopoverContent } from "./popover";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/tailwind";
 
 import { blockSelectionVariants } from "./block-selection";
 import {

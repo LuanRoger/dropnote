@@ -9,7 +9,7 @@ import type {
 import { BaseTablePlugin } from "@platejs/table";
 import { SlateElement } from "platejs";
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/tailwind";
 
 export function TableElementStatic({
   children,

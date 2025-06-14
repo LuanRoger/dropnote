@@ -23,7 +23,7 @@ import {
 
 import { Button } from "./button";
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/tailwind";
 
 export function EquationElement(props: PlateElementProps<TEquationElement>) {
   const selected = useSelected();

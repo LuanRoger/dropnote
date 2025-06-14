@@ -9,7 +9,7 @@ import type {
 
 import { NodeApi, SlateElement } from "platejs";
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/tailwind";
 
 export function ImageElementStatic(
   props: SlateElementProps<TImageElement & TCaptionProps & TResizableProps>,

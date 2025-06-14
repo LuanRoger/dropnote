@@ -4,7 +4,7 @@ import type { SlateElementProps } from "platejs";
 
 import { SlateElement } from "platejs";
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/tailwind";
 
 export function CalloutElementStatic({
   children,

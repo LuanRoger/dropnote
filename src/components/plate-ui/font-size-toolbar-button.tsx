@@ -11,7 +11,7 @@ import { KEYS } from "platejs";
 import { useEditorPlugin, useEditorSelector } from "platejs/react";
 
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/tailwind";
 
 import { ToolbarButton } from "./toolbar";
 
