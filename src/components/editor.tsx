@@ -10,17 +10,20 @@ import {
   EditorStateProvider,
 } from "@/contexts/editor-state";
 import { EDITOR_DEBOUNCE_TIME_MS } from "@/constants";
+import LoadingSpinner from "./loading-spinner";
 
 interface EditorProps {
   code: string;
   initialValue?: any[];
   readOnly?: boolean;
+  noSave?: boolean;
 }
 
 export default function Editor({
   code,
   initialValue,
   readOnly = false,
+  noSave = false,
 }: EditorProps) {
   const editor = usePlateEditor({
     plugins: EditorKit,
@@ -29,9 +32,13 @@ export default function Editor({
 
   return (
     <Plate editor={editor} readOnly={readOnly}>
-      <EditorStateProvider>
-        <RichEditorShell code={code} />
-      </EditorStateProvider>
+      {noSave ? (
+        <RichEditorEmpty />
+      ) : (
+        <EditorStateProvider>
+          <RichEditorShell code={code} />
+        </EditorStateProvider>
+      )}
     </Plate>
   );
 }
@@ -39,7 +46,7 @@ export default function Editor({
 function RichEditorShell({ code }: { code: string }) {
   const noteBody = useEditorSelector((editor) => editor.children, []);
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
-  const { setIsSaving } = useContext(EditorStateContext);
+  const { isSaving, setIsSaving } = useContext(EditorStateContext);
 
   const debouncedSave = useCallback(
     (code: string, noteBody: any[]) => {
@@ -68,5 +75,14 @@ function RichEditorShell({ code }: { code: string }) {
     };
   }, [noteBody, code, debouncedSave]);
 
-  return <RichEditor className="h-full" />;
+  return <RichEditorEmpty isLoading={isSaving} />;
+}
+
+function RichEditorEmpty({ isLoading }: { isLoading?: boolean }) {
+  return (
+    <div className="relative size-full">
+      <LoadingSpinner className="absolute right-10 bottom-10" />
+      <RichEditor />
+    </div>
+  );
 }

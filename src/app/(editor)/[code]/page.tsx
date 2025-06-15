@@ -1,4 +1,4 @@
-import { ensureCreated } from "../actions/notes";
+import { ensureCreated } from "../../actions/notes";
 import Editor from "@/components/editor";
 
 export default async function Page({
@@ -11,9 +11,5 @@ export default async function Page({
   const note = await ensureCreated(code);
   const body = note?.body;
 
-  return (
-    <div className="h-screen" data-registry="plate">
-      <Editor code={code} initialValue={body} />
-    </div>
-  );
+  return <Editor code={code} initialValue={body} />;
 }
