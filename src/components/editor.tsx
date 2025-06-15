@@ -3,7 +3,7 @@
 import { Plate, useEditorSelector, usePlateEditor } from "platejs/react";
 import { EditorKit } from "./editor/editor-kit";
 import RichEditor from "./rich-editor";
-import { createNote } from "@/app/actions/notes";
+import { updateNoteByCode } from "@/app/actions/notes";
 import { useCallback, useContext, useEffect, useRef } from "react";
 import {
   EditorStateContext,
@@ -48,7 +48,7 @@ function RichEditorShell({ code }: { code: string }) {
 
       debounceRef.current = setTimeout(async () => {
         setIsSaving(true);
-        await createNote(code, noteBody);
+        await updateNoteByCode(code, noteBody);
         setIsSaving(false);
       }, 1000);
     },
