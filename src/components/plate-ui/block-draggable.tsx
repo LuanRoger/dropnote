@@ -5,11 +5,22 @@ import * as React from "react";
 import { useDraggable, useDropLine } from "@platejs/dnd";
 import { BlockSelectionPlugin } from "@platejs/selection/react";
 import { GripVertical } from "lucide-react";
-import { getContainerTypes, isType, KEYS } from "platejs";
+import {
+  BasePluginContext,
+  getContainerTypes,
+  isType,
+  KEYS,
+  Path,
+  PluginConfig,
+  RenderElementProps,
+  TElement,
+} from "platejs";
 import {
   type PlateElementProps,
   type RenderNodeWrapper,
+  EditorPlatePlugin,
   MemoizedChildren,
+  PlateEditor,
   useEditorRef,
   useElement,
   usePath,
@@ -60,7 +71,19 @@ export const BlockDraggable: RenderNodeWrapper = (props) => {
 
   if (!enabled) return;
 
-  return (props) => <Draggable {...props} />;
+  const DraggableWrapper = (
+    props: React.JSX.IntrinsicAttributes &
+      BasePluginContext<PluginConfig> & {
+        editor: PlateEditor;
+        plugin: EditorPlatePlugin<PluginConfig>;
+      } & { ref?: any } & RenderElementProps<TElement> & { path: Path } & {
+        className?: string;
+        style?: React.CSSProperties;
+      },
+  ) => <Draggable {...props} />;
+  DraggableWrapper.displayName = "DraggableWrapper";
+
+  return DraggableWrapper;
 };
 
 export function Draggable(props: PlateElementProps) {

@@ -2,7 +2,14 @@
 
 import React from "react";
 
-import type { TListElement } from "platejs";
+import type {
+  BasePluginContext,
+  Path,
+  PluginConfig,
+  RenderElementProps,
+  TElement,
+  TListElement,
+} from "platejs";
 
 import { isOrderedList } from "@platejs/list";
 import {
@@ -10,6 +17,8 @@ import {
   useTodoListElementState,
 } from "@platejs/list/react";
 import {
+  EditorPlatePlugin,
+  PlateEditor,
   type PlateElementProps,
   type RenderNodeWrapper,
   useReadOnly,
@@ -34,7 +43,18 @@ const config: Record<
 export const BlockList: RenderNodeWrapper = (props) => {
   if (!props.element.listStyleType) return;
 
-  return (props) => <List {...props} />;
+  const BlockListComponent = (
+    props: React.JSX.IntrinsicAttributes &
+      BasePluginContext<PluginConfig> & {
+        editor: PlateEditor;
+        plugin: EditorPlatePlugin<PluginConfig>;
+      } & { ref?: any } & RenderElementProps<TElement> & { path: Path } & {
+        className?: string;
+        style?: React.CSSProperties;
+      },
+  ) => <List {...props} />;
+  BlockListComponent.displayName = "BlockListComponent";
+  return BlockListComponent;
 };
 
 function List(props: PlateElementProps) {

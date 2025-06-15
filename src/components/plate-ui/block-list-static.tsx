@@ -1,8 +1,15 @@
 import * as React from "react";
 
 import type {
+  AnyObject,
+  BasePluginContext,
+  EditorPlugin,
+  PluginConfig,
+  RenderElementProps,
   RenderStaticNodeWrapper,
+  SlateEditor,
   SlateRenderElementProps,
+  TElement,
   TListElement,
 } from "platejs";
 
@@ -27,7 +34,19 @@ const config: Record<
 export const BlockListStatic: RenderStaticNodeWrapper = (props) => {
   if (!props.element.listStyleType) return;
 
-  return (props) => <List {...props} />;
+  const ListWrapper = (
+    props: React.JSX.IntrinsicAttributes &
+      BasePluginContext<PluginConfig<any, object, object, object, object>> & {
+        editor: SlateEditor;
+        plugin: EditorPlugin<PluginConfig<any, object, object, object, object>>;
+      } & {
+        attributes?: AnyObject;
+        className?: string;
+        nodeProps?: AnyObject;
+      } & RenderElementProps<TElement>,
+  ) => <List {...props} />;
+  ListWrapper.displayName = "ListWrapper";
+  return ListWrapper;
 };
 
 function List(props: SlateRenderElementProps) {
