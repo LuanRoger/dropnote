@@ -3,7 +3,6 @@
 import * as React from "react";
 
 import {
-  ArrowUpToLineIcon,
   BaselineIcon,
   BoldIcon,
   Code2Icon,
@@ -19,7 +18,6 @@ import { AlignToolbarButton } from "./align-toolbar-button";
 import { ExportToolbarButton } from "./export-toolbar-button";
 import { FontColorToolbarButton } from "./font-color-toolbar-button";
 import { RedoToolbarButton, UndoToolbarButton } from "./history-toolbar-button";
-import { ImportToolbarButton } from "./import-toolbar-button";
 import {
   IndentToolbarButton,
   OutdentToolbarButton,
@@ -126,11 +124,7 @@ export function FixedToolbarButtons() {
       <div className="grow" />
 
       <ToolbarGroup>
-        <ExportToolbarButton>
-          <ArrowUpToLineIcon />
-        </ExportToolbarButton>
-
-        <ImportToolbarButton />
+        <ExportToolbarButton />
       </ToolbarGroup>
     </div>
   );

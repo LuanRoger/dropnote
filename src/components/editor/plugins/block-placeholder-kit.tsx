@@ -9,7 +9,11 @@ export const BlockPlaceholderKit = [
       className:
         "before:absolute before:cursor-text before:opacity-30 before:content-[attr(placeholder)]",
       placeholders: {
-        [KEYS.p]: "Type something...",
+        [KEYS.p]: "Start typing or type '/' for commands",
+        [KEYS.h1]: "Heading 1",
+        [KEYS.h2]: "Heading 2",
+        [KEYS.h3]: "Heading 3",
+        [KEYS.h4]: "Heading 4",
       },
       query: ({ path }) => {
         return path.length === 1;
