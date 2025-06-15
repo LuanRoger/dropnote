@@ -81,7 +81,10 @@ function RichEditorShell({ code }: { code: string }) {
 function RichEditorEmpty({ isLoading }: { isLoading?: boolean }) {
   return (
     <div className="relative size-full">
-      <LoadingSpinner className="absolute right-10 bottom-10" />
+      <LoadingSpinner
+        className="absolute right-10 bottom-10"
+        show={isLoading}
+      />
       <RichEditor />
     </div>
   );
