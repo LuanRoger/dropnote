@@ -1,7 +1,7 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import { Form, FormControl, FormField, FormItem } from "./ui/form";
+import { Form, FormControl, FormField, FormItem, FormMessage } from "./ui/form";
 import {
   navigateToPageSchema,
   NavigateToPageSchema,
@@ -38,10 +38,13 @@ export default function NavigateToPageForm() {
               <FormControl>
                 <Input placeholder="some-slug" className="h-full" {...field} />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
-        <Button type="submit" className="h-full">Go</Button>
+        <Button type="submit" className="h-full">
+          Go
+        </Button>
       </form>
     </Form>
   );
