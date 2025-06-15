@@ -85,7 +85,7 @@ function RichEditorEmpty({ isLoading }: { isLoading?: boolean }) {
         className="absolute right-10 bottom-10"
         show={isLoading}
       />
-      <RichEditor />
+      <RichEditor className="scrollbar-hide" />
     </div>
   );
 }

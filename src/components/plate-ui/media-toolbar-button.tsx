@@ -4,13 +4,7 @@ import * as React from "react";
 
 import type { DropdownMenuProps } from "@radix-ui/react-dropdown-menu";
 
-import {
-  AudioLinesIcon,
-  FileUpIcon,
-  FilmIcon,
-  ImageIcon,
-  LinkIcon,
-} from "lucide-react";
+import { FilmIcon, ImageIcon } from "lucide-react";
 import { isUrl, KEYS } from "platejs";
 import { useEditorRef } from "platejs/react";
 import { toast } from "sonner";
@@ -25,20 +19,9 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "./alert-dialog";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "./dropdown-menu";
 import { Input } from "./input";
 
-import {
-  ToolbarSplitButton,
-  ToolbarSplitButtonPrimary,
-  ToolbarSplitButtonSecondary,
-} from "./toolbar";
+import { ToolbarSplitButton, ToolbarSplitButtonPrimary } from "./toolbar";
 
 const MEDIA_CONFIG: Record<
   string,
@@ -49,18 +32,6 @@ const MEDIA_CONFIG: Record<
     tooltip: string;
   }
 > = {
-  [KEYS.audio]: {
-    accept: ["audio/*"],
-    icon: <AudioLinesIcon className="size-4" />,
-    title: "Insert Audio",
-    tooltip: "Audio",
-  },
-  [KEYS.file]: {
-    accept: ["*"],
-    icon: <FileUpIcon className="size-4" />,
-    title: "Insert File",
-    tooltip: "File",
-  },
   [KEYS.img]: {
     accept: ["image/*"],
     icon: <ImageIcon className="size-4" />,
@@ -77,7 +48,6 @@ const MEDIA_CONFIG: Record<
 
 export function MediaToolbarButton({
   nodeType,
-  ...props
 }: DropdownMenuProps & { nodeType: string }) {
   const currentConfig = MEDIA_CONFIG[nodeType];
 
@@ -87,6 +57,8 @@ export function MediaToolbarButton({
   return (
     <>
       <ToolbarSplitButton
+        onClick={() => setDialogOpen(true)}
+        tooltip={currentConfig.tooltip}
         onKeyDown={(e) => {
           if (e.key === "ArrowDown") {
             e.preventDefault();
@@ -98,30 +70,6 @@ export function MediaToolbarButton({
         <ToolbarSplitButtonPrimary>
           {currentConfig.icon}
         </ToolbarSplitButtonPrimary>
-
-        <DropdownMenu
-          open={open}
-          onOpenChange={setOpen}
-          modal={false}
-          {...props}
-        >
-          <DropdownMenuTrigger asChild>
-            <ToolbarSplitButtonSecondary />
-          </DropdownMenuTrigger>
-
-          <DropdownMenuContent
-            onClick={(e) => e.stopPropagation()}
-            align="start"
-            alignOffset={-32}
-          >
-            <DropdownMenuGroup>
-              <DropdownMenuItem onSelect={() => setDialogOpen(true)}>
-                <LinkIcon />
-                Insert via URL
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-          </DropdownMenuContent>
-        </DropdownMenu>
       </ToolbarSplitButton>
 
       <AlertDialog

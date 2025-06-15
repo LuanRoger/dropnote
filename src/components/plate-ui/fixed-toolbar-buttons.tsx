@@ -7,7 +7,6 @@ import {
   BaselineIcon,
   BoldIcon,
   Code2Icon,
-  HighlighterIcon,
   ItalicIcon,
   PaintBucketIcon,
   StrikethroughIcon,
@@ -17,10 +16,8 @@ import { KEYS } from "platejs";
 import { useEditorReadOnly } from "platejs/react";
 
 import { AlignToolbarButton } from "./align-toolbar-button";
-import { EmojiToolbarButton } from "./emoji-toolbar-button";
 import { ExportToolbarButton } from "./export-toolbar-button";
 import { FontColorToolbarButton } from "./font-color-toolbar-button";
-import { FontSizeToolbarButton } from "./font-size-toolbar-button";
 import { RedoToolbarButton, UndoToolbarButton } from "./history-toolbar-button";
 import { ImportToolbarButton } from "./import-toolbar-button";
 import {
@@ -28,8 +25,6 @@ import {
   OutdentToolbarButton,
 } from "./indent-toolbar-button";
 import { InsertToolbarButton } from "./insert-toolbar-button";
-import { LineHeightToolbarButton } from "./line-height-toolbar-button";
-import { LinkToolbarButton } from "./link-toolbar-button";
 import {
   BulletedListToolbarButton,
   NumberedListToolbarButton,
@@ -56,17 +51,8 @@ export function FixedToolbarButtons() {
           </ToolbarGroup>
 
           <ToolbarGroup>
-            <ExportToolbarButton>
-              <ArrowUpToLineIcon />
-            </ExportToolbarButton>
-
-            <ImportToolbarButton />
-          </ToolbarGroup>
-
-          <ToolbarGroup>
             <InsertToolbarButton />
             <TurnIntoToolbarButton />
-            <FontSizeToolbarButton />
           </ToolbarGroup>
 
           <ToolbarGroup>
@@ -118,20 +104,15 @@ export function FixedToolbarButtons() {
           </ToolbarGroup>
 
           <ToolbarGroup>
-            <LinkToolbarButton />
             <TableToolbarButton />
-            <EmojiToolbarButton />
           </ToolbarGroup>
 
           <ToolbarGroup>
             <MediaToolbarButton nodeType={KEYS.img} />
             <MediaToolbarButton nodeType={KEYS.video} />
-            <MediaToolbarButton nodeType={KEYS.audio} />
-            <MediaToolbarButton nodeType={KEYS.file} />
           </ToolbarGroup>
 
           <ToolbarGroup>
-            <LineHeightToolbarButton />
             <OutdentToolbarButton />
             <IndentToolbarButton />
           </ToolbarGroup>
@@ -145,9 +126,11 @@ export function FixedToolbarButtons() {
       <div className="grow" />
 
       <ToolbarGroup>
-        <MarkToolbarButton nodeType={KEYS.highlight} tooltip="Highlight">
-          <HighlighterIcon />
-        </MarkToolbarButton>
+        <ExportToolbarButton>
+          <ArrowUpToLineIcon />
+        </ExportToolbarButton>
+
+        <ImportToolbarButton />
       </ToolbarGroup>
     </div>
   );
