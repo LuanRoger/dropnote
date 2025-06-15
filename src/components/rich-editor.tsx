@@ -1,23 +1,21 @@
-import { Plate, PlateEditor } from "platejs/react";
+"use client";
 
 import { Editor, EditorContainer } from "@/components/plate-ui/editor";
+import LoadingSpinner from "./loading-spinner";
+import { useContext } from "react";
+import { EditorStateContext } from "@/contexts/editor-state";
 
 export interface RichEditorProps {
-  editor: PlateEditor;
-  readOnly?: boolean;
   className?: string;
 }
 
-export default function RichEditor({
-  editor,
-  readOnly = false,
-  className,
-}: RichEditorProps) {
+export default function RichEditor({ className }: RichEditorProps) {
+  const { isSaving } = useContext(EditorStateContext);
+
   return (
-    <Plate editor={editor} readOnly={readOnly}>
-      <EditorContainer variant={"demo"} className={className}>
-        <Editor variant={"demo"} />
-      </EditorContainer>
-    </Plate>
+    <EditorContainer variant={"demo"} className={className}>
+      {isSaving && <LoadingSpinner />}
+      <Editor variant={"demo"} />
+    </EditorContainer>
   );
 }
