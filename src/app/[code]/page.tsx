@@ -8,11 +8,12 @@ export default async function Page({
 }) {
   const { code } = await params;
 
-  await ensureCreated(code);
+  const note = await ensureCreated(code);
+  const body = note?.body;
 
   return (
-    <div className="h-screen w-full" data-registry="plate">
-      <Editor code={code} />
+    <div className="h-screen" data-registry="plate">
+      <Editor code={code} initialValue={body} />
     </div>
   );
 }

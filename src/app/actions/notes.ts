@@ -5,7 +5,7 @@ import { createNote, findNoteByCode, updateNote } from "@/db/queries/notes";
 export async function ensureCreated(code: string) {
   const note = await findNoteByCode(code);
   if (note) {
-    return;
+    return note;
   }
 
   await createNote(code, []);

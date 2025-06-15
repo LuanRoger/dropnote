@@ -9,6 +9,7 @@ import {
   EditorStateContext,
   EditorStateProvider,
 } from "@/contexts/editor-state";
+import { EDITOR_DEBOUNCE_TIME_MS } from "@/constants";
 
 interface EditorProps {
   code: string;
@@ -50,7 +51,7 @@ function RichEditorShell({ code }: { code: string }) {
         setIsSaving(true);
         await updateNoteByCode(code, noteBody);
         setIsSaving(false);
-      }, 1000);
+      }, EDITOR_DEBOUNCE_TIME_MS);
     },
     [setIsSaving],
   );
