@@ -59,7 +59,7 @@
     "html2canvas-pro": "^1.5.11",
     "lowlight": "^3.3.0",
     "lucide-react": "^0.515.0",
-    "mongodb": "^6.17.0",
+    "mongoose": "^8.15.2",
     "next": "15.3.3",
     "pdf-lib": "^1.17.1",
     "react": "^19.1.0",
