@@ -24,7 +24,7 @@ export default function Home() {
       <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col gap-4 items-center justify-center">
         <h1 className="text-4xl font-bold">Dropnote</h1>
         <p className="font-geist-mono text-muted-foreground">
-          Create, edit, and share text documents instantly.
+          Create, edit, and share text instantly.
         </p>
         <NavigateToPageForm />
       </div>
