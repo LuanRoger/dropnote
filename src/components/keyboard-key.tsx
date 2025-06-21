@@ -7,7 +7,7 @@ interface KeyboardKeyProps {
 export default function KeyboardKey({ children }: KeyboardKeyProps) {
   return (
     <kbd className="text-xs bg-muted rounded-sm p-1 border-gray border font-geist-mono">
-        {children}
+      {children}
     </kbd>
   );
 }
