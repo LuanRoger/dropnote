@@ -19,7 +19,12 @@ export default function Home() {
         </Link>
         <div className="flex flex-row gap-2 items-center text-muted-foreground">
           Created by{" "}
-          <Link href="https://github.com/LuanRoger" className="hover:underline">
+          <Link
+            href="https://www.luanroger.dev"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:underline"
+          >
             Luan Roger
           </Link>
         </div>
@@ -27,7 +32,7 @@ export default function Home() {
       <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col gap-4 items-center justify-center">
         <h1 className="text-4xl font-bold">Dropnote</h1>
         <p className="font-geist-mono text-muted-foreground">
-          Create, edit, and share text instantly.
+          Create, edit and share text instantly.
         </p>
         <NavigateToPageForm />
       </div>
