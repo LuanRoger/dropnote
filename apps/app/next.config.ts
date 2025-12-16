@@ -1,6 +1,6 @@
 import { config, withAnalyzer } from "@repo/next-config";
 import type { NextConfig } from "next";
-import { env } from "@/env";
+import { env } from "./env";
 
 let nextConfig: NextConfig = config;
 
