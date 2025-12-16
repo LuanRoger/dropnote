@@ -1,7 +1,13 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import { Form, FormControl, FormField, FormItem, FormMessage } from "./ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@repo/design-system/components/ui/form";
 import {
   navigateToPageSchema,
   NavigateToPageSchema,
