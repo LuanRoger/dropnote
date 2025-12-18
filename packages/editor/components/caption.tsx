@@ -1,20 +1,16 @@
 "use client";
 
-import * as React from "react";
-
-import type { VariantProps } from "class-variance-authority";
-
 import {
   Caption as CaptionPrimitive,
   CaptionTextarea as CaptionTextareaPrimitive,
   useCaptionButton,
   useCaptionButtonState,
 } from "@platejs/caption/react";
-import { createPrimitiveComponent } from "@udecode/cn";
+import { Button } from "@repo/design-system/components/ui/button";
+import { cn } from "@repo/design-system/lib/utils";
+import { createPrimitiveComponent } from "@udecode/react-utils";
+import type { VariantProps } from "class-variance-authority";
 import { cva } from "class-variance-authority";
-
-import { Button } from "./button";
-import { cn } from "@/utils/tailwind";
 
 const captionVariants = cva("max-w-full", {
   defaultVariants: {

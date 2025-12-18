@@ -4,10 +4,9 @@ import type { TDateElement } from "platejs";
 import type { PlateElementProps } from "platejs/react";
 
 import { PlateElement, useReadOnly } from "platejs/react";
-
+import { cn } from "@/utils/tailwind";
 import { Calendar } from "./calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
-import { cn } from "@/utils/tailwind";
 
 export function DateElement(props: PlateElementProps<TDateElement>) {
   const { editor, element } = props;
@@ -38,9 +37,15 @@ export function DateElement(props: PlateElementProps<TDateElement>) {
             new Date(today.setDate(today.getDate() + 2)).toDateString() ===
             elementDate.toDateString();
 
-          if (isToday) return "Today";
-          if (isYesterday) return "Yesterday";
-          if (isTomorrow) return "Tomorrow";
+          if (isToday) {
+            return "Today";
+          }
+          if (isYesterday) {
+            return "Yesterday";
+          }
+          if (isTomorrow) {
+            return "Tomorrow";
+          }
 
           return elementDate.toLocaleDateString(undefined, {
             day: "numeric",
@@ -61,27 +66,29 @@ export function DateElement(props: PlateElementProps<TDateElement>) {
   return (
     <PlateElement
       {...props}
-      className="inline-block"
       attributes={{
         ...props.attributes,
         contentEditable: false,
       }}
+      className="inline-block"
     >
       <Popover>
         <PopoverTrigger asChild>{trigger}</PopoverTrigger>
         <PopoverContent className="w-auto p-0">
           <Calendar
-            selected={new Date(element.date as string)}
+            initialFocus
+            mode="single"
             onSelect={(date) => {
-              if (!date) return;
+              if (!date) {
+                return;
+              }
 
               editor.tf.setNodes(
                 { date: date.toDateString() },
                 { at: element },
               );
             }}
-            mode="single"
-            initialFocus
+            selected={new Date(element.date as string)}
           />
         </PopoverContent>
       </Popover>

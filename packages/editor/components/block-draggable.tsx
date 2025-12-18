@@ -1,43 +1,41 @@
 "use client";
 
-import * as React from "react";
-
 import { useDraggable, useDropLine } from "@platejs/dnd";
 import { BlockSelectionPlugin } from "@platejs/selection/react";
 import { GripVertical } from "lucide-react";
 import {
-  BasePluginContext,
+  type BasePluginContext,
   getContainerTypes,
   isType,
   KEYS,
-  Path,
-  PluginConfig,
-  RenderElementProps,
-  TElement,
+  type Path,
+  type PluginConfig,
+  type RenderElementProps,
+  type TElement,
 } from "platejs";
 import {
+  type EditorPlatePlugin,
+  MemoizedChildren,
+  type PlateEditor,
   type PlateElementProps,
   type RenderNodeWrapper,
-  EditorPlatePlugin,
-  MemoizedChildren,
-  PlateEditor,
   useEditorRef,
   useElement,
   usePath,
   usePluginOption,
+  useSelected,
 } from "platejs/react";
-import { useSelected } from "platejs/react";
-
+import { memo, useMemo } from "react";
+import { cn } from "@/utils/tailwind";
 import { Button } from "./button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./tooltip";
-import { cn } from "@/utils/tailwind";
 
 const UNDRAGGABLE_KEYS = [KEYS.column, KEYS.tr, KEYS.td];
 
 export const BlockDraggable: RenderNodeWrapper = (props) => {
   const { editor, element, path } = props;
 
-  const enabled = React.useMemo(() => {
+  const enabled = useMemo(() => {
     if (path.length === 1 && !isType(editor, element, UNDRAGGABLE_KEYS)) {
       return true;
     }
@@ -137,10 +135,10 @@ export function Draggable(props: PlateElementProps) {
               )}
             >
               <Button
-                ref={handleRef}
-                variant="ghost"
                 className="h-6 w-4.5 p-0"
                 data-plate-prevent-deselect
+                ref={handleRef}
+                variant="ghost"
               >
                 <DragHandle />
               </Button>
@@ -149,7 +147,7 @@ export function Draggable(props: PlateElementProps) {
         </Gutter>
       )}
 
-      <div ref={previewRef} className="slate-blockWrapper">
+      <div className="slate-blockWrapper" ref={previewRef}>
         <MemoizedChildren>{children}</MemoizedChildren>
         <DropLine />
       </div>
@@ -180,7 +178,7 @@ function Gutter({
       {...props}
       className={cn(
         "slate-gutterLeft",
-        "absolute top-0 z-50 flex h-full -translate-x-full cursor-text hover:opacity-100 sm:opacity-0",
+        "-translate-x-full absolute top-0 z-50 flex h-full cursor-text hover:opacity-100 sm:opacity-0",
         getContainerTypes(editor).includes(element.type)
           ? "group-hover/container:opacity-100"
           : "group-hover:opacity-100",
@@ -212,7 +210,7 @@ function Gutter({
   );
 }
 
-const DragHandle = React.memo(function DragHandle() {
+const DragHandle = memo(function DragHandle() {
   const editor = useEditorRef();
   const element = useElement();
 
@@ -236,7 +234,7 @@ const DragHandle = React.memo(function DragHandle() {
   );
 });
 
-const DropLine = React.memo(function DropLine({
+const DropLine = memo(function DropLine({
   className,
   ...props
 }: React.ComponentProps<"div">) {

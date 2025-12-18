@@ -1,7 +1,5 @@
 "use client";
 
-import * as React from "react";
-
 import {
   type CursorData,
   type CursorOverlayState,
@@ -35,22 +33,20 @@ function Cursor({
 
   return (
     <>
-      {selectionRects.map((position, i) => {
-        return (
-          <div
-            key={i}
-            className={cn(
-              "pointer-events-none absolute z-10",
-              id === "selection" && "bg-brand/25",
-              id === "selection" && isCursor && "bg-primary",
-            )}
-            style={{
-              ...selectionStyle,
-              ...position,
-            }}
-          />
-        );
-      })}
+      {selectionRects.map((position, i) => (
+        <div
+          className={cn(
+            "pointer-events-none absolute z-10",
+            id === "selection" && "bg-brand/25",
+            id === "selection" && isCursor && "bg-primary",
+          )}
+          key={i}
+          style={{
+            ...selectionStyle,
+            ...position,
+          }}
+        />
+      ))}
       {caretPosition && (
         <div
           className={cn(

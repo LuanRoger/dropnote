@@ -1,7 +1,10 @@
 "use client";
 
-import React from "react";
-
+import { isOrderedList } from "@platejs/list";
+import {
+  useTodoListElement,
+  useTodoListElementState,
+} from "@platejs/list/react";
 import type {
   BasePluginContext,
   Path,
@@ -10,22 +13,15 @@ import type {
   TElement,
   TListElement,
 } from "platejs";
-
-import { isOrderedList } from "@platejs/list";
 import {
-  useTodoListElement,
-  useTodoListElementState,
-} from "@platejs/list/react";
-import {
-  EditorPlatePlugin,
-  PlateEditor,
+  type EditorPlatePlugin,
+  type PlateEditor,
   type PlateElementProps,
   type RenderNodeWrapper,
   useReadOnly,
 } from "platejs/react";
-
-import { Checkbox } from "./checkbox";
 import { cn } from "@/utils/tailwind";
+import { Checkbox } from "./checkbox";
 
 const config: Record<
   string,
@@ -65,8 +61,8 @@ function List(props: PlateElementProps) {
   return (
     <List
       className="relative m-0 p-0"
-      style={{ listStyleType }}
       start={listStart}
+      style={{ listStyleType }}
     >
       {Marker && <Marker {...props} />}
       {Li ? <Li {...props} /> : <li>{props.children}</li>}
@@ -83,7 +79,7 @@ function TodoMarker(props: PlateElementProps) {
     <div contentEditable={false}>
       <Checkbox
         className={cn(
-          "absolute top-1 -left-6",
+          "-left-6 absolute top-1",
           readOnly && "pointer-events-none",
         )}
         {...checkboxProps}

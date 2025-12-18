@@ -1,15 +1,10 @@
 "use client";
 
-import * as React from "react";
-
 import {
   BLOCK_CONTEXT_MENU_ID,
   BlockMenuPlugin,
   BlockSelectionPlugin,
 } from "@platejs/selection/react";
-import { KEYS } from "platejs";
-import { useEditorPlugin, usePlateState } from "platejs/react";
-
 import {
   ContextMenu,
   ContextMenuContent,
@@ -19,7 +14,10 @@ import {
   ContextMenuSubContent,
   ContextMenuSubTrigger,
   ContextMenuTrigger,
-} from "./context-menu";
+} from "@repo/design-system/components/ui/context-menu";
+import { KEYS } from "platejs";
+import { useEditorPlugin, usePlateState } from "platejs/react";
+import { useCallback } from "react";
 import { useIsTouchDevice } from "@/hooks/use-is-touch-device";
 
 export function BlockContextMenu({ children }: { children: React.ReactNode }) {
@@ -27,7 +25,7 @@ export function BlockContextMenu({ children }: { children: React.ReactNode }) {
   const isTouch = useIsTouchDevice();
   const [readOnly] = usePlateState("readOnly");
 
-  const handleTurnInto = React.useCallback(
+  const handleTurnInto = useCallback(
     (type: string) => {
       editor
         .getApi(BlockSelectionPlugin)
@@ -42,16 +40,16 @@ export function BlockContextMenu({ children }: { children: React.ReactNode }) {
           editor.tf.toggleBlock(type, { at: path });
         });
     },
-    [editor],
+    [editor]
   );
 
-  const handleAlign = React.useCallback(
+  const handleAlign = useCallback(
     (align: "center" | "left" | "right") => {
       editor
         .getTransforms(BlockSelectionPlugin)
         .blockSelection.setNodes({ align });
     },
-    [editor],
+    [editor]
   );
 
   if (isTouch) {
@@ -60,15 +58,14 @@ export function BlockContextMenu({ children }: { children: React.ReactNode }) {
 
   return (
     <ContextMenu
+      modal={false}
       onOpenChange={(open) => {
         if (!open) {
-          // prevent unselect the block selection
           setTimeout(() => {
             api.blockMenu.hide();
           }, 0);
         }
       }}
-      modal={false}
     >
       <ContextMenuTrigger
         asChild

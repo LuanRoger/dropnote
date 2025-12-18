@@ -1,9 +1,7 @@
-import * as React from 'react';
+import type { TDateElement } from "platejs";
+import type { SlateElementProps } from "platejs/static";
 
-import type { TDateElement } from 'platejs';
-import type { SlateElementProps } from 'platejs/static';
-
-import { SlateElement } from 'platejs/static';
+import { SlateElement } from "platejs/static";
 
 export function DateElementStatic(props: SlateElementProps<TDateElement>) {
   const { element } = props;
@@ -27,14 +25,20 @@ export function DateElementStatic(props: SlateElementProps<TDateElement>) {
               new Date(today.setDate(today.getDate() + 2)).toDateString() ===
               elementDate.toDateString();
 
-            if (isToday) return 'Today';
-            if (isYesterday) return 'Yesterday';
-            if (isTomorrow) return 'Tomorrow';
+            if (isToday) {
+              return "Today";
+            }
+            if (isYesterday) {
+              return "Yesterday";
+            }
+            if (isTomorrow) {
+              return "Tomorrow";
+            }
 
             return elementDate.toLocaleDateString(undefined, {
-              day: 'numeric',
-              month: 'long',
-              year: 'numeric',
+              day: "numeric",
+              month: "long",
+              year: "numeric",
             });
           })()
         ) : (
