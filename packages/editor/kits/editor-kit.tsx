@@ -1,6 +1,6 @@
 "use client";
 
-import { type Value, TrailingBlockPlugin } from "platejs";
+import { TrailingBlockPlugin, type Value } from "platejs";
 import { type TPlateEditor, useEditorRef } from "platejs/react";
 
 import { AlignKit } from "@/plugins/align-kit";

@@ -1,9 +1,9 @@
 import { createContext, useState } from "react";
 
-export interface EditorStateContextProps {
+export type EditorStateContextProps = {
   isSaving: boolean;
   setIsSaving: (saving: boolean) => void;
-}
+};
 
 export const EditorStateContext = createContext<EditorStateContextProps>({
   isSaving: false,
@@ -20,8 +20,8 @@ export function EditorStateProvider({
   return (
     <EditorStateContext.Provider
       value={{
-        isSaving: isSaving,
-        setIsSaving: setIsSaving,
+        isSaving,
+        setIsSaving,
       }}
     >
       {children}
