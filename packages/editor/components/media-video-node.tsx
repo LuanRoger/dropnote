@@ -22,7 +22,7 @@ import {
 export const VideoElement = withHOC(
   ResizableProvider,
   function VideoElement(
-    props: PlateElementProps<TVideoElement & TResizableProps>,
+    props: PlateElementProps<TVideoElement & TResizableProps>
   ) {
     const {
       align = "center",
@@ -87,7 +87,7 @@ export const VideoElement = withHOC(
                       "[&_>_.lty-playbtn]:before:absolute [&_>_.lty-playbtn]:before:top-1/2 [&_>_.lty-playbtn]:before:left-1/2 [&_>_.lty-playbtn]:before:[transform:translate3d(-50%,-50%,0)]",
                       "[&.lyt-activated]:cursor-[unset]",
                       "[&.lyt-activated]:before:pointer-events-none [&.lyt-activated]:before:opacity-0",
-                      "[&.lyt-activated_>_.lty-playbtn]:pointer-events-none [&.lyt-activated_>_.lty-playbtn]:opacity-0!",
+                      "[&.lyt-activated_>_.lty-playbtn]:pointer-events-none [&.lyt-activated_>_.lty-playbtn]:opacity-0!"
                     )}
                   />
                 </div>
@@ -116,5 +116,5 @@ export const VideoElement = withHOC(
         {props.children}
       </PlateElement>
     );
-  },
+  }
 );

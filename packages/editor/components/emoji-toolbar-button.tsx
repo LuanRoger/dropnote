@@ -118,7 +118,7 @@ export function EmojiPicker({
     <div
       className={cn(
         "flex flex-col rounded-xl bg-popover text-popover-foreground",
-        "h-[23rem] w-80 border shadow-md",
+        "h-[23rem] w-80 border shadow-md"
       )}
     >
       <EmojiPickerNavigation
@@ -255,7 +255,7 @@ function EmojiPickerContent({
       visibleCategories.has(categoryId)
         ? visibleCategories.get(categoryId)
         : false,
-    [visibleCategories],
+    [visibleCategories]
   );
 
   const EmojiList = useCallback(
@@ -274,7 +274,7 @@ function EmojiPickerContent({
               ref={section.root}
               style={{ width: getRowWidth }}
             >
-              <div className="-top-px sticky z-1 bg-popover/90 p-1 py-2 font-semibold text-sm backdrop-blur-xs">
+              <div className="sticky -top-px z-1 bg-popover/90 p-1 py-2 font-semibold text-sm backdrop-blur-xs">
                 {i18n.categories[categoryId]}
               </div>
               <div
@@ -305,13 +305,13 @@ function EmojiPickerContent({
       onSelectEmoji,
       onMouseOver,
       settings,
-    ],
+    ]
   );
 
   const SearchList = useCallback(
     () => (
       <div data-id="search" style={{ width: getRowWidth }}>
-        <div className="-top-px sticky z-1 bg-popover/90 p-1 py-2 font-semibold text-card-foreground text-sm backdrop-blur-xs">
+        <div className="sticky -top-px z-1 bg-popover/90 p-1 py-2 font-semibold text-card-foreground text-sm backdrop-blur-xs">
           {i18n.searchResult}
         </div>
         <div className="relative flex flex-wrap">
@@ -334,7 +334,7 @@ function EmojiPickerContent({
       searchResult,
       onSelectEmoji,
       onMouseOver,
-    ],
+    ]
   );
 
   return (
@@ -344,7 +344,7 @@ function EmojiPickerContent({
         "[&::-webkit-scrollbar]:w-4",
         "[&::-webkit-scrollbar-button]:hidden [&::-webkit-scrollbar-button]:size-0",
         "[&::-webkit-scrollbar-thumb]:min-h-11 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-muted [&::-webkit-scrollbar-thumb]:hover:bg-muted-foreground/25",
-        "[&::-webkit-scrollbar-thumb]:border-4 [&::-webkit-scrollbar-thumb]:border-popover [&::-webkit-scrollbar-thumb]:border-solid [&::-webkit-scrollbar-thumb]:bg-clip-padding",
+        "[&::-webkit-scrollbar-thumb]:border-4 [&::-webkit-scrollbar-thumb]:border-popover [&::-webkit-scrollbar-thumb]:border-solid [&::-webkit-scrollbar-thumb]:bg-clip-padding"
       )}
       data-id="scroll"
       ref={refs.current.contentRoot}
@@ -392,7 +392,7 @@ function EmojiPickerSearchAndClear({
     <div className="flex items-center text-foreground">
       <div
         className={cn(
-          "-translate-y-1/2 absolute top-1/2 left-2.5 z-10 flex size-5 items-center justify-center text-foreground",
+          "absolute top-1/2 left-2.5 z-10 flex size-5 -translate-y-1/2 items-center justify-center text-foreground"
         )}
       >
         {emojiSearchIcons.loupe}
@@ -401,7 +401,7 @@ function EmojiPickerSearchAndClear({
         <Button
           aria-label="Clear"
           className={cn(
-            "-translate-y-1/2 absolute top-1/2 right-0.5 flex size-8 cursor-pointer items-center justify-center rounded-full border-none bg-transparent text-popover-foreground hover:bg-transparent",
+            "absolute top-1/2 right-0.5 flex size-8 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border-none bg-transparent text-popover-foreground hover:bg-transparent"
           )}
           onClick={clearSearch}
           size="icon"
@@ -505,7 +505,7 @@ function EmojiPickerNavigation({
                     className={cn(
                       "h-fit rounded-full fill-current p-1.5 text-muted-foreground hover:bg-muted hover:text-muted-foreground",
                       id === focusedCategory &&
-                        "pointer-events-none bg-accent fill-current text-accent-foreground",
+                        "pointer-events-none bg-accent fill-current text-accent-foreground"
                     )}
                     onClick={() => {
                       onClick(id);

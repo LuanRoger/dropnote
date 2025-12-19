@@ -1,9 +1,7 @@
+import { cn } from "@repo/design-system/lib/utils";
 import type { VariantProps } from "class-variance-authority";
-
 import { cva } from "class-variance-authority";
 import { PlateStatic, type PlateStaticProps } from "platejs/static";
-
-import { cn } from "@repo/design-system/lib/utils";
 
 export const editorVariants = cva(
   cn(
@@ -11,7 +9,7 @@ export const editorVariants = cva(
     "relative w-full cursor-text select-text overflow-x-hidden whitespace-pre-wrap break-words",
     "rounded-md ring-offset-background focus-visible:outline-none",
     "placeholder:text-muted-foreground/80 **:data-slate-placeholder:top-[auto_!important] **:data-slate-placeholder:text-muted-foreground/80 **:data-slate-placeholder:opacity-100!",
-    "[&_strong]:font-bold",
+    "[&_strong]:font-bold"
   ),
   {
     defaultVariants: {
@@ -36,7 +34,7 @@ export const editorVariants = cva(
         select: "px-3 py-2 text-base data-readonly:w-fit",
       },
     },
-  },
+  }
 );
 
 export function EditorStatic({

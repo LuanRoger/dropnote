@@ -7,7 +7,7 @@ import { useEditorRef } from "platejs/react";
 import { ToolbarButton } from "./toolbar";
 
 export function InlineEquationToolbarButton(
-  props: React.ComponentProps<typeof ToolbarButton>,
+  props: React.ComponentProps<typeof ToolbarButton>
 ) {
   const editor = useEditorRef();
 

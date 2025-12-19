@@ -40,7 +40,7 @@ export function BlockContextMenu({ children }: { children: React.ReactNode }) {
           editor.tf.toggleBlock(type, { at: path });
         });
     },
-    [editor],
+    [editor]
   );
 
   const handleAlign = useCallback(
@@ -49,7 +49,7 @@ export function BlockContextMenu({ children }: { children: React.ReactNode }) {
         .getTransforms(BlockSelectionPlugin)
         .blockSelection.setNodes({ align });
     },
-    [editor],
+    [editor]
   );
 
   if (isTouch) {

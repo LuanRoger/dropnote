@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import { notesSchema } from "../schemas/notes";
 import { ensureConnected } from "../client";
+import { notesSchema } from "../schemas/notes";
 
 export async function findNoteByCode(code: string) {
   await ensureConnected();

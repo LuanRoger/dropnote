@@ -17,7 +17,7 @@ export const blockSelectionVariants = cva(
         true: "opacity-100",
       },
     },
-  },
+  }
 );
 
 export function BlockSelection(props: PlateElementProps) {

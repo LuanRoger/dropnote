@@ -7,7 +7,7 @@ import { SlateElement } from "platejs/static";
 import { cn } from "@/utils/tailwind";
 
 export function EquationElementStatic(
-  props: SlateElementProps<TEquationElement>,
+  props: SlateElementProps<TEquationElement>
 ) {
   const { element } = props;
 
@@ -31,9 +31,7 @@ export function EquationElementStatic(
       <div
         className={cn(
           "group flex select-none items-center justify-center rounded-sm hover:bg-primary/10 data-[selected=true]:bg-primary/10",
-          element.texExpression.length === 0
-            ? "bg-muted p-3 pr-9"
-            : "px-2 py-1",
+          element.texExpression.length === 0 ? "bg-muted p-3 pr-9" : "px-2 py-1"
         )}
       >
         {element.texExpression.length > 0 ? (
@@ -55,7 +53,7 @@ export function EquationElementStatic(
 }
 
 export function InlineEquationElementStatic(
-  props: SlateElementProps<TEquationElement>,
+  props: SlateElementProps<TEquationElement>
 ) {
   const html = getEquationHtml({
     element: props.element,
@@ -79,16 +77,16 @@ export function InlineEquationElementStatic(
     >
       <div
         className={cn(
-          'after:-top-0.5 after:-left-1 after:absolute after:inset-0 after:z-1 after:h-[calc(100%)+4px] after:w-[calc(100%+8px)] after:rounded-sm after:content-[""]',
+          'after:absolute after:inset-0 after:-top-0.5 after:-left-1 after:z-1 after:h-[calc(100%)+4px] after:w-[calc(100%+8px)] after:rounded-sm after:content-[""]',
           "h-6",
           props.element.texExpression.length === 0 &&
-            "text-muted-foreground after:bg-neutral-500/10",
+            "text-muted-foreground after:bg-neutral-500/10"
         )}
       >
         <span
           className={cn(
             props.element.texExpression.length === 0 && "hidden",
-            "font-mono leading-none",
+            "font-mono leading-none"
           )}
           dangerouslySetInnerHTML={{ __html: html }}
         />

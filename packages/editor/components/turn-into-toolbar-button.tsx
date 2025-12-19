@@ -96,7 +96,7 @@ const turnIntoItems = [
 ];
 
 export function TurnIntoToolbarButton(
-  props: ComponentProps<typeof DropdownMenu>,
+  props: ComponentProps<typeof DropdownMenu>
 ) {
   const editor = useEditorRef();
   const [open, setOpen] = useState(false);
@@ -109,7 +109,7 @@ export function TurnIntoToolbarButton(
     () =>
       turnIntoItems.find((item) => item.value === (value ?? KEYS.p)) ??
       turnIntoItems[0],
-    [value],
+    [value]
   );
 
   return (

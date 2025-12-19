@@ -2,9 +2,9 @@
 
 import { useCalloutEmojiPicker } from "@platejs/callout/react";
 import { useEmojiDropdownMenuState } from "@platejs/emoji/react";
-import { PlateElement } from "platejs/react";
-import { cn } from "@repo/design-system/lib/utils";
 import { Button } from "@repo/design-system/components/ui/button";
+import { cn } from "@repo/design-system/lib/utils";
+import { PlateElement } from "platejs/react";
 
 import { EmojiPicker, EmojiPopover } from "./emoji-toolbar-button";
 

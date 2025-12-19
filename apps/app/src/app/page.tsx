@@ -29,7 +29,7 @@ export default function Home() {
           </Link>
         </div>
       </div>
-      <div className="-translate-x-1/2 -translate-y-1/2 absolute top-1/2 left-1/2 flex transform flex-col items-center justify-center gap-4">
+      <div className="absolute top-1/2 left-1/2 flex -translate-x-1/2 -translate-y-1/2 transform flex-col items-center justify-center gap-4">
         <h1 className="font-bold text-4xl">Dropnote</h1>
         <p className="font-geist-mono text-muted-foreground">
           Create, edit and share text instantly.

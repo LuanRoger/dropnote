@@ -60,7 +60,7 @@ function RichEditorShell({ code }: { code: string }) {
         setIsSaving(false);
       }, EDITOR_DEBOUNCE_TIME_MS);
     },
-    [setIsSaving],
+    [setIsSaving]
   );
 
   useEffect(() => {

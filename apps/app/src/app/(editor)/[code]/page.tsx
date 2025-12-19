@@ -1,7 +1,7 @@
+import { notFound } from "next/navigation";
+import Editor from "@/components/editor";
 import { validateSlug } from "@/utils/slug";
 import { ensureCreated } from "../../actions/notes";
-import Editor from "@/components/editor";
-import { notFound } from "next/navigation";
 
 export default async function Page({
   params,

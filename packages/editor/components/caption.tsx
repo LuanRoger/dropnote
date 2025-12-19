@@ -40,7 +40,7 @@ export function Caption({
 }
 
 export function CaptionTextarea(
-  props: React.ComponentProps<typeof CaptionTextareaPrimitive>,
+  props: React.ComponentProps<typeof CaptionTextareaPrimitive>
 ) {
   return (
     <CaptionTextareaPrimitive
@@ -49,7 +49,7 @@ export function CaptionTextarea(
         "mt-2 w-full resize-none border-none bg-inherit p-0 font-[inherit] text-inherit",
         "focus:outline-none focus:[&::placeholder]:opacity-0",
         "text-center print:placeholder:text-transparent",
-        props.className,
+        props.className
       )}
     />
   );

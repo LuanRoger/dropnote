@@ -5,6 +5,8 @@ import {
   useTodoListElement,
   useTodoListElementState,
 } from "@platejs/list/react";
+import { Checkbox } from "@repo/design-system/components/ui/checkbox";
+import { cn } from "@repo/design-system/lib/utils";
 import type {
   BasePluginContext,
   Path,
@@ -20,8 +22,6 @@ import {
   type RenderNodeWrapper,
   useReadOnly,
 } from "platejs/react";
-import { cn } from "@repo/design-system/lib/utils";
-import { Checkbox } from "@repo/design-system/components/ui/checkbox";
 
 const config: Record<
   string,
@@ -47,7 +47,7 @@ export const BlockList: RenderNodeWrapper = (props) => {
       } & { ref?: any } & RenderElementProps<TElement> & { path: Path } & {
         className?: string;
         style?: React.CSSProperties;
-      },
+      }
   ) => <List {...props} />;
   BlockListComponent.displayName = "BlockListComponent";
   return BlockListComponent;
@@ -79,8 +79,8 @@ function TodoMarker(props: PlateElementProps) {
     <div contentEditable={false}>
       <Checkbox
         className={cn(
-          "-left-6 absolute top-1",
-          readOnly && "pointer-events-none",
+          "absolute top-1 -left-6",
+          readOnly && "pointer-events-none"
         )}
         {...checkboxProps}
       />
@@ -94,7 +94,7 @@ function TodoLi(props: PlateElementProps) {
       className={cn(
         "list-none",
         (props.element.checked as boolean) &&
-          "text-muted-foreground line-through",
+          "text-muted-foreground line-through"
       )}
     >
       {props.children}

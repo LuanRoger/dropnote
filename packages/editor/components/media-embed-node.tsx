@@ -77,7 +77,7 @@ export const MediaEmbedElement = withHOC(
                       "[&_>_.lty-playbtn]:before:absolute [&_>_.lty-playbtn]:before:top-1/2 [&_>_.lty-playbtn]:before:left-1/2 [&_>_.lty-playbtn]:before:[transform:translate3d(-50%,-50%,0)]",
                       "[&.lyt-activated]:cursor-[unset]",
                       "[&.lyt-activated]:before:pointer-events-none [&.lyt-activated]:before:opacity-0",
-                      "[&.lyt-activated_>_.lty-playbtn]:pointer-events-none [&.lyt-activated_>_.lty-playbtn]:opacity-0!",
+                      "[&.lyt-activated_>_.lty-playbtn]:pointer-events-none [&.lyt-activated_>_.lty-playbtn]:opacity-0!"
                     )}
                   />
                 ) : (
@@ -86,7 +86,7 @@ export const MediaEmbedElement = withHOC(
                       provider === "vimeo" && "pb-[75%]",
                       provider === "youku" && "pb-[56.25%]",
                       provider === "dailymotion" && "pb-[56.0417%]",
-                      provider === "coub" && "pb-[51.25%]",
+                      provider === "coub" && "pb-[51.25%]"
                     )}
                   >
                     <iframe
@@ -94,7 +94,7 @@ export const MediaEmbedElement = withHOC(
                       className={cn(
                         "absolute top-0 left-0 size-full rounded-sm",
                         isVideo && "border-0",
-                        focused && selected && "ring-2 ring-ring ring-offset-2",
+                        focused && selected && "ring-2 ring-ring ring-offset-2"
                       )}
                       src={embed!.url}
                       title="embed"
@@ -109,7 +109,7 @@ export const MediaEmbedElement = withHOC(
                     "[&_.react-tweet-theme]:my-0",
                     !readOnly &&
                       selected &&
-                      "[&_.react-tweet-theme]:ring-2 [&_.react-tweet-theme]:ring-ring [&_.react-tweet-theme]:ring-offset-2",
+                      "[&_.react-tweet-theme]:ring-2 [&_.react-tweet-theme]:ring-ring [&_.react-tweet-theme]:ring-offset-2"
                   )}
                 >
                   <Tweet id={embed!.id!} />
@@ -131,5 +131,5 @@ export const MediaEmbedElement = withHOC(
         </PlateElement>
       </MediaToolbar>
     );
-  },
+  }
 );

@@ -33,12 +33,12 @@ export function FontColorToolbarButton({
 
   const selectionDefined = useEditorSelector(
     (editor) => !!editor.selection,
-    [],
+    []
   );
 
   const color = useEditorSelector(
     (editor) => editor.api.mark(nodeType) as string,
-    [nodeType],
+    [nodeType]
   );
 
   const [selectedColor, setSelectedColor] = useState<string>();
@@ -48,7 +48,7 @@ export function FontColorToolbarButton({
     (value = !open) => {
       setOpen(value);
     },
-    [open, setOpen],
+    [open, setOpen]
   );
 
   const updateColor = useCallback(
@@ -62,7 +62,7 @@ export function FontColorToolbarButton({
         editor.tf.addMarks({ [nodeType]: value });
       }
     },
-    [editor, nodeType],
+    [editor, nodeType]
   );
 
   const updateColorAndClose = useCallback(
@@ -70,7 +70,7 @@ export function FontColorToolbarButton({
       updateColor(value);
       onToggle();
     },
-    [onToggle, updateColor],
+    [onToggle, updateColor]
   );
 
   const clearColor = useCallback(() => {
@@ -174,7 +174,7 @@ const ColorPicker = memo(
   (prev, next) =>
     prev.color === next.color &&
     prev.colors === next.colors &&
-    prev.customColors === next.customColors,
+    prev.customColors === next.customColors
 );
 
 function ColorCustom({
@@ -219,12 +219,12 @@ function ColorCustom({
             },
           ]
         : customColors,
-    [customColor, customColors],
+    [customColor, customColors]
   );
 
   const updateCustomColorDebounced = useCallback(
     debounce(updateCustomColor, 100),
-    [updateCustomColor],
+    [updateCustomColor]
   );
 
   return (
@@ -247,7 +247,7 @@ function ColorCustom({
                 size: "icon",
                 variant: "outline",
               }),
-              "absolute top-1 right-2 bottom-2 flex size-8 items-center justify-center rounded-full",
+              "absolute top-1 right-2 bottom-2 flex size-8 items-center justify-center rounded-full"
             )}
             onSelect={(e) => {
               e.preventDefault();
@@ -283,7 +283,7 @@ function ColorInput({
           }>,
           {
             onClick: () => inputRef.current?.click(),
-          },
+          }
         );
       })}
       <input
@@ -328,7 +328,7 @@ function ColorDropdownMenuItem({
         "my-1 flex size-6 items-center justify-center rounded-full border border-muted border-solid p-0 transition-all hover:scale-125",
         !isBrightColor && "border-transparent",
         isSelected && "border-2 border-primary",
-        className,
+        className
       )}
       onSelect={(e) => {
         e.preventDefault();
@@ -364,7 +364,7 @@ export function ColorDropdownMenuItems({
     <div
       className={cn(
         "grid grid-cols-[repeat(10,1fr)] place-items-center gap-x-1",
-        className,
+        className
       )}
       {...props}
     >

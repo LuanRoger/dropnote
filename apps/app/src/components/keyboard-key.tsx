@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 
 interface KeyboardKeyProps {
   children?: ReactNode;
@@ -6,7 +6,7 @@ interface KeyboardKeyProps {
 
 export default function KeyboardKey({ children }: KeyboardKeyProps) {
   return (
-    <kbd className="text-xs bg-muted rounded-sm p-1 border-gray border font-geist-mono">
+    <kbd className="rounded-sm border border-gray bg-muted p-1 font-geist-mono text-xs">
       {children}
     </kbd>
   );

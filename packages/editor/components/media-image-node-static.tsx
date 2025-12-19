@@ -6,7 +6,7 @@ import { SlateElement } from "platejs/static";
 import { cn } from "@/utils/tailwind";
 
 export function ImageElementStatic(
-  props: SlateElementProps<TImageElement & TCaptionProps & TResizableProps>,
+  props: SlateElementProps<TImageElement & TCaptionProps & TResizableProps>
 ) {
   const { align = "center", caption, url, width } = props.element;
 
@@ -21,7 +21,7 @@ export function ImageElementStatic(
             alt={(props.attributes as any).alt}
             className={cn(
               "w-full max-w-full cursor-default object-cover px-0",
-              "rounded-sm",
+              "rounded-sm"
             )}
             src={url}
           />

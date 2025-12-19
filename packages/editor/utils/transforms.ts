@@ -1,7 +1,5 @@
 "use client";
 
-import type { PlateEditor } from "platejs/react";
-
 import { insertCallout } from "@platejs/callout";
 import { insertCodeBlock } from "@platejs/code-block";
 import { insertDate } from "@platejs/date";
@@ -17,12 +15,13 @@ import {
 import { TablePlugin } from "@platejs/table/react";
 import { insertToc } from "@platejs/toc";
 import {
+  KEYS,
   type NodeEntry,
   type Path,
-  type TElement,
-  KEYS,
   PathApi,
+  type TElement,
 } from "platejs";
+import type { PlateEditor } from "platejs/react";
 
 const ACTION_THREE_COLUMNS = "action_three_columns";
 
@@ -32,7 +31,7 @@ const insertList = (editor: PlateEditor, type: string) => {
       indent: 1,
       listStyleType: type,
     }),
-    { select: true },
+    { select: true }
   );
 };
 
@@ -101,7 +100,7 @@ export const insertInlineElement = (editor: PlateEditor, type: string) => {
 const setList = (
   editor: PlateEditor,
   type: string,
-  entry: NodeEntry<TElement>,
+  entry: NodeEntry<TElement>
 ) => {
   editor.tf.setNodes(
     editor.api.create.block({
@@ -110,7 +109,7 @@ const setList = (
     }),
     {
       at: entry[1],
-    },
+    }
   );
 };
 
@@ -127,7 +126,7 @@ const setBlockMap: Record<
 export const setBlockType = (
   editor: PlateEditor,
   type: string,
-  { at }: { at?: Path } = {},
+  { at }: { at?: Path } = {}
 ) => {
   editor.tf.withoutNormalizing(() => {
     const setEntry = (entry: NodeEntry<TElement>) => {
@@ -164,11 +163,11 @@ export const getBlockType = (block: TElement) => {
   if (block[KEYS.listType]) {
     if (block[KEYS.listType] === KEYS.ol) {
       return KEYS.ol;
-    } else if (block[KEYS.listType] === KEYS.listTodo) {
-      return KEYS.listTodo;
-    } else {
-      return KEYS.ul;
     }
+    if (block[KEYS.listType] === KEYS.listTodo) {
+      return KEYS.listTodo;
+    }
+    return KEYS.ul;
   }
 
   return block.type;

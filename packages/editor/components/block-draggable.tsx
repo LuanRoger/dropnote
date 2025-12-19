@@ -2,6 +2,13 @@
 
 import { useDraggable, useDropLine } from "@platejs/dnd";
 import { BlockSelectionPlugin } from "@platejs/selection/react";
+import { Button } from "@repo/design-system/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@repo/design-system/components/ui/tooltip";
+import { cn } from "@repo/design-system/lib/utils";
 import { GripVertical } from "lucide-react";
 import {
   type BasePluginContext,
@@ -26,13 +33,6 @@ import {
   useSelected,
 } from "platejs/react";
 import { memo, useMemo } from "react";
-import { cn } from "@repo/design-system/lib/utils";
-import { Button } from "@repo/design-system/components/ui/button";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@repo/design-system/components/ui/tooltip";
 
 const UNDRAGGABLE_KEYS = [KEYS.column, KEYS.tr, KEYS.td];
 
@@ -81,7 +81,7 @@ export const BlockDraggable: RenderNodeWrapper = (props) => {
       } & { ref?: any } & RenderElementProps<TElement> & { path: Path } & {
         className?: string;
         style?: React.CSSProperties;
-      },
+      }
   ) => <Draggable {...props} />;
   DraggableWrapper.displayName = "DraggableWrapper";
 
@@ -112,7 +112,7 @@ export function Draggable(props: PlateElementProps) {
         isDragging && "opacity-50",
         getContainerTypes(editor).includes(element.type)
           ? "group/container"
-          : "group",
+          : "group"
       )}
     >
       {!isInTable && (
@@ -128,14 +128,14 @@ export function Draggable(props: PlateElementProps) {
                 KEYS.h4,
                 KEYS.h5,
               ]) && "h-[1.3em]",
-              isInColumn && "h-4",
+              isInColumn && "h-4"
             )}
           >
             <div
               className={cn(
                 "slate-blockToolbar",
                 "pointer-events-auto mr-1 flex items-center",
-                isInColumn && "mr-1.5",
+                isInColumn && "mr-1.5"
               )}
             >
               <Button
@@ -169,7 +169,7 @@ function Gutter({
   const path = usePath();
   const isSelectionAreaVisible = usePluginOption(
     BlockSelectionPlugin,
-    "isSelectionAreaVisible",
+    "isSelectionAreaVisible"
   );
   const selected = useSelected();
 
@@ -182,7 +182,7 @@ function Gutter({
       {...props}
       className={cn(
         "slate-gutterLeft",
-        "-translate-x-full absolute top-0 z-50 flex h-full cursor-text hover:opacity-100 sm:opacity-0",
+        "absolute top-0 z-50 flex h-full -translate-x-full cursor-text hover:opacity-100 sm:opacity-0",
         getContainerTypes(editor).includes(element.type)
           ? "group-hover/container:opacity-100"
           : "group-hover:opacity-100",
@@ -205,7 +205,7 @@ function Gutter({
         ]) && "py-0",
         isNodeType([KEYS.placeholder, KEYS.table]) && "pt-3 pb-0",
         isInColumn && "mt-2 h-4 pt-0",
-        className,
+        className
       )}
       contentEditable={false}
     >
@@ -255,7 +255,7 @@ const DropLine = memo(function DropLine({
         "bg-brand/50",
         dropLine === "top" && "-top-px",
         dropLine === "bottom" && "-bottom-px",
-        className,
+        className
       )}
     />
   );

@@ -185,7 +185,7 @@ const groups: Group[] = [
 ];
 
 export function SlashInputElement(
-  props: PlateElementProps<TComboboxInputElement>,
+  props: PlateElementProps<TComboboxInputElement>
 ) {
   const { editor, element } = props;
 
@@ -215,7 +215,7 @@ export function SlashInputElement(
                     <div className="mr-2 text-muted-foreground">{icon}</div>
                     {label ?? value}
                   </InlineComboboxItem>
-                ),
+                )
               )}
             </InlineComboboxGroup>
           ))}

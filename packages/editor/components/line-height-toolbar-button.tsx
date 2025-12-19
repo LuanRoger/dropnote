@@ -14,7 +14,7 @@ import { type ComponentPropsWithoutRef, useState } from "react";
 import { ToolbarButton } from "./toolbar";
 
 export function LineHeightToolbarButton(
-  props: ComponentPropsWithoutRef<typeof DropdownMenu>,
+  props: ComponentPropsWithoutRef<typeof DropdownMenu>
 ) {
   const editor = useEditorRef();
   const { defaultNodeValue, validNodeValues: values = [] } =

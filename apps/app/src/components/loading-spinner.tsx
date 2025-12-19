@@ -1,8 +1,8 @@
 "use client";
 
-import { cn } from "@/utils/tailwind";
 import { Loader2Icon } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
+import { cn } from "@/utils/tailwind";
 
 interface LoadingSpinnerProps {
   className?: string;
@@ -17,11 +17,11 @@ export default function LoadingSpinner({
     <AnimatePresence>
       {show && (
         <motion.div
-          initial={{ opacity: 0 }}
           animate={{ opacity: 0.4 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.3, ease: "easeInOut" }}
           className={cn("animate-spin", className)}
+          exit={{ opacity: 0 }}
+          initial={{ opacity: 0 }}
+          transition={{ duration: 0.3, ease: "easeInOut" }}
         >
           <Loader2Icon />
         </motion.div>

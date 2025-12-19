@@ -42,7 +42,7 @@ export const ColumnElement = withHOC(
     const readOnly = useReadOnly();
     const isSelectionAreaVisible = usePluginOption(
       BlockSelectionPlugin,
-      "isSelectionAreaVisible",
+      "isSelectionAreaVisible"
     );
 
     const { isDragging, previewRef, handleRef } = useDraggable({
@@ -52,7 +52,7 @@ export const ColumnElement = withHOC(
       canDropNode: ({ dragEntry, dropEntry }) =>
         PathApi.equals(
           PathApi.parent(dragEntry[1]),
-          PathApi.parent(dropEntry[1]),
+          PathApi.parent(dropEntry[1])
         ),
     });
 
@@ -61,9 +61,9 @@ export const ColumnElement = withHOC(
         {!(readOnly || isSelectionAreaVisible) && (
           <div
             className={cn(
-              "-translate-x-1/2 -translate-y-1/2 absolute top-2 left-1/2 z-50",
+              "absolute top-2 left-1/2 z-50 -translate-x-1/2 -translate-y-1/2",
               "pointer-events-auto flex items-center",
-              "opacity-0 transition-opacity group-hover/column:opacity-100",
+              "opacity-0 transition-opacity group-hover/column:opacity-100"
             )}
             ref={handleRef}
           >
@@ -80,7 +80,7 @@ export const ColumnElement = withHOC(
             className={cn(
               "relative h-full border border-transparent p-1.5",
               !readOnly && "rounded-lg border-border border-dashed",
-              isDragging && "opacity-50",
+              isDragging && "opacity-50"
             )}
           >
             {props.children}
@@ -90,7 +90,7 @@ export const ColumnElement = withHOC(
         </PlateElement>
       </div>
     );
-  },
+  }
 );
 
 const ColumnDragHandle = memo(function ColumnDragHandle() {
@@ -128,9 +128,9 @@ function DropLine() {
         "slate-dropLine",
         "absolute bg-brand/50",
         dropLine === "left" &&
-          "group-first/column:-left-1 inset-y-0 left-[-10.5px] w-1",
+          "inset-y-0 left-[-10.5px] w-1 group-first/column:-left-1",
         dropLine === "right" &&
-          "group-last/column:-right-1 inset-y-0 right-[-11px] w-1",
+          "inset-y-0 right-[-11px] w-1 group-last/column:-right-1"
       )}
     />
   );

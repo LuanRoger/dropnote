@@ -15,9 +15,7 @@ export const BlockPlaceholderKit = [
         [KEYS.h3]: "Heading 3",
         [KEYS.h4]: "Heading 4",
       },
-      query: ({ path }) => {
-        return path.length === 1;
-      },
+      query: ({ path }) => path.length === 1,
     },
   }),
 ];

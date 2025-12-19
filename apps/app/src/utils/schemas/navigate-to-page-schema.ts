@@ -1,5 +1,5 @@
-import { SLUG_REGEX } from "@/constants";
 import { z } from "zod";
+import { SLUG_REGEX } from "@/constants";
 
 export const navigateToPageSchema = z.object({
   code: z
