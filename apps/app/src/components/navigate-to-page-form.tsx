@@ -1,6 +1,7 @@
 "use client";
 
-import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Button } from "@repo/design-system/components/ui/button";
 import {
   Form,
   FormControl,
@@ -8,14 +9,13 @@ import {
   FormItem,
   FormMessage,
 } from "@repo/design-system/components/ui/form";
-import {
-  navigateToPageSchema,
-  NavigateToPageSchema,
-} from "@/utils/schemas/navigate-to-page-schema";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Input } from "./ui/input";
-import { Button } from "./ui/button";
+import { Input } from "@repo/design-system/components/ui/input";
 import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import {
+  type NavigateToPageSchema,
+  navigateToPageSchema,
+} from "@/utils/schemas/navigate-to-page-schema";
 
 export default function NavigateToPageForm() {
   const form = useForm<NavigateToPageSchema>({
@@ -34,7 +34,7 @@ export default function NavigateToPageForm() {
   return (
     <Form {...form}>
       <form
-        className="flex flex-row gap-2 h-12"
+        className="flex h-12 flex-row gap-2"
         onSubmit={form.handleSubmit(onSubmit)}
       >
         <FormField
@@ -42,13 +42,13 @@ export default function NavigateToPageForm() {
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Input placeholder="some-slug" className="h-full" {...field} />
+                <Input className="h-full" placeholder="some-slug" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button type="submit" className="h-full">
+        <Button className="h-full" type="submit">
           Go
         </Button>
       </form>

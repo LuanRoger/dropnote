@@ -1,23 +1,23 @@
 "use client";
 
-import { Plate, useEditorSelector, usePlateEditor } from "platejs/react";
-import { EditorKit } from "./editor/editor-kit";
-import RichEditor from "./rich-editor";
-import { updateNoteByCode } from "@/app/actions/notes";
-import { useCallback, useContext, useEffect, useRef } from "react";
+import { Plate, useEditorSelector, usePlateEditor } from "@repo/editor";
+import RichEditor from "@repo/editor/components/rich-editor";
 import {
   EditorStateContext,
   EditorStateProvider,
-} from "@/contexts/editor-state";
+} from "@repo/editor/contexts/editor-state";
+import { EditorKit } from "@repo/editor/kits/editor-kit";
+import { useCallback, useContext, useEffect, useRef } from "react";
+import { updateNoteByCode } from "@/app/actions/notes";
 import { EDITOR_DEBOUNCE_TIME_MS } from "@/constants";
 import LoadingSpinner from "./loading-spinner";
 
-interface EditorProps {
+type EditorProps = {
   code: string;
   initialValue?: any[];
   readOnly?: boolean;
   noSave?: boolean;
-}
+};
 
 export default function Editor({
   code,
