@@ -1,6 +1,10 @@
 "use server";
 
-import { createNote, findNoteByCode, updateNote } from "@/db/queries/notes";
+import {
+  createNote,
+  findNoteByCode,
+  updateNote,
+} from "@repo/database/queries/notes";
 
 export async function ensureCreated(code: string) {
   const note = await findNoteByCode(code);
