@@ -20,8 +20,8 @@ import {
   type RenderNodeWrapper,
   useReadOnly,
 } from "platejs/react";
-import { cn } from "@/utils/tailwind";
-import { Checkbox } from "./checkbox";
+import { cn } from "@repo/design-system/lib/utils";
+import { Checkbox } from "@repo/design-system/components/ui/checkbox";
 
 const config: Record<
   string,

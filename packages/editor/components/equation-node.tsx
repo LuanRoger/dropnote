@@ -2,6 +2,13 @@
 
 import { useEquationElement, useEquationInput } from "@platejs/math/react";
 import { BlockSelectionPlugin } from "@platejs/selection/react";
+import { Button } from "@repo/design-system/components/ui/button";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@repo/design-system/components/ui/popover";
+import { cn } from "@repo/design-system/lib/utils";
 import { CornerDownLeftIcon, RadicalIcon } from "lucide-react";
 import type { TEquationElement } from "platejs";
 import type { PlateElementProps } from "platejs/react";
@@ -18,9 +25,6 @@ import { useEffect, useRef, useState } from "react";
 import TextareaAutosize, {
   type TextareaAutosizeProps,
 } from "react-textarea-autosize";
-import { cn } from "@/utils/tailwind";
-import { Button } from "./button";
-import { Popover, PopoverContent, PopoverTrigger } from "./popover";
 
 export function EquationElement(props: PlateElementProps<TEquationElement>) {
   const selected = useSelected();

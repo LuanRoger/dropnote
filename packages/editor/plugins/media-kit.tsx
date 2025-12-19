@@ -10,12 +10,12 @@ import {
 } from "@platejs/media/react";
 import { KEYS } from "platejs";
 
-import { AudioElement } from "@/components/plate-ui/media-audio-node";
-import { MediaEmbedElement } from "@/components/plate-ui/media-embed-node";
-import { FileElement } from "@/components/plate-ui/media-file-node";
-import { ImageElement } from "@/components/plate-ui/media-image-node";
-import { MediaPreviewDialog } from "@/components/plate-ui/media-preview-dialog";
-import { VideoElement } from "@/components/plate-ui/media-video-node";
+import { AudioElement } from "../components/media-audio-node";
+import { MediaEmbedElement } from "../components/media-embed-node";
+import { FileElement } from "../components/media-file-node";
+import { ImageElement } from "../components/media-image-node";
+import { MediaPreviewDialog } from "../components/media-preview-dialog";
+import { VideoElement } from "../components/media-video-node";
 
 export const MediaKit = [
   ImagePlugin.configure({

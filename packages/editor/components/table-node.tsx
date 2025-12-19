@@ -15,7 +15,22 @@ import {
   useTableElement,
   useTableMergeState,
 } from "@platejs/table/react";
-import { PopoverAnchor } from "@radix-ui/react-popover";
+import { PopoverAnchor } from "@repo/design-system/components/ui/popover";
+import { Button } from "@repo/design-system/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuPortal,
+  DropdownMenuTrigger,
+} from "@repo/design-system/components/ui/dropdown-menu";
+import {
+  Popover,
+  PopoverContent,
+} from "@repo/design-system/components/ui/popover";
+import { cn } from "@repo/design-system/lib/utils";
 import { cva } from "class-variance-authority";
 import {
   ArrowDown,
@@ -55,19 +70,6 @@ import {
   useSelected,
   withHOC,
 } from "platejs/react";
-
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuPortal,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Popover, PopoverContent } from "@/components/ui/popover";
-import { cn } from "@repo/design-system/lib/utils";
 import { useCallback, useState } from "react";
 
 import { blockSelectionVariants } from "./block-selection";

@@ -31,7 +31,7 @@ import {
 import { KEYS } from "platejs";
 import { type PlateEditor, useEditorRef } from "platejs/react";
 import { type ComponentPropsWithoutRef, useState } from "react";
-import { insertBlock, insertInlineElement } from "@/utils/transforms";
+import { insertBlock, insertInlineElement } from "../utils/transforms";
 import { ToolbarButton, ToolbarMenuGroup } from "./toolbar";
 
 type Group = {

@@ -6,6 +6,16 @@ import {
   useFloatingMediaValue,
   useImagePreviewValue,
 } from "@platejs/media/react";
+import {
+  Button,
+  buttonVariants,
+} from "@repo/design-system/components/ui/button";
+import {
+  Popover,
+  PopoverAnchor,
+  PopoverContent,
+} from "@repo/design-system/components/ui/popover";
+import { Separator } from "@repo/design-system/components/ui/separator";
 import { cva } from "class-variance-authority";
 import { Link, Trash2Icon } from "lucide-react";
 import type { WithRequiredKey } from "platejs";
@@ -17,11 +27,7 @@ import {
   useRemoveNodeButton,
   useSelected,
 } from "platejs/react";
-
-import { Button, buttonVariants } from "./button";
 import { CaptionButton } from "./caption";
-import { Popover, PopoverAnchor, PopoverContent } from "./popover";
-import { Separator } from "./separator";
 
 const inputVariants = cva(
   "flex h-[28px] w-full rounded-md border-none bg-transparent px-1.5 py-1 text-base placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-transparent md:text-sm",

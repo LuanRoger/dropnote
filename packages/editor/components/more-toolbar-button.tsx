@@ -6,6 +6,13 @@ import {
 } from "@platejs/link/react";
 import type { DropdownMenuProps } from "@radix-ui/react-dropdown-menu";
 import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@repo/design-system/components/ui/dropdown-menu";
+import {
   KeyboardIcon,
   LinkIcon,
   MoreHorizontalIcon,
@@ -14,20 +21,12 @@ import {
 } from "lucide-react";
 import { KEYS } from "platejs";
 import { useEditorRef } from "platejs/react";
-
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "./dropdown-menu";
-
+import { useState } from "react";
 import { ToolbarButton } from "./toolbar";
 
 export function MoreToolbarButton(props: DropdownMenuProps) {
   const editor = useEditorRef();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const stateLink = useLinkToolbarButtonState();
   const { props: buttonProps } = useLinkToolbarButton(stateLink);
 

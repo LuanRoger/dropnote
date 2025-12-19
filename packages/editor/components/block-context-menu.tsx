@@ -18,7 +18,7 @@ import {
 import { KEYS } from "platejs";
 import { useEditorPlugin, usePlateState } from "platejs/react";
 import { useCallback } from "react";
-import { useIsTouchDevice } from "@/hooks/use-is-touch-device";
+import { useIsTouchDevice } from "../hooks/use-is-touch-device";
 
 export function BlockContextMenu({ children }: { children: React.ReactNode }) {
   const { api, editor } = useEditorPlugin(BlockMenuPlugin);
@@ -40,7 +40,7 @@ export function BlockContextMenu({ children }: { children: React.ReactNode }) {
           editor.tf.toggleBlock(type, { at: path });
         });
     },
-    [editor]
+    [editor],
   );
 
   const handleAlign = useCallback(
@@ -49,7 +49,7 @@ export function BlockContextMenu({ children }: { children: React.ReactNode }) {
         .getTransforms(BlockSelectionPlugin)
         .blockSelection.setNodes({ align });
     },
-    [editor]
+    [editor],
   );
 
   if (isTouch) {

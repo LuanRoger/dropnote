@@ -7,6 +7,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@repo/design-system/components/ui/dropdown-menu";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@repo/design-system/components/ui/tooltip";
 import { cn } from "@repo/design-system/lib/utils";
 import { useComposedRef } from "@udecode/cn";
 import { debounce } from "lodash";
@@ -14,12 +20,6 @@ import { EraserIcon, PlusIcon } from "lucide-react";
 import { useEditorRef, useEditorSelector } from "platejs/react";
 import React, { memo, useCallback, useEffect, useRef, useState } from "react";
 import { ToolbarButton, ToolbarMenuGroup } from "./toolbar";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "./tooltip";
 
 export function FontColorToolbarButton({
   children,

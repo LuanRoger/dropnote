@@ -14,6 +14,8 @@ import {
   useFloatingLinkInsert,
   useFloatingLinkInsertState,
 } from "@platejs/link/react";
+import { buttonVariants } from "@repo/design-system/components/ui/button";
+import { Separator } from "@repo/design-system/components/ui/separator";
 import { cva } from "class-variance-authority";
 import { ExternalLink, Link, Text, Unlink } from "lucide-react";
 import type { TLinkElement } from "platejs";
@@ -24,9 +26,7 @@ import {
   useFormInputProps,
   usePluginOption,
 } from "platejs/react";
-
-import { buttonVariants } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
+import { useMemo } from "react";
 
 const popoverVariants = cva(
   "z-50 w-auto rounded-md border bg-popover p-1 text-popover-foreground shadow-md outline-hidden",
@@ -47,7 +47,7 @@ export function LinkFloatingToolbar({
     "activeId",
   );
 
-  const floatingOptions: UseVirtualFloatingOptions = React.useMemo(
+  const floatingOptions: UseVirtualFloatingOptions = useMemo(
     () => ({
       middleware: [
         offset(8),
@@ -93,7 +93,9 @@ export function LinkFloatingToolbar({
     preventDefaultOnEnterKeydown: true,
   });
 
-  if (hidden) return null;
+  if (hidden) {
+    return null;
+  }
 
   const input = (
     <div className="flex w-[330px] flex-col" {...inputProps}>
@@ -171,20 +173,16 @@ function LinkOpenButton() {
   const editor = useEditorRef();
   const selection = useEditorSelection();
 
-  const attributes = React.useMemo(
-    () => {
-      const entry = editor.api.node<TLinkElement>({
-        match: { type: editor.getType(KEYS.link) },
-      });
-      if (!entry) {
-        return {};
-      }
-      const [element] = entry;
-      return getLinkAttributes(editor, element);
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [editor, selection],
-  );
+  const attributes = useMemo(() => {
+    const entry = editor.api.node<TLinkElement>({
+      match: { type: editor.getType(KEYS.link) },
+    });
+    if (!entry) {
+      return {};
+    }
+    const [element] = entry;
+    return getLinkAttributes(editor, element);
+  }, [editor, selection]);
 
   return (
     <a

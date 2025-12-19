@@ -26,9 +26,13 @@ import {
   useSelected,
 } from "platejs/react";
 import { memo, useMemo } from "react";
-import { cn } from "@/utils/tailwind";
-import { Button } from "./button";
-import { Tooltip, TooltipContent, TooltipTrigger } from "./tooltip";
+import { cn } from "@repo/design-system/lib/utils";
+import { Button } from "@repo/design-system/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@repo/design-system/components/ui/tooltip";
 
 const UNDRAGGABLE_KEYS = [KEYS.column, KEYS.tr, KEYS.td];
 

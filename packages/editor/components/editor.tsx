@@ -4,6 +4,7 @@ import type { VariantProps } from "class-variance-authority";
 import { cva } from "class-variance-authority";
 import type { PlateContentProps } from "platejs/react";
 import { PlateContainer, PlateContent } from "platejs/react";
+import React from "react";
 
 import { cn } from "@/utils/tailwind";
 
@@ -82,8 +83,15 @@ const editorVariants = cva(
 export type EditorProps = PlateContentProps &
   VariantProps<typeof editorVariants>;
 
-export const Editor = React.forwardRef<HTMLDivElement, EditorProps>(
-  ({ className, disabled, focused, variant, ...props }, ref) => (
+export function Editor({
+  className,
+  disabled,
+  focused,
+  variant,
+  ref,
+  ...props
+}: EditorProps & { ref?: React.Ref<HTMLDivElement> }) {
+  return (
     <PlateContent
       className={cn(
         editorVariants({
@@ -98,7 +106,7 @@ export const Editor = React.forwardRef<HTMLDivElement, EditorProps>(
       ref={ref}
       {...props}
     />
-  ),
-);
+  );
+}
 
 Editor.displayName = "Editor";

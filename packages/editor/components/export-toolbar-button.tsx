@@ -2,27 +2,27 @@
 
 import { MarkdownPlugin } from "@platejs/markdown";
 import type { DropdownMenuProps } from "@radix-ui/react-dropdown-menu";
-import { ArrowDownToLineIcon } from "lucide-react";
-import { createSlateEditor } from "platejs";
-import { useEditorRef } from "platejs/react";
-import { serializeHtml } from "platejs/static";
-
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "@repo/design-system/components/ui/dropdown-menu";
+import { ArrowDownToLineIcon } from "lucide-react";
+import { createSlateEditor } from "platejs";
+import { useEditorRef } from "platejs/react";
+import { serializeHtml } from "platejs/static";
 
 import { EditorStatic } from "./editor-static";
 import { ToolbarButton } from "./toolbar";
+import { useState } from "react";
 
 const siteUrl = "https://platejs.org";
 
 export function ExportToolbarButton(props: DropdownMenuProps) {
   const editor = useEditorRef();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
 
   const getCanvas = async () => {
     const { default: html2canvas } = await import("html2canvas-pro");

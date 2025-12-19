@@ -2,6 +2,19 @@
 
 import { formatCodeBlock, isLangSupported } from "@platejs/code-block";
 import { Button } from "@repo/design-system/components/ui/button";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@repo/design-system/components/ui/command";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@repo/design-system/components/ui/popover";
 import { cn } from "@repo/design-system/lib/utils";
 import { BracesIcon, Check, CheckIcon, CopyIcon } from "lucide-react";
 import { NodeApi, type TCodeBlockElement, type TCodeSyntaxLeaf } from "platejs";
@@ -15,15 +28,6 @@ import {
   useReadOnly,
 } from "platejs/react";
 import React, { useMemo, useState } from "react";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "./command";
-import { Popover, PopoverContent, PopoverTrigger } from "./popover";
 
 export function CodeBlockElement(props: PlateElementProps<TCodeBlockElement>) {
   const { editor, element } = props;

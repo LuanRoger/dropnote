@@ -5,6 +5,20 @@ import { setColumns } from "@platejs/layout";
 import { useDebouncePopoverOpen } from "@platejs/layout/react";
 import { ResizableProvider } from "@platejs/resizable";
 import { BlockSelectionPlugin } from "@platejs/selection/react";
+import { Button } from "@repo/design-system/components/ui/button";
+import {
+  Popover,
+  PopoverAnchor,
+  PopoverContent,
+} from "@repo/design-system/components/ui/popover";
+import { Separator } from "@repo/design-system/components/ui/separator";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@repo/design-system/components/ui/tooltip";
+import { cn } from "@repo/design-system/lib/utils";
 import { useComposedRef } from "@udecode/cn";
 import { GripHorizontal, type LucideProps, Trash2Icon } from "lucide-react";
 import type { TColumnElement } from "platejs";
@@ -19,16 +33,7 @@ import {
   useRemoveNodeButton,
   withHOC,
 } from "platejs/react";
-import { cn } from "@/utils/tailwind";
-import { Button } from "./button";
-import { Popover, PopoverAnchor, PopoverContent } from "./popover";
-import { Separator } from "./separator";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "./tooltip";
+import { memo } from "react";
 
 export const ColumnElement = withHOC(
   ResizableProvider,
@@ -88,7 +93,7 @@ export const ColumnElement = withHOC(
   },
 );
 
-const ColumnDragHandle = React.memo(function ColumnDragHandle() {
+const ColumnDragHandle = memo(function ColumnDragHandle() {
   return (
     <TooltipProvider>
       <Tooltip>

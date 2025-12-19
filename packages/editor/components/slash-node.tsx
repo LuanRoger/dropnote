@@ -22,10 +22,7 @@ import { KEYS, type TComboboxInputElement } from "platejs";
 import type { PlateEditor, PlateElementProps } from "platejs/react";
 import { PlateElement } from "platejs/react";
 
-import {
-  insertBlock,
-  insertInlineElement,
-} from "@/components/editor/transforms";
+import { insertBlock, insertInlineElement } from "../utils/transforms";
 
 import {
   InlineCombobox,
