@@ -1,7 +1,5 @@
 "use client";
 
-import * as React from "react";
-
 import {
   type FloatingToolbarState,
   flip,
@@ -9,6 +7,7 @@ import {
   useFloatingToolbar,
   useFloatingToolbarState,
 } from "@platejs/floating";
+import { cn } from "@repo/design-system/lib/utils";
 import { useComposedRef } from "@udecode/cn";
 import { KEYS } from "platejs";
 import {
@@ -16,8 +15,6 @@ import {
   useEventEditorValue,
   usePluginOption,
 } from "platejs/react";
-
-import { cn } from "@/utils/tailwind";
 
 import { Toolbar } from "./toolbar";
 
@@ -66,19 +63,21 @@ export function FloatingToolbar({
 
   const ref = useComposedRef<HTMLDivElement>(props.ref, floatingRef);
 
-  if (hidden) return null;
+  if (hidden) {
+    return null;
+  }
 
   return (
     <div ref={clickOutsideRef}>
       <Toolbar
         {...props}
         {...rootProps}
-        ref={ref}
         className={cn(
-          "absolute z-50 scrollbar-hide overflow-x-auto rounded-md border bg-popover p-1 whitespace-nowrap opacity-100 shadow-md print:hidden",
+          "scrollbar-hide absolute z-50 overflow-x-auto whitespace-nowrap rounded-md border bg-popover p-1 opacity-100 shadow-md print:hidden",
           "max-w-[80vw]",
           className,
         )}
+        ref={ref}
       >
         {children}
       </Toolbar>

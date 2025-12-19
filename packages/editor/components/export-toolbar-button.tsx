@@ -1,14 +1,11 @@
-'use client';
+"use client";
 
-import * as React from 'react';
-
-import type { DropdownMenuProps } from '@radix-ui/react-dropdown-menu';
-
-import { MarkdownPlugin } from '@platejs/markdown';
-import { ArrowDownToLineIcon } from 'lucide-react';
-import { createSlateEditor } from 'platejs';
-import { useEditorRef } from 'platejs/react';
-import { serializeHtml } from 'platejs/static';
+import { MarkdownPlugin } from "@platejs/markdown";
+import type { DropdownMenuProps } from "@radix-ui/react-dropdown-menu";
+import { ArrowDownToLineIcon } from "lucide-react";
+import { createSlateEditor } from "platejs";
+import { useEditorRef } from "platejs/react";
+import { serializeHtml } from "platejs/static";
 
 import {
   DropdownMenu,
@@ -16,34 +13,34 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+} from "@/components/ui/dropdown-menu";
 
-import { EditorStatic } from './editor-static';
-import { ToolbarButton } from './toolbar';
+import { EditorStatic } from "./editor-static";
+import { ToolbarButton } from "./toolbar";
 
-const siteUrl = 'https://platejs.org';
+const siteUrl = "https://platejs.org";
 
 export function ExportToolbarButton(props: DropdownMenuProps) {
   const editor = useEditorRef();
   const [open, setOpen] = React.useState(false);
 
   const getCanvas = async () => {
-    const { default: html2canvas } = await import('html2canvas-pro');
+    const { default: html2canvas } = await import("html2canvas-pro");
 
-    const style = document.createElement('style');
+    const style = document.createElement("style");
     document.head.append(style);
 
     const canvas = await html2canvas(editor.api.toDOMNode(editor)!, {
       onclone: (document: Document) => {
         const editorElement = document.querySelector(
-          '[contenteditable="true"]'
+          '[contenteditable="true"]',
         );
         if (editorElement) {
-          Array.from(editorElement.querySelectorAll('*')).forEach((element) => {
-            const existingStyle = element.getAttribute('style') || '';
+          Array.from(editorElement.querySelectorAll("*")).forEach((element) => {
+            const existingStyle = element.getAttribute("style") || "";
             element.setAttribute(
-              'style',
-              `${existingStyle}; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important`
+              "style",
+              `${existingStyle}; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important`,
             );
           });
         }
@@ -60,7 +57,7 @@ export function ExportToolbarButton(props: DropdownMenuProps) {
     const blob = await response.blob();
     const blobUrl = window.URL.createObjectURL(blob);
 
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     link.href = blobUrl;
     link.download = filename;
     document.body.append(link);
@@ -74,10 +71,10 @@ export function ExportToolbarButton(props: DropdownMenuProps) {
   const exportToPdf = async () => {
     const canvas = await getCanvas();
 
-    const PDFLib = await import('pdf-lib');
+    const PDFLib = await import("pdf-lib");
     const pdfDoc = await PDFLib.PDFDocument.create();
     const page = pdfDoc.addPage([canvas.width, canvas.height]);
-    const imageEmbed = await pdfDoc.embedPng(canvas.toDataURL('PNG'));
+    const imageEmbed = await pdfDoc.embedPng(canvas.toDataURL("PNG"));
     const { height, width } = imageEmbed.scale(1);
     page.drawImage(imageEmbed, {
       height,
@@ -87,12 +84,12 @@ export function ExportToolbarButton(props: DropdownMenuProps) {
     });
     const pdfBase64 = await pdfDoc.saveAsBase64({ dataUri: true });
 
-    await downloadFile(pdfBase64, 'plate.pdf');
+    await downloadFile(pdfBase64, "plate.pdf");
   };
 
   const exportToImage = async () => {
     const canvas = await getCanvas();
-    await downloadFile(canvas.toDataURL('image/png'), 'plate.png');
+    await downloadFile(canvas.toDataURL("image/png"), "plate.png");
   };
 
   const exportToHtml = async () => {
@@ -102,7 +99,7 @@ export function ExportToolbarButton(props: DropdownMenuProps) {
 
     const editorHtml = await serializeHtml(editorStatic, {
       editorComponent: EditorStatic,
-      props: { style: { padding: '0 calc(50% - 350px)', paddingBottom: '' } },
+      props: { style: { padding: "0 calc(50% - 350px)", paddingBottom: "" } },
     });
 
     const tailwindCss = `<link rel="stylesheet" href="${siteUrl}/tailwind.css">`;
@@ -136,19 +133,19 @@ export function ExportToolbarButton(props: DropdownMenuProps) {
 
     const url = `data:text/html;charset=utf-8,${encodeURIComponent(html)}`;
 
-    await downloadFile(url, 'plate.html');
+    await downloadFile(url, "plate.html");
   };
 
   const exportToMarkdown = async () => {
     const md = editor.getApi(MarkdownPlugin).markdown.serialize();
     const url = `data:text/markdown;charset=utf-8,${encodeURIComponent(md)}`;
-    await downloadFile(url, 'plate.md');
+    await downloadFile(url, "plate.md");
   };
 
   return (
-    <DropdownMenu open={open} onOpenChange={setOpen} modal={false} {...props}>
+    <DropdownMenu modal={false} onOpenChange={setOpen} open={open} {...props}>
       <DropdownMenuTrigger asChild>
-        <ToolbarButton pressed={open} tooltip="Export" isDropdown>
+        <ToolbarButton isDropdown pressed={open} tooltip="Export">
           <ArrowDownToLineIcon className="size-4" />
         </ToolbarButton>
       </DropdownMenuTrigger>

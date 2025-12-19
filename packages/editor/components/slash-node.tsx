@@ -1,9 +1,5 @@
 "use client";
 
-import * as React from "react";
-
-import type { PlateEditor, PlateElementProps } from "platejs/react";
-
 import {
   CalendarIcon,
   ChevronRightIcon,
@@ -22,7 +18,8 @@ import {
   Table,
   TableOfContentsIcon,
 } from "lucide-react";
-import { type TComboboxInputElement, KEYS } from "platejs";
+import { KEYS, type TComboboxInputElement } from "platejs";
+import type { PlateEditor, PlateElementProps } from "platejs/react";
 import { PlateElement } from "platejs/react";
 
 import {
@@ -45,7 +42,7 @@ type Group = {
   items: Item[];
 };
 
-interface Item {
+type Item = {
   icon: React.ReactNode;
   value: string;
   onSelect: (editor: PlateEditor, value: string) => void;
@@ -53,7 +50,7 @@ interface Item {
   focusEditor?: boolean;
   keywords?: string[];
   label?: string;
-}
+};
 
 const groups: Group[] = [
   {
@@ -210,13 +207,13 @@ export function SlashInputElement(
               {items.map(
                 ({ focusEditor, icon, keywords, label, value, onSelect }) => (
                   <InlineComboboxItem
-                    key={value}
-                    value={value}
-                    onClick={() => onSelect(editor, value)}
-                    label={label}
                     focusEditor={focusEditor}
                     group={group}
+                    key={value}
                     keywords={keywords}
+                    label={label}
+                    onClick={() => onSelect(editor, value)}
+                    value={value}
                   >
                     <div className="mr-2 text-muted-foreground">{icon}</div>
                     {label ?? value}

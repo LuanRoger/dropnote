@@ -1,15 +1,12 @@
-import * as React from 'react';
-
-import type { TCaptionElement, TResizableProps, TVideoElement } from 'platejs';
-import type { SlateElementProps } from 'platejs/static';
-
-import { NodeApi } from 'platejs';
-import { SlateElement } from 'platejs/static';
+import type { TCaptionElement, TResizableProps, TVideoElement } from "platejs";
+import { NodeApi } from "platejs";
+import type { SlateElementProps } from "platejs/static";
+import { SlateElement } from "platejs/static";
 
 export function VideoElementStatic(
-  props: SlateElementProps<TVideoElement & TCaptionElement & TResizableProps>
+  props: SlateElementProps<TVideoElement & TCaptionElement & TResizableProps>,
 ) {
-  const { align = 'center', caption, url, width } = props.element;
+  const { align = "center", caption, url, width } = props.element;
 
   return (
     <SlateElement className="py-2.5" {...props}>
@@ -20,8 +17,8 @@ export function VideoElementStatic(
         >
           <video
             className="w-full max-w-full rounded-sm object-cover px-0"
-            src={url}
             controls
+            src={url}
           />
           {caption && <figcaption>{NodeApi.string(caption[0])}</figcaption>}
         </figure>

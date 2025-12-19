@@ -1,11 +1,8 @@
 "use client";
 
-import * as React from "react";
-
+import { useLink } from "@platejs/link/react";
 import type { TLinkElement } from "platejs";
 import type { PlateElementProps } from "platejs/react";
-
-import { useLink } from "@platejs/link/react";
 import { PlateElement } from "platejs/react";
 
 export function LinkElement(props: PlateElementProps<TLinkElement>) {
@@ -15,11 +12,11 @@ export function LinkElement(props: PlateElementProps<TLinkElement>) {
     <PlateElement
       {...props}
       as="a"
-      className="font-medium text-primary underline decoration-primary underline-offset-4"
       attributes={{
         ...props.attributes,
         ...(linkProps as any),
       }}
+      className="font-medium text-primary underline decoration-primary underline-offset-4"
     >
       {props.children}
     </PlateElement>

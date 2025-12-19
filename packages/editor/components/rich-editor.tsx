@@ -1,8 +1,8 @@
-import { Editor, EditorContainer } from "@/components/plate-ui/editor";
+import { Editor, EditorContainer } from "./editor";
 
-export interface RichEditorProps {
+export type RichEditorProps = {
   className?: string;
-}
+};
 
 export default function RichEditor({ className }: RichEditorProps) {
   return (

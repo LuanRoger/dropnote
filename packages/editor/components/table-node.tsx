@@ -1,9 +1,5 @@
 "use client";
 
-import * as React from "react";
-
-import type * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
-
 import { useDraggable, useDropLine } from "@platejs/dnd";
 import {
   BlockSelectionPlugin,
@@ -36,30 +32,31 @@ import {
   XIcon,
 } from "lucide-react";
 import {
+  KEYS,
+  PathApi,
   type TElement,
   type TTableCellElement,
   type TTableElement,
   type TTableRowElement,
-  KEYS,
-  PathApi,
 } from "platejs";
 import {
-  type PlateElementProps,
   PlateElement,
+  type PlateElementProps,
   useComposedRef,
   useEditorPlugin,
   useEditorRef,
   useEditorSelector,
   useElement,
+  useElementSelector,
+  useFocusedLast,
   usePluginOption,
   useReadOnly,
   useRemoveNodeButton,
   useSelected,
   withHOC,
 } from "platejs/react";
-import { useElementSelector } from "platejs/react";
 
-import { Button } from "./button";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -68,9 +65,10 @@ import {
   DropdownMenuItem,
   DropdownMenuPortal,
   DropdownMenuTrigger,
-} from "./dropdown-menu";
-import { Popover, PopoverContent } from "./popover";
-import { cn } from "@/utils/tailwind";
+} from "@/components/ui/dropdown-menu";
+import { Popover, PopoverContent } from "@/components/ui/popover";
+import { cn } from "@repo/design-system/lib/utils";
+import { useCallback, useState } from "react";
 
 import { blockSelectionVariants } from "./block-selection";
 import {
@@ -103,13 +101,14 @@ export const TableElement = withHOC(
       BlockSelectionPlugin,
       "isSelectionAreaVisible",
     );
-    const hasControls = !readOnly && !isSelectionAreaVisible;
-    const selected = useSelected();
+    const hasControls = !(readOnly || isSelectionAreaVisible);
     const {
       isSelectingCell,
       marginLeft,
       props: tableProps,
     } = useTableElement();
+
+    const isSelectingTable = useBlockSelected(props.element.id as string);
 
     const content = (
       <PlateElement
@@ -130,11 +129,15 @@ export const TableElement = withHOC(
           >
             <tbody className="min-w-full">{children}</tbody>
           </table>
+
+          {isSelectingTable && (
+            <div className={blockSelectionVariants()} contentEditable={false} />
+          )}
         </div>
       </PlateElement>
     );
 
-    if (readOnly || !selected) {
+    if (readOnly) {
       return content;
     }
 
@@ -147,19 +150,27 @@ function TableFloatingToolbar({
   ...props
 }: React.ComponentProps<typeof PopoverContent>) {
   const { tf } = useEditorPlugin(TablePlugin);
+  const selected = useSelected();
   const element = useElement<TTableElement>();
   const { props: buttonProps } = useRemoveNodeButton({ element });
-  const collapsed = useEditorSelector((editor) => !editor.api.isExpanded(), []);
+  const collapsedInside = useEditorSelector(
+    (editor) => selected && editor.api.isCollapsed(),
+    [selected],
+  );
+  const isFocusedLast = useFocusedLast();
 
   const { canMerge, canSplit } = useTableMergeState();
 
   return (
-    <Popover open={canMerge || canSplit || collapsed} modal={false}>
+    <Popover
+      modal={false}
+      open={isFocusedLast && (canMerge || canSplit || collapsedInside)}
+    >
       <PopoverAnchor asChild>{children}</PopoverAnchor>
       <PopoverContent
         asChild
-        onOpenAutoFocus={(e) => e.preventDefault()}
         contentEditable={false}
+        onOpenAutoFocus={(e) => e.preventDefault()}
         {...props}
       >
         <Toolbar
@@ -201,7 +212,7 @@ function TableFloatingToolbar({
               </DropdownMenuPortal>
             </DropdownMenu>
 
-            {collapsed && (
+            {collapsedInside && (
               <ToolbarGroup>
                 <ToolbarButton tooltip="Delete table" {...buttonProps}>
                   <Trash2Icon />
@@ -210,7 +221,7 @@ function TableFloatingToolbar({
             )}
           </ToolbarGroup>
 
-          {collapsed && (
+          {collapsedInside && (
             <ToolbarGroup>
               <ToolbarButton
                 onClick={() => {
@@ -242,7 +253,7 @@ function TableFloatingToolbar({
             </ToolbarGroup>
           )}
 
-          {collapsed && (
+          {collapsedInside && (
             <ToolbarGroup>
               <ToolbarButton
                 onClick={() => {
@@ -295,12 +306,12 @@ function TableBordersDropdownMenuContent(
 
   return (
     <DropdownMenuContent
+      align="start"
       className="min-w-[220px]"
       onCloseAutoFocus={(e) => {
         e.preventDefault();
         editor.tf.focus();
       }}
-      align="start"
       side="right"
       sideOffset={0}
       {...props}
@@ -363,12 +374,12 @@ function ColorDropdownMenu({
   children: React.ReactNode;
   tooltip: string;
 }) {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
 
   const editor = useEditorRef();
   const selectedCells = usePluginOption(TablePlugin, "selectedCells");
 
-  const onUpdateColor = React.useCallback(
+  const onUpdateColor = useCallback(
     (color: string) => {
       setOpen(false);
       setCellBackground(editor, { color, selectedCells: selectedCells ?? [] });
@@ -376,7 +387,7 @@ function ColorDropdownMenu({
     [selectedCells, editor],
   );
 
-  const onClearColor = React.useCallback(() => {
+  const onClearColor = useCallback(() => {
     setOpen(false);
     setCellBackground(editor, {
       color: null,
@@ -385,7 +396,7 @@ function ColorDropdownMenu({
   }, [selectedCells, editor]);
 
   return (
-    <DropdownMenu open={open} onOpenChange={setOpen} modal={false}>
+    <DropdownMenu modal={false} onOpenChange={setOpen} open={open}>
       <DropdownMenuTrigger asChild>
         <ToolbarButton tooltip={tooltip}>{children}</ToolbarButton>
       </DropdownMenuTrigger>
@@ -409,7 +420,10 @@ function ColorDropdownMenu({
   );
 }
 
-export function TableRowElement(props: PlateElementProps<TTableRowElement>) {
+export function TableRowElement({
+  children,
+  ...props
+}: PlateElementProps<TTableRowElement>) {
   const { element } = props;
   const readOnly = useReadOnly();
   const selected = useSelected();
@@ -418,9 +432,9 @@ export function TableRowElement(props: PlateElementProps<TTableRowElement>) {
     BlockSelectionPlugin,
     "isSelectionAreaVisible",
   );
-  const hasControls = !readOnly && !isSelectionAreaVisible;
+  const hasControls = !(readOnly || isSelectionAreaVisible);
 
-  const { isDragging, previewRef, handleRef } = useDraggable({
+  const { isDragging, nodeRef, previewRef, handleRef } = useDraggable({
     element,
     type: element.type,
     canDropNode: ({ dragEntry, dropEntry }) =>
@@ -440,13 +454,13 @@ export function TableRowElement(props: PlateElementProps<TTableRowElement>) {
   return (
     <PlateElement
       {...props}
-      ref={useComposedRef(props.ref, previewRef)}
       as="tr"
-      className={cn("group/row", isDragging && "opacity-50")}
       attributes={{
         ...props.attributes,
         "data-selected": selected ? "true" : undefined,
       }}
+      className={cn("group/row", isDragging && "opacity-50")}
+      ref={useComposedRef(props.ref, previewRef, nodeRef)}
     >
       {hasControls && (
         <td className="w-2 select-none" contentEditable={false}>
@@ -455,7 +469,7 @@ export function TableRowElement(props: PlateElementProps<TTableRowElement>) {
         </td>
       )}
 
-      {props.children}
+      {children}
     </PlateElement>
   );
 }
@@ -466,16 +480,16 @@ function RowDragHandle({ dragRef }: { dragRef: React.Ref<any> }) {
 
   return (
     <Button
-      ref={dragRef}
-      variant="outline"
       className={cn(
-        "absolute top-1/2 left-0 z-51 h-6 w-4 -translate-y-1/2 p-0 focus-visible:ring-0 focus-visible:ring-offset-0",
+        "-translate-y-1/2 absolute top-1/2 left-0 z-51 h-6 w-4 p-0 focus-visible:ring-0 focus-visible:ring-offset-0",
         "cursor-grab active:cursor-grabbing",
         'opacity-0 transition-opacity duration-100 group-hover/row:opacity-100 group-has-data-[resizing="true"]/row:opacity-0',
       )}
       onClick={() => {
         editor.tf.select(element);
       }}
+      ref={dragRef}
+      variant="outline"
     >
       <GripVertical className="text-muted-foreground" />
     </Button>
@@ -507,10 +521,14 @@ export function TableCellElement({
   const readOnly = useReadOnly();
   const element = props.element;
 
+  const tableId = useElementSelector(([node]) => node.id as string, [], {
+    key: KEYS.table,
+  });
   const rowId = useElementSelector(([node]) => node.id as string, [], {
     key: KEYS.tr,
   });
-  const isSelectingRow = useBlockSelected(rowId);
+  const isSelectingTable = useBlockSelected(tableId);
+  const isSelectingRow = useBlockSelected(rowId) || isSelectingTable;
   const isSelectionAreaVisible = usePluginOption(
     BlockSelectionPlugin,
     "isSelectionAreaVisible",
@@ -530,17 +548,22 @@ export function TableCellElement({
     <PlateElement
       {...props}
       as={isHeader ? "th" : "td"}
+      attributes={{
+        ...props.attributes,
+        colSpan: api.table.getColSpan(element),
+        rowSpan: api.table.getRowSpan(element),
+      }}
       className={cn(
         "h-full overflow-visible border-none bg-background p-0",
         element.background ? "bg-(--cellBackground)" : "bg-background",
         isHeader && "text-left *:m-0",
         "before:size-full",
         selected && "before:z-10 before:bg-brand/5",
-        "before:absolute before:box-border before:content-[''] before:select-none",
-        borders.bottom?.size && `before:border-b before:border-b-border`,
-        borders.right?.size && `before:border-r before:border-r-border`,
-        borders.left?.size && `before:border-l before:border-l-border`,
-        borders.top?.size && `before:border-t before:border-t-border`,
+        "before:absolute before:box-border before:select-none before:content-['']",
+        borders.bottom?.size && "before:border-b before:border-b-border",
+        borders.right?.size && "before:border-r before:border-r-border",
+        borders.left?.size && "before:border-l before:border-l-border",
+        borders.top?.size && "before:border-t before:border-t-border",
       )}
       style={
         {
@@ -549,11 +572,6 @@ export function TableCellElement({
           minWidth: width || 120,
         } as React.CSSProperties
       }
-      attributes={{
-        ...props.attributes,
-        colSpan: api.table.getColSpan(element),
-        rowSpan: api.table.getRowSpan(element),
-      }}
     >
       <div
         className="relative z-20 box-border h-full px-3 py-2"
@@ -579,7 +597,7 @@ export function TableCellElement({
               {!hiddenLeft && (
                 <ResizeHandle
                   {...leftProps}
-                  className="top-0 -left-1 w-2"
+                  className="-left-1 top-0 w-2"
                   data-resizer-left={colIndex === 0 ? "true" : undefined}
                 />
               )}
@@ -596,7 +614,7 @@ export function TableCellElement({
                   className={cn(
                     "absolute top-0 z-30 h-full w-1 bg-ring",
                     "left-[-1.5px]",
-                    'hidden animate-in fade-in group-has-[[data-resizer-left]:hover]/table:block group-has-[[data-resizer-left][data-resizing="true"]]/table:block',
+                    'fade-in hidden animate-in group-has-[[data-resizer-left]:hover]/table:block group-has-[[data-resizer-left][data-resizing="true"]]/table:block',
                   )}
                 />
               )}
@@ -618,7 +636,7 @@ export function TableCellHeaderElement(
   return <TableCellElement {...props} isHeader />;
 }
 
-const columnResizeVariants = cva("hidden animate-in fade-in", {
+const columnResizeVariants = cva("fade-in hidden animate-in", {
   variants: {
     colIndex: {
       0: 'group-has-[[data-col="0"]:hover]/table:block group-has-[[data-col="0"][data-resizing="true"]]/table:block',

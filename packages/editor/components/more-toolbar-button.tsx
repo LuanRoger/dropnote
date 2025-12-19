@@ -1,9 +1,10 @@
 "use client";
 
-import * as React from "react";
-
+import {
+  useLinkToolbarButton,
+  useLinkToolbarButtonState,
+} from "@platejs/link/react";
 import type { DropdownMenuProps } from "@radix-ui/react-dropdown-menu";
-
 import {
   KeyboardIcon,
   LinkIcon,
@@ -13,10 +14,6 @@ import {
 } from "lucide-react";
 import { KEYS } from "platejs";
 import { useEditorRef } from "platejs/react";
-import {
-  useLinkToolbarButton,
-  useLinkToolbarButtonState,
-} from "@platejs/link/react";
 
 import {
   DropdownMenu,
@@ -35,7 +32,7 @@ export function MoreToolbarButton(props: DropdownMenuProps) {
   const { props: buttonProps } = useLinkToolbarButton(stateLink);
 
   return (
-    <DropdownMenu open={open} onOpenChange={setOpen} modal={false} {...props}>
+    <DropdownMenu modal={false} onOpenChange={setOpen} open={open} {...props}>
       <DropdownMenuTrigger asChild>
         <ToolbarButton pressed={open} tooltip="Insert">
           <MoreHorizontalIcon />
@@ -43,14 +40,11 @@ export function MoreToolbarButton(props: DropdownMenuProps) {
       </DropdownMenuTrigger>
 
       <DropdownMenuContent
-        className="ignore-click-outside/toolbar flex max-h-[500px] min-w-[180px] flex-col overflow-y-auto"
         align="start"
+        className="ignore-click-outside/toolbar flex max-h-[500px] min-w-[180px] flex-col overflow-y-auto"
       >
         <DropdownMenuGroup>
-          <DropdownMenuItem
-            onClick={buttonProps.onClick}
-            //onMouseDown={buttonProps.onMouseDown}
-          >
+          <DropdownMenuItem onClick={buttonProps.onClick}>
             <LinkIcon />
             Link
           </DropdownMenuItem>

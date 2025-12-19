@@ -1,33 +1,25 @@
 "use client";
 
-import React from "react";
-
-import type {
-  DropdownMenuItemProps,
-  DropdownMenuProps,
-} from "@radix-ui/react-dropdown-menu";
-
-import { useComposedRef } from "@udecode/cn";
-import debounce from "lodash/debounce.js";
-import { EraserIcon, PlusIcon } from "lucide-react";
-import { useEditorRef, useEditorSelector } from "platejs/react";
-
-import { buttonVariants } from "./button";
+import { buttonVariants } from "@repo/design-system/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "./dropdown-menu";
+} from "@repo/design-system/components/ui/dropdown-menu";
+import { cn } from "@repo/design-system/lib/utils";
+import { useComposedRef } from "@udecode/cn";
+import { debounce } from "lodash";
+import { EraserIcon, PlusIcon } from "lucide-react";
+import { useEditorRef, useEditorSelector } from "platejs/react";
+import React, { memo, useCallback, useEffect, useRef, useState } from "react";
+import { ToolbarButton, ToolbarMenuGroup } from "./toolbar";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "./tooltip";
-import { cn } from "@/utils/tailwind";
-
-import { ToolbarButton, ToolbarMenuGroup } from "./toolbar";
 
 export function FontColorToolbarButton({
   children,
@@ -36,7 +28,7 @@ export function FontColorToolbarButton({
 }: {
   nodeType: string;
   tooltip?: string;
-} & DropdownMenuProps) {
+} & React.ComponentPropsWithoutRef<typeof DropdownMenu>) {
   const editor = useEditorRef();
 
   const selectionDefined = useEditorSelector(
@@ -49,17 +41,17 @@ export function FontColorToolbarButton({
     [nodeType],
   );
 
-  const [selectedColor, setSelectedColor] = React.useState<string>();
-  const [open, setOpen] = React.useState(false);
+  const [selectedColor, setSelectedColor] = useState<string>();
+  const [open, setOpen] = useState(false);
 
-  const onToggle = React.useCallback(
+  const onToggle = useCallback(
     (value = !open) => {
       setOpen(value);
     },
     [open, setOpen],
   );
 
-  const updateColor = React.useCallback(
+  const updateColor = useCallback(
     (value: string) => {
       if (editor.selection) {
         setSelectedColor(value);
@@ -73,7 +65,7 @@ export function FontColorToolbarButton({
     [editor, nodeType],
   );
 
-  const updateColorAndClose = React.useCallback(
+  const updateColorAndClose = useCallback(
     (value: string) => {
       updateColor(value);
       onToggle();
@@ -81,7 +73,7 @@ export function FontColorToolbarButton({
     [onToggle, updateColor],
   );
 
-  const clearColor = React.useCallback(() => {
+  const clearColor = useCallback(() => {
     if (editor.selection) {
       editor.tf.select(editor.selection);
       editor.tf.focus();
@@ -94,7 +86,7 @@ export function FontColorToolbarButton({
     }
   }, [editor, selectedColor, onToggle, nodeType]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (selectionDefined) {
       setSelectedColor(color);
     }
@@ -102,11 +94,11 @@ export function FontColorToolbarButton({
 
   return (
     <DropdownMenu
-      open={open}
+      modal={false}
       onOpenChange={(value) => {
         setOpen(value);
       }}
-      modal={false}
+      open={open}
     >
       <DropdownMenuTrigger asChild>
         <ToolbarButton pressed={open} tooltip={tooltip}>
@@ -116,8 +108,8 @@ export function FontColorToolbarButton({
 
       <DropdownMenuContent align="start">
         <ColorPicker
-          color={selectedColor || color}
           clearColor={clearColor}
+          color={selectedColor || color}
           colors={DEFAULT_COLORS}
           customColors={DEFAULT_CUSTOM_COLORS}
           updateColor={updateColorAndClose}
@@ -149,8 +141,8 @@ function PureColorPicker({
     <div className={cn("flex flex-col", className)} {...props}>
       <ToolbarMenuGroup label="Custom Colors">
         <ColorCustom
-          color={color}
           className="px-2"
+          color={color}
           colors={colors}
           customColors={customColors}
           updateColor={updateColor}
@@ -159,8 +151,8 @@ function PureColorPicker({
       </ToolbarMenuGroup>
       <ToolbarMenuGroup label="Default Colors">
         <ColorDropdownMenuItems
-          color={color}
           className="px-2"
+          color={color}
           colors={colors}
           updateColor={updateColor}
         />
@@ -177,7 +169,7 @@ function PureColorPicker({
   );
 }
 
-const ColorPicker = React.memo(
+const ColorPicker = memo(
   PureColorPicker,
   (prev, next) =>
     prev.color === next.color &&
@@ -200,10 +192,10 @@ function ColorCustom({
   updateCustomColor: (color: string) => void;
   color?: string;
 } & React.ComponentPropsWithoutRef<"div">) {
-  const [customColor, setCustomColor] = React.useState<string>();
-  const [value, setValue] = React.useState<string>(color || "#000000");
+  const [customColor, setCustomColor] = useState<string>();
+  const [value, setValue] = useState<string>(color || "#000000");
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (
       !color ||
       customColors.some((c) => c.value === color) ||
@@ -230,8 +222,7 @@ function ColorCustom({
     [customColor, customColors],
   );
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const updateCustomColorDebounced = React.useCallback(
+  const updateCustomColorDebounced = useCallback(
     debounce(updateCustomColor, 100),
     [updateCustomColor],
   );
@@ -244,11 +235,11 @@ function ColorCustom({
         updateColor={updateColor}
       >
         <ColorInput
-          value={value}
           onChange={(e) => {
             setValue(e.target.value);
             updateCustomColorDebounced(e.target.value);
           }}
+          value={value}
         >
           <DropdownMenuItem
             className={cn(
@@ -277,12 +268,14 @@ function ColorInput({
   value = "#000000",
   ...props
 }: React.ComponentProps<"input">) {
-  const inputRef = React.useRef<HTMLInputElement | null>(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
   return (
     <div className="flex flex-col items-center">
       {React.Children.map(children, (child) => {
-        if (!child) return child;
+        if (!child) {
+          return child;
+        }
 
         return React.cloneElement(
           child as React.ReactElement<{
@@ -295,10 +288,10 @@ function ColorInput({
       })}
       <input
         {...props}
-        ref={useComposedRef(props.ref, inputRef)}
         className={cn("size-0 overflow-hidden border-0 p-0", className)}
-        value={value}
+        ref={useComposedRef(props.ref, inputRef)}
         type="color"
+        value={value}
       />
     </div>
   );
@@ -332,16 +325,16 @@ function ColorDropdownMenuItem({
           size: "icon",
           variant: "outline",
         }),
-        "my-1 flex size-6 items-center justify-center rounded-full border border-solid border-muted p-0 transition-all hover:scale-125",
+        "my-1 flex size-6 items-center justify-center rounded-full border border-muted border-solid p-0 transition-all hover:scale-125",
         !isBrightColor && "border-transparent",
         isSelected && "border-2 border-primary",
         className,
       )}
-      style={{ backgroundColor: value }}
       onSelect={(e) => {
         e.preventDefault();
         updateColor(value);
       }}
+      style={{ backgroundColor: value }}
       {...props}
     />
   );
@@ -378,12 +371,12 @@ export function ColorDropdownMenuItems({
       <TooltipProvider>
         {colors.map(({ isBrightColor, name, value }) => (
           <ColorDropdownMenuItem
-            name={name}
-            key={name ?? value}
-            value={value}
             isBrightColor={isBrightColor}
             isSelected={color === value}
+            key={name ?? value}
+            name={name}
             updateColor={updateColor}
+            value={value}
           />
         ))}
         {props.children}

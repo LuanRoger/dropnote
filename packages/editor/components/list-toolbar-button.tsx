@@ -1,23 +1,20 @@
 "use client";
 
-import * as React from "react";
-
 import { ListStyleType, someList, toggleList } from "@platejs/list";
 import {
   useIndentTodoToolBarButton,
   useIndentTodoToolBarButtonState,
 } from "@platejs/list/react";
-import { List, ListOrdered, ListTodoIcon } from "lucide-react";
-import { useEditorRef, useEditorSelector } from "platejs/react";
-
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "./dropdown-menu";
-
+} from "@repo/design-system/components/ui/dropdown-menu";
+import { List, ListOrdered, ListTodoIcon } from "lucide-react";
+import { useEditorRef, useEditorSelector } from "platejs/react";
+import { useState } from "react";
 import {
   ToolbarButton,
   ToolbarSplitButton,
@@ -27,7 +24,7 @@ import {
 
 export function BulletedListToolbarButton() {
   const editor = useEditorRef();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
 
   const pressed = useEditorSelector(
     (editor) =>
@@ -43,17 +40,17 @@ export function BulletedListToolbarButton() {
     <ToolbarSplitButton pressed={open}>
       <ToolbarSplitButtonPrimary
         className="data-[state=on]:bg-accent data-[state=on]:text-accent-foreground"
+        data-state={pressed ? "on" : "off"}
         onClick={() => {
           toggleList(editor, {
             listStyleType: ListStyleType.Disc,
           });
         }}
-        data-state={pressed ? "on" : "off"}
       >
         <List className="size-4" />
       </ToolbarSplitButtonPrimary>
 
-      <DropdownMenu open={open} onOpenChange={setOpen} modal={false}>
+      <DropdownMenu modal={false} onOpenChange={setOpen} open={open}>
         <DropdownMenuTrigger asChild>
           <ToolbarSplitButtonSecondary />
         </DropdownMenuTrigger>
@@ -105,7 +102,7 @@ export function BulletedListToolbarButton() {
 
 export function NumberedListToolbarButton() {
   const editor = useEditorRef();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
 
   const pressed = useEditorSelector(
     (editor) =>
@@ -123,17 +120,17 @@ export function NumberedListToolbarButton() {
     <ToolbarSplitButton pressed={open}>
       <ToolbarSplitButtonPrimary
         className="data-[state=on]:bg-accent data-[state=on]:text-accent-foreground"
+        data-state={pressed ? "on" : "off"}
         onClick={() =>
           toggleList(editor, {
             listStyleType: ListStyleType.Decimal,
           })
         }
-        data-state={pressed ? "on" : "off"}
       >
         <ListOrdered className="size-4" />
       </ToolbarSplitButtonPrimary>
 
-      <DropdownMenu open={open} onOpenChange={setOpen} modal={false}>
+      <DropdownMenu modal={false} onOpenChange={setOpen} open={open}>
         <DropdownMenuTrigger asChild>
           <ToolbarSplitButtonSecondary />
         </DropdownMenuTrigger>
