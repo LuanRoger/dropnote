@@ -4,7 +4,6 @@ import {
   useLinkToolbarButton,
   useLinkToolbarButtonState,
 } from "@platejs/link/react";
-import type { DropdownMenuProps } from "@radix-ui/react-dropdown-menu";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,10 +20,12 @@ import {
 } from "lucide-react";
 import { KEYS } from "platejs";
 import { useEditorRef } from "platejs/react";
-import { useState } from "react";
+import { ComponentPropsWithoutRef, useState } from "react";
 import { ToolbarButton } from "./toolbar";
 
-export function MoreToolbarButton(props: DropdownMenuProps) {
+export function MoreToolbarButton(
+  props: ComponentPropsWithoutRef<typeof DropdownMenu>,
+) {
   const editor = useEditorRef();
   const [open, setOpen] = useState(false);
   const stateLink = useLinkToolbarButtonState();

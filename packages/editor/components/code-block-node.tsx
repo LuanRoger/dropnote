@@ -27,7 +27,7 @@ import {
   useElement,
   useReadOnly,
 } from "platejs/react";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 export function CodeBlockElement(props: PlateElementProps<TCodeBlockElement>) {
   const { editor, element } = props;
@@ -85,9 +85,9 @@ function CodeBlockCombobox() {
       languages.filter(
         (language) =>
           !searchValue ||
-          language.label.toLowerCase().includes(searchValue.toLowerCase())
+          language.label.toLowerCase().includes(searchValue.toLowerCase()),
       ),
-    [searchValue]
+    [searchValue],
   );
 
   if (readOnly) {
@@ -130,7 +130,7 @@ function CodeBlockCombobox() {
                   onSelect={(value) => {
                     editor.tf.setNodes<TCodeBlockElement>(
                       { lang: value },
-                      { at: element }
+                      { at: element },
                     );
                     setSearchValue(value);
                     setOpen(false);
@@ -139,7 +139,7 @@ function CodeBlockCombobox() {
                 >
                   <Check
                     className={cn(
-                      value === language.value ? "opacity-100" : "opacity-0"
+                      value === language.value ? "opacity-100" : "opacity-0",
                     )}
                   />
                   {language.label}
@@ -172,7 +172,7 @@ function CopyButton({
     <Button
       onClick={() => {
         void navigator.clipboard.writeText(
-          typeof value === "function" ? value() : value
+          typeof value === "function" ? value() : value,
         );
         setHasCopied(true);
       }}

@@ -1,9 +1,9 @@
 import { MarkdownPlugin, remarkMdx, remarkMention } from "@platejs/markdown";
-import { KEYS } from "platejs";
+import { type AnyPluginConfig, KEYS } from "platejs";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 
-export const MarkdownKit = [
+export const MarkdownKit: AnyPluginConfig[] = [
   MarkdownPlugin.configure({
     options: {
       disallowedNodes: [KEYS.suggestion],

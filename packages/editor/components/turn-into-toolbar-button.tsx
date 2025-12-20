@@ -22,7 +22,7 @@ import {
 import type { TElement } from "platejs";
 import { KEYS } from "platejs";
 import { useEditorRef, useSelectionFragmentProp } from "platejs/react";
-import { useMemo, useState } from "react";
+import { ComponentProps, useMemo, useState } from "react";
 import { getBlockType, setBlockType } from "../utils/transforms";
 
 import { ToolbarButton, ToolbarMenuGroup } from "./toolbar";
@@ -96,7 +96,7 @@ const turnIntoItems = [
 ];
 
 export function TurnIntoToolbarButton(
-  props: ComponentProps<typeof DropdownMenu>
+  props: ComponentProps<typeof DropdownMenu>,
 ) {
   const editor = useEditorRef();
   const [open, setOpen] = useState(false);
@@ -109,7 +109,7 @@ export function TurnIntoToolbarButton(
     () =>
       turnIntoItems.find((item) => item.value === (value ?? KEYS.p)) ??
       turnIntoItems[0],
-    [value]
+    [value],
   );
 
   return (

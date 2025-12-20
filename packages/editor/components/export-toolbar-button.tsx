@@ -1,7 +1,6 @@
 "use client";
 
 import { MarkdownPlugin } from "@platejs/markdown";
-import type { DropdownMenuProps } from "@radix-ui/react-dropdown-menu";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,13 +12,15 @@ import { ArrowDownToLineIcon } from "lucide-react";
 import { createSlateEditor } from "platejs";
 import { useEditorRef } from "platejs/react";
 import { serializeHtml } from "platejs/static";
-import { useState } from "react";
+import { type ComponentPropsWithoutRef, useState } from "react";
 import { EditorStatic } from "./editor-static";
 import { ToolbarButton } from "./toolbar";
 
 const siteUrl = "https://platejs.org";
 
-export function ExportToolbarButton(props: DropdownMenuProps) {
+export function ExportToolbarButton(
+  props: ComponentPropsWithoutRef<typeof DropdownMenu>,
+) {
   const editor = useEditorRef();
   const [open, setOpen] = useState(false);
 
@@ -32,14 +33,14 @@ export function ExportToolbarButton(props: DropdownMenuProps) {
     const canvas = await html2canvas(editor.api.toDOMNode(editor)!, {
       onclone: (document: Document) => {
         const editorElement = document.querySelector(
-          '[contenteditable="true"]'
+          '[contenteditable="true"]',
         );
         if (editorElement) {
           Array.from(editorElement.querySelectorAll("*")).forEach((element) => {
             const existingStyle = element.getAttribute("style") || "";
             element.setAttribute(
               "style",
-              `${existingStyle}; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important`
+              `${existingStyle}; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important`,
             );
           });
         }

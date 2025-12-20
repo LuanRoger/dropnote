@@ -98,7 +98,7 @@ export const VideoElement = withHOC(
                   <ReactPlayer
                     controls
                     height="100%"
-                    url={unsafeUrl}
+                    src={unsafeUrl}
                     width="100%"
                   />
                 </div>

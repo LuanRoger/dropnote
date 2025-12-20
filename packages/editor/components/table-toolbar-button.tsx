@@ -1,7 +1,6 @@
 "use client";
 
 import { TablePlugin, useTableMergeState } from "@platejs/table/react";
-import type { DropdownMenuProps } from "@radix-ui/react-dropdown-menu";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -27,10 +26,12 @@ import {
 } from "lucide-react";
 import { KEYS } from "platejs";
 import { useEditorPlugin, useEditorSelector } from "platejs/react";
-import { useState } from "react";
+import { type ComponentPropsWithoutRef, useState } from "react";
 import { ToolbarButton } from "./toolbar";
 
-export function TableToolbarButton(props: DropdownMenuProps) {
+export function TableToolbarButton(
+  props: ComponentPropsWithoutRef<typeof DropdownMenu>
+) {
   const tableSelected = useEditorSelector(
     (editor) => editor.api.some({ match: { type: KEYS.table } }),
     []
@@ -207,7 +208,7 @@ export function TableToolbarButton(props: DropdownMenuProps) {
 function TablePicker() {
   const { editor, tf } = useEditorPlugin(TablePlugin);
 
-  const [tablePicker, setTablePicker] = React.useState({
+  const [tablePicker, setTablePicker] = useState({
     grid: Array.from({ length: 8 }, () => Array.from({ length: 8 }).fill(0)),
     size: { colCount: 0, rowCount: 0 },
   });

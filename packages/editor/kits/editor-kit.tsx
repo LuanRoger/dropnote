@@ -1,6 +1,6 @@
 "use client";
 
-import { TrailingBlockPlugin, type Value } from "platejs";
+import { type AnyPluginConfig, TrailingBlockPlugin } from "platejs";
 import { type TPlateEditor, useEditorRef } from "platejs/react";
 
 import { AlignKit } from "../plugins/align-kit";
@@ -32,7 +32,7 @@ import { TableKit } from "../plugins/table-kit";
 import { TocKit } from "../plugins/toc-kit";
 import { ToggleKit } from "../plugins/toggle-kit";
 
-export const EditorKit = [
+export const EditorKit: AnyPluginConfig[] = [
   // Elements
   ...BasicBlocksKit,
   ...CodeBlockKit,
@@ -75,6 +75,6 @@ export const EditorKit = [
   ...FloatingToolbarKit,
 ];
 
-export type MyEditor = TPlateEditor<Value, (typeof EditorKit)[number]>;
+export type MyEditor = TPlateEditor;
 
-export const useEditor = () => useEditorRef<MyEditor>();
+export const useEditor = (): MyEditor => useEditorRef<MyEditor>();

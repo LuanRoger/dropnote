@@ -49,7 +49,7 @@ function RichEditorShell({ code }: { code: string }) {
   const { isSaving, setIsSaving } = useContext(EditorStateContext);
 
   const debouncedSave = useCallback(
-    (code: string, noteBody: any[]) => {
+  (code: string, noteBody: any[]) => {
       if (debounceRef.current) {
         clearTimeout(debounceRef.current);
       }
