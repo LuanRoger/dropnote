@@ -10,6 +10,7 @@
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev",
+    "start": "turbo start",
     "dev:web": "turbo dev --filter=web --filter=storybook",
     "dev:app": "turbo dev --filter=app --filter=storybook --filter=studio",
     "dev:docs": "turbo dev --filter=docs",

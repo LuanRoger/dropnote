@@ -14,6 +14,10 @@
         ".react-email/**"
       ]
     },
+    "start": {
+      "cache": false,
+      "dependsOn": ["build"]
+    },
     "test": {
       "dependsOn": ["^test"]
     },
