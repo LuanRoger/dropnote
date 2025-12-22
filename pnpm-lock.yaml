@@ -354,6 +354,9 @@ importers:
       '@emoji-mart/data':
         specifier: ^1.2.1
         version: 1.2.1
+      '@hookform/resolvers':
+        specifier: ^5.2.2
+        version: 5.2.2(react-hook-form@7.68.0(react@19.2.3))
       '@platejs/ai':
         specifier: ^52.0.11
         version: 52.0.11(platejs@52.0.11(@types/react@19.2.7)(immer@10.2.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(scheduler@0.27.0)(use-sync-external-store@1.5.0(react@19.2.3)))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(typescript@5.9.3)
@@ -534,6 +537,9 @@ importers:
       sonner:
         specifier: ^2.0.7
         version: 2.0.7(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+      zod:
+        specifier: ^4.1.13
+        version: 4.2.1
     devDependencies:
       '@repo/typescript-config':
         specifier: workspace:*

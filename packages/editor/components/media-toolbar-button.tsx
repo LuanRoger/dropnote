@@ -1,8 +1,8 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -10,13 +10,22 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@repo/design-system/components/ui/alert-dialog";
+import { Button } from "@repo/design-system/components/ui/button";
+import {
+  Field,
+  FieldError,
+  FieldLabel,
+} from "@repo/design-system/components/ui/field";
 import { Input } from "@repo/design-system/components/ui/input";
 import { FilmIcon, ImageIcon } from "lucide-react";
-import { isUrl, KEYS } from "platejs";
+import { KEYS } from "platejs";
 import { useEditorRef } from "platejs/react";
-import { useCallback, useState } from "react";
-import { toast } from "sonner";
-
+import { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import {
+  type MediaToolbarSchema,
+  mediaToolbarSchema,
+} from "../utils/schemas/media-toolbar";
 import { ToolbarSplitButton, ToolbarSplitButtonPrimary } from "./toolbar";
 
 const MEDIA_CONFIG: Record<
@@ -66,12 +75,7 @@ export function MediaToolbarButton({ nodeType }: { nodeType: string }) {
         </ToolbarSplitButtonPrimary>
       </ToolbarSplitButton>
 
-      <AlertDialog
-        onOpenChange={(value) => {
-          setDialogOpen(value);
-        }}
-        open={dialogOpen}
-      >
+      <AlertDialog onOpenChange={setDialogOpen} open={dialogOpen}>
         <AlertDialogContent className="gap-6">
           <MediaUrlDialogContent
             currentConfig={currentConfig}
@@ -93,13 +97,16 @@ function MediaUrlDialogContent({
   nodeType: string;
   setOpen: (value: boolean) => void;
 }) {
+  const form = useForm<MediaToolbarSchema>({
+    resolver: zodResolver(mediaToolbarSchema),
+    defaultValues: {
+      url: "",
+    },
+  });
   const editor = useEditorRef();
-  const [url, setUrl] = useState("");
 
-  const embedMedia = useCallback(() => {
-    if (!isUrl(url)) {
-      return toast.error("Invalid URL");
-    }
+  function handleSubmit(data: MediaToolbarSchema) {
+    const { url } = data;
 
     setOpen(false);
     editor.tf.insertNodes({
@@ -108,48 +115,39 @@ function MediaUrlDialogContent({
       type: nodeType,
       url,
     });
-  }, [url, editor, nodeType, setOpen]);
+  }
 
   return (
-    <>
+    <form className="contents" onSubmit={form.handleSubmit(handleSubmit)}>
       <AlertDialogHeader>
         <AlertDialogTitle>{currentConfig.title}</AlertDialogTitle>
       </AlertDialogHeader>
 
       <AlertDialogDescription className="group relative w-full">
-        <label
-          className="absolute top-1/2 block -translate-y-1/2 cursor-text px-1 text-muted-foreground/70 text-sm transition-all group-focus-within:pointer-events-none group-focus-within:top-0 group-focus-within:cursor-default group-focus-within:font-medium group-focus-within:text-foreground group-focus-within:text-xs has-[+input:not(:placeholder-shown)]:pointer-events-none has-[+input:not(:placeholder-shown)]:top-0 has-[+input:not(:placeholder-shown)]:cursor-default has-[+input:not(:placeholder-shown)]:font-medium has-[+input:not(:placeholder-shown)]:text-foreground has-[+input:not(:placeholder-shown)]:text-xs"
-          htmlFor="url"
-        >
-          <span className="inline-flex bg-background px-2">URL</span>
-        </label>
-        <Input
-          autoFocus
-          className="w-full"
-          id="url"
-          onChange={(e) => setUrl(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              embedMedia();
-            }
-          }}
-          placeholder=""
-          type="url"
-          value={url}
+        <Controller
+          control={form.control}
+          name="url"
+          render={({ field, fieldState }) => (
+            <Field>
+              <FieldLabel htmlFor="url">URL</FieldLabel>
+              <Input
+                {...field}
+                autoFocus
+                className="w-full"
+                id="url"
+                placeholder="URL"
+                type="url"
+              />
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
+          )}
         />
       </AlertDialogDescription>
 
       <AlertDialogFooter>
         <AlertDialogCancel>Cancel</AlertDialogCancel>
-        <AlertDialogAction
-          onClick={(e) => {
-            e.preventDefault();
-            embedMedia();
-          }}
-        >
-          Accept
-        </AlertDialogAction>
+        <Button type="submit">Confirm</Button>
       </AlertDialogFooter>
-    </>
+    </form>
   );
 }
