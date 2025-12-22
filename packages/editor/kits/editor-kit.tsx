@@ -14,7 +14,6 @@ import { CodeBlockKit } from "../plugins/code-block-kit";
 import { ColumnKit } from "../plugins/column-kit";
 import { CursorOverlayKit } from "../plugins/cursor-overlay-kit";
 import { DateKit } from "../plugins/date-kit";
-import { DndKit } from "../plugins/dnd-kit";
 import { DocxKit } from "../plugins/docx-kit";
 import { EmojiKit } from "../plugins/emoji-kit";
 import { ExitBreakKit } from "../plugins/exit-break-kit";
@@ -60,7 +59,6 @@ export const EditorKit: AnyPluginConfig[] = [
   ...AutoformatKit,
   ...CursorOverlayKit,
   ...BlockMenuKit,
-  ...DndKit,
   ...EmojiKit,
   ...ExitBreakKit,
   TrailingBlockPlugin,
