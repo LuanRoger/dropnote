@@ -1,6 +1,5 @@
 "use client";
 
-import { useDraggable } from "@platejs/dnd";
 import { Image, ImagePlugin, useMediaState } from "@platejs/media/react";
 import { ResizableProvider, useResizableValue } from "@platejs/resizable";
 import type { TImageElement } from "platejs";
@@ -23,10 +22,6 @@ export const ImageElement = withHOC(
     const { align = "center", focused, readOnly, selected } = useMediaState();
     const width = useResizableValue("width");
 
-    const { isDragging, handleRef } = useDraggable({
-      element: props.element,
-    });
-
     return (
       <MediaToolbar plugin={ImagePlugin}>
         <PlateElement {...props} className="py-2.5">
@@ -48,9 +43,7 @@ export const ImageElement = withHOC(
                   "block w-full max-w-full cursor-pointer object-cover px-0",
                   "rounded-sm",
                   focused && selected && "ring-2 ring-ring ring-offset-2",
-                  isDragging && "opacity-50"
                 )}
-                ref={handleRef}
               />
               <ResizeHandle
                 className={mediaResizeHandleVariants({
@@ -75,5 +68,5 @@ export const ImageElement = withHOC(
         </PlateElement>
       </MediaToolbar>
     );
-  }
+  },
 );

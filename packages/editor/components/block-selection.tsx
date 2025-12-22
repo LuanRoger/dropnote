@@ -1,6 +1,5 @@
 "use client";
 
-import { DndPlugin } from "@platejs/dnd";
 import { useBlockSelected } from "@platejs/selection/react";
 import { cva } from "class-variance-authority";
 import { type PlateElementProps, usePluginOption } from "platejs/react";
@@ -17,19 +16,16 @@ export const blockSelectionVariants = cva(
         true: "opacity-100",
       },
     },
-  }
+  },
 );
 
 export function BlockSelection(props: PlateElementProps) {
   const isBlockSelected = useBlockSelected();
-  const isDragging = usePluginOption(DndPlugin, "isDragging");
-
-  if (!isBlockSelected || props.plugin.key === "tr") return null;
 
   return (
     <div
       className={blockSelectionVariants({
-        active: isBlockSelected && !isDragging,
+        active: isBlockSelected,
       })}
       data-slot="block-selection"
     />

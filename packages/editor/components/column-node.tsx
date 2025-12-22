@@ -1,6 +1,5 @@
 "use client";
 
-import { useDraggable, useDropLine } from "@platejs/dnd";
 import { setColumns } from "@platejs/layout";
 import { useDebouncePopoverOpen } from "@platejs/layout/react";
 import { ResizableProvider } from "@platejs/resizable";
@@ -42,7 +41,7 @@ export const ColumnElement = withHOC(
     const readOnly = useReadOnly();
     const isSelectionAreaVisible = usePluginOption(
       BlockSelectionPlugin,
-      "isSelectionAreaVisible"
+      "isSelectionAreaVisible",
     );
 
     const { isDragging, previewRef, handleRef } = useDraggable({
@@ -52,7 +51,7 @@ export const ColumnElement = withHOC(
       canDropNode: ({ dragEntry, dropEntry }) =>
         PathApi.equals(
           PathApi.parent(dragEntry[1]),
-          PathApi.parent(dropEntry[1])
+          PathApi.parent(dropEntry[1]),
         ),
     });
 
@@ -63,7 +62,7 @@ export const ColumnElement = withHOC(
             className={cn(
               "absolute top-2 left-1/2 z-50 -translate-x-1/2 -translate-y-1/2",
               "pointer-events-auto flex items-center",
-              "opacity-0 transition-opacity group-hover/column:opacity-100"
+              "opacity-0 transition-opacity group-hover/column:opacity-100",
             )}
             ref={handleRef}
           >
@@ -80,17 +79,15 @@ export const ColumnElement = withHOC(
             className={cn(
               "relative h-full border border-transparent p-1.5",
               !readOnly && "rounded-lg border-border border-dashed",
-              isDragging && "opacity-50"
+              isDragging && "opacity-50",
             )}
           >
             {props.children}
-
-            {!(readOnly || isSelectionAreaVisible) && <DropLine />}
           </div>
         </PlateElement>
       </div>
     );
-  }
+  },
 );
 
 const ColumnDragHandle = memo(function ColumnDragHandle() {
@@ -114,27 +111,6 @@ const ColumnDragHandle = memo(function ColumnDragHandle() {
     </TooltipProvider>
   );
 });
-
-function DropLine() {
-  const { dropLine } = useDropLine({ orientation: "horizontal" });
-
-  if (!dropLine) {
-    return null;
-  }
-
-  return (
-    <div
-      className={cn(
-        "slate-dropLine",
-        "absolute bg-brand/50",
-        dropLine === "left" &&
-          "inset-y-0 left-[-10.5px] w-1 group-first/column:-left-1",
-        dropLine === "right" &&
-          "inset-y-0 right-[-11px] w-1 group-last/column:-right-1"
-      )}
-    />
-  );
-}
 
 export function ColumnGroupElement(props: PlateElementProps) {
   return (

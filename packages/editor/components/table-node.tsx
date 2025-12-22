@@ -1,6 +1,5 @@
 "use client";
 
-import { useDraggable, useDropLine } from "@platejs/dnd";
 import {
   BlockSelectionPlugin,
   useBlockSelected,
@@ -467,7 +466,6 @@ export function TableRowElement({
       {hasControls && (
         <td className="w-2 select-none" contentEditable={false}>
           <RowDragHandle dragRef={handleRef} />
-          <RowDropLine />
         </td>
       )}
 
@@ -495,21 +493,6 @@ function RowDragHandle({ dragRef }: { dragRef: React.Ref<any> }) {
     >
       <GripVertical className="text-muted-foreground" />
     </Button>
-  );
-}
-
-function RowDropLine() {
-  const { dropLine } = useDropLine();
-
-  if (!dropLine) return null;
-
-  return (
-    <div
-      className={cn(
-        "absolute inset-x-0 left-2 z-50 h-0.5 bg-brand/50",
-        dropLine === "top" ? "-top-px" : "-bottom-px",
-      )}
-    />
   );
 }
 
