@@ -13,6 +13,12 @@
         ".env.production",
         ".env.production.local"
       ],
+      "env": [
+        "DATABASE_URL",
+        "NEXT_PUBLIC_POSTHOG_KEY",
+        "NEXT_PUBLIC_POSTHOG_HOST",
+        "NEXT_PUBLIC_APP_URL"
+      ],
       "outputs": [
         ".next/**",
         "!.next/cache/**",
