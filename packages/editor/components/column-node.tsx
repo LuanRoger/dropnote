@@ -3,7 +3,6 @@
 import { setColumns } from "@platejs/layout";
 import { useDebouncePopoverOpen } from "@platejs/layout/react";
 import { ResizableProvider } from "@platejs/resizable";
-import { BlockSelectionPlugin } from "@platejs/selection/react";
 import { Button } from "@repo/design-system/components/ui/button";
 import {
   Popover,
@@ -11,17 +10,10 @@ import {
   PopoverContent,
 } from "@repo/design-system/components/ui/popover";
 import { Separator } from "@repo/design-system/components/ui/separator";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@repo/design-system/components/ui/tooltip";
 import { cn } from "@repo/design-system/lib/utils";
 import { useComposedRef } from "@udecode/cn";
-import { GripHorizontal, type LucideProps, Trash2Icon } from "lucide-react";
+import { type LucideProps, Trash2Icon } from "lucide-react";
 import type { TColumnElement } from "platejs";
-import { PathApi } from "platejs";
 import type { PlateElementProps } from "platejs/react";
 import {
   PlateElement,
@@ -39,47 +31,18 @@ export const ColumnElement = withHOC(
   function ColumnElement(props: PlateElementProps<TColumnElement>) {
     const { width } = props.element;
     const readOnly = useReadOnly();
-    const isSelectionAreaVisible = usePluginOption(
-      BlockSelectionPlugin,
-      "isSelectionAreaVisible",
-    );
-
-    const { isDragging, previewRef, handleRef } = useDraggable({
-      element: props.element,
-      orientation: "horizontal",
-      type: "column",
-      canDropNode: ({ dragEntry, dropEntry }) =>
-        PathApi.equals(
-          PathApi.parent(dragEntry[1]),
-          PathApi.parent(dropEntry[1]),
-        ),
-    });
 
     return (
       <div className="group/column relative" style={{ width: width ?? "100%" }}>
-        {!(readOnly || isSelectionAreaVisible) && (
-          <div
-            className={cn(
-              "absolute top-2 left-1/2 z-50 -translate-x-1/2 -translate-y-1/2",
-              "pointer-events-auto flex items-center",
-              "opacity-0 transition-opacity group-hover/column:opacity-100",
-            )}
-            ref={handleRef}
-          >
-            <ColumnDragHandle />
-          </div>
-        )}
-
         <PlateElement
           {...props}
           className="h-full px-2 pt-2 group-first/column:pl-0 group-last/column:pr-0"
-          ref={useComposedRef(props.ref, previewRef)}
+          ref={useComposedRef(props.ref)}
         >
           <div
             className={cn(
               "relative h-full border border-transparent p-1.5",
               !readOnly && "rounded-lg border-border border-dashed",
-              isDragging && "opacity-50",
             )}
           >
             {props.children}
@@ -89,28 +52,6 @@ export const ColumnElement = withHOC(
     );
   },
 );
-
-const ColumnDragHandle = memo(function ColumnDragHandle() {
-  return (
-    <TooltipProvider>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <Button className="!px-1 h-5" variant="ghost">
-            <GripHorizontal
-              className="text-muted-foreground"
-              onClick={(event) => {
-                event.stopPropagation();
-                event.preventDefault();
-              }}
-            />
-          </Button>
-        </TooltipTrigger>
-
-        <TooltipContent>Drag to move column</TooltipContent>
-      </Tooltip>
-    </TooltipProvider>
-  );
-});
 
 export function ColumnGroupElement(props: PlateElementProps) {
   return (

@@ -14,7 +14,6 @@ import {
   useTableElement,
   useTableMergeState,
 } from "@platejs/table/react";
-import { Button } from "@repo/design-system/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -39,7 +38,6 @@ import {
   CombineIcon,
   EraserIcon,
   Grid2X2Icon,
-  GripVertical,
   PaintBucketIcon,
   SquareSplitHorizontalIcon,
   Trash2Icon,
@@ -47,8 +45,6 @@ import {
 } from "lucide-react";
 import {
   KEYS,
-  PathApi,
-  type TElement,
   type TTableCellElement,
   type TTableElement,
   type TTableRowElement,
@@ -425,32 +421,7 @@ export function TableRowElement({
   children,
   ...props
 }: PlateElementProps<TTableRowElement>) {
-  const { element } = props;
-  const readOnly = useReadOnly();
   const selected = useSelected();
-  const editor = useEditorRef();
-  const isSelectionAreaVisible = usePluginOption(
-    BlockSelectionPlugin,
-    "isSelectionAreaVisible",
-  );
-  const hasControls = !(readOnly || isSelectionAreaVisible);
-
-  const { isDragging, nodeRef, previewRef, handleRef } = useDraggable({
-    element,
-    type: element.type,
-    canDropNode: ({ dragEntry, dropEntry }) =>
-      PathApi.equals(
-        PathApi.parent(dragEntry[1]),
-        PathApi.parent(dropEntry[1]),
-      ),
-    onDropHandler: (_, { dragItem }) => {
-      const dragElement = (dragItem as { element: TElement }).element;
-
-      if (dragElement) {
-        editor.tf.select(dragElement);
-      }
-    },
-  });
 
   return (
     <PlateElement
@@ -460,39 +431,60 @@ export function TableRowElement({
         ...props.attributes,
         "data-selected": selected ? "true" : undefined,
       }}
-      className={cn("group/row", isDragging && "opacity-50")}
-      ref={useComposedRef(props.ref, previewRef, nodeRef)}
+      className={cn("group/row")}
+      ref={useComposedRef(props.ref)}
     >
-      {hasControls && (
-        <td className="w-2 select-none" contentEditable={false}>
-          <RowDragHandle dragRef={handleRef} />
-        </td>
-      )}
-
       {children}
     </PlateElement>
   );
 }
 
-function RowDragHandle({ dragRef }: { dragRef: React.Ref<any> }) {
-  const editor = useEditorRef();
-  const element = useElement();
-
+function TableCellResizeHandles({
+  bottomProps,
+  colIndex,
+  hiddenLeft,
+  leftProps,
+  rightProps,
+}: {
+  bottomProps: ReturnType<typeof useTableCellElementResizable>["bottomProps"];
+  colIndex: number;
+  hiddenLeft: boolean;
+  leftProps: ReturnType<typeof useTableCellElementResizable>["leftProps"];
+  rightProps: ReturnType<typeof useTableCellElementResizable>["rightProps"];
+}) {
   return (
-    <Button
-      className={cn(
-        "absolute top-1/2 left-0 z-51 h-6 w-4 -translate-y-1/2 p-0 focus-visible:ring-0 focus-visible:ring-offset-0",
-        "cursor-grab active:cursor-grabbing",
-        'opacity-0 transition-opacity duration-100 group-hover/row:opacity-100 group-has-data-[resizing="true"]/row:opacity-0',
+    <>
+      <ResizeHandle
+        {...rightProps}
+        className="-top-2 -right-1 h-[calc(100%_+_8px)] w-2"
+        data-col={colIndex}
+      />
+      <ResizeHandle {...bottomProps} className="-bottom-1 h-2" />
+      {!hiddenLeft && (
+        <ResizeHandle
+          {...leftProps}
+          className="top-0 -left-1 w-2"
+          data-resizer-left={colIndex === 0 ? "true" : undefined}
+        />
       )}
-      onClick={() => {
-        editor.tf.select(element);
-      }}
-      ref={dragRef}
-      variant="outline"
-    >
-      <GripVertical className="text-muted-foreground" />
-    </Button>
+
+      <div
+        className={cn(
+          "absolute top-0 z-30 hidden h-full w-1 bg-ring",
+          "right-[-1.5px]",
+          columnResizeVariants({ colIndex: colIndex as any }),
+        )}
+      />
+      {colIndex === 0 && (
+        <div
+          className={cn(
+            "absolute top-0 z-30 h-full w-1 bg-ring",
+            "left-[-1.5px]",
+            'fade-in hidden animate-in group-has-[[data-resizer-left]:hover]/table:block group-has-[[data-resizer-left][data-resizing="true"]]/table:block',
+          )}
+        />
+      )}
+    </>
   );
 }
 
@@ -528,6 +520,9 @@ export function TableCellElement({
       colSpan,
       rowIndex,
     });
+
+  const showResizeOverlay = !isSelectionAreaVisible;
+  const showResizeHandles = showResizeOverlay && !readOnly;
 
   return (
     <PlateElement
@@ -565,45 +560,20 @@ export function TableCellElement({
         {props.children}
       </div>
 
-      {!isSelectionAreaVisible && (
+      {showResizeOverlay && (
         <div
           className="group absolute top-0 size-full select-none"
           contentEditable={false}
           suppressContentEditableWarning={true}
         >
-          {!readOnly && (
-            <>
-              <ResizeHandle
-                {...rightProps}
-                className="-top-2 -right-1 h-[calc(100%_+_8px)] w-2"
-                data-col={colIndex}
-              />
-              <ResizeHandle {...bottomProps} className="-bottom-1 h-2" />
-              {!hiddenLeft && (
-                <ResizeHandle
-                  {...leftProps}
-                  className="top-0 -left-1 w-2"
-                  data-resizer-left={colIndex === 0 ? "true" : undefined}
-                />
-              )}
-
-              <div
-                className={cn(
-                  "absolute top-0 z-30 hidden h-full w-1 bg-ring",
-                  "right-[-1.5px]",
-                  columnResizeVariants({ colIndex: colIndex as any }),
-                )}
-              />
-              {colIndex === 0 && (
-                <div
-                  className={cn(
-                    "absolute top-0 z-30 h-full w-1 bg-ring",
-                    "left-[-1.5px]",
-                    'fade-in hidden animate-in group-has-[[data-resizer-left]:hover]/table:block group-has-[[data-resizer-left][data-resizing="true"]]/table:block',
-                  )}
-                />
-              )}
-            </>
+          {showResizeHandles && (
+            <TableCellResizeHandles
+              bottomProps={bottomProps}
+              colIndex={colIndex}
+              hiddenLeft={hiddenLeft}
+              leftProps={leftProps}
+              rightProps={rightProps}
+            />
           )}
         </div>
       )}
