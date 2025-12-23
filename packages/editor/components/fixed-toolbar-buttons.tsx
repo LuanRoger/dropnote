@@ -38,7 +38,7 @@ export function FixedToolbarButtons() {
   const readOnly = useEditorReadOnly();
 
   return (
-    <div className="flex w-full">
+    <div className="flex min-w-max shrink-0 gap-0.5">
       {!readOnly && (
         <>
           <ToolbarGroup>
@@ -118,8 +118,6 @@ export function FixedToolbarButtons() {
           </ToolbarGroup>
         </>
       )}
-
-      <div className="grow" />
 
       <ToolbarGroup>
         <ExportToolbarButton />
