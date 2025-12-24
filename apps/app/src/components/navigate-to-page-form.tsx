@@ -3,19 +3,21 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@repo/design-system/components/ui/button";
 import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "@repo/design-system/components/ui/form";
+  Field,
+  FieldError,
+  FieldGroup,
+} from "@repo/design-system/components/ui/field";
 import { Input } from "@repo/design-system/components/ui/input";
+import { PenIcon } from "lucide-react";
+import { AnimatePresence, motion } from "motion/react";
 import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import {
   type NavigateToPageSchema,
   navigateToPageSchema,
 } from "@/utils/schemas/navigate-to-page-schema";
+
+const MotionButton = motion(Button);
 
 export default function NavigateToPageForm() {
   const form = useForm<NavigateToPageSchema>({
@@ -24,6 +26,8 @@ export default function NavigateToPageForm() {
       code: "",
     },
   });
+  const currentCodeValueLength = form.watch("code").length;
+  const canDisableSubmitButton = currentCodeValueLength < 3;
   const router = useRouter();
 
   function onSubmit(data: NavigateToPageSchema) {
@@ -32,26 +36,60 @@ export default function NavigateToPageForm() {
   }
 
   return (
-    <Form {...form}>
-      <form
-        className="flex h-12 flex-row gap-2"
-        onSubmit={form.handleSubmit(onSubmit)}
-      >
-        <FormField
+    <form
+      className="flex flex-col gap-2"
+      onSubmit={form.handleSubmit(onSubmit)}
+    >
+      <FieldGroup className="contents">
+        <Controller
+          control={form.control}
           name="code"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <Input className="h-full" placeholder="some-slug" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
+          render={({ field, fieldState }) => (
+            <Field className="gap-1">
+              {fieldState.invalid && (
+                <FieldError className="text-end" errors={[fieldState.error]} />
+              )}
+              <Input
+                autoComplete="off"
+                className="w-full"
+                placeholder="slug"
+                {...field}
+              />
+            </Field>
           )}
         />
-        <Button className="h-full" type="submit">
-          Go
-        </Button>
-      </form>
-    </Form>
+      </FieldGroup>
+      <MotionButton
+        className="self-end text-xs"
+        disabled={canDisableSubmitButton}
+        layout
+        size="sm"
+        type="submit"
+      >
+        write.
+        <AnimatePresence>
+          {!canDisableSubmitButton && (
+            <motion.div
+              animate={{
+                y: 0,
+                width: "auto",
+              }}
+              exit={{
+                y: -10,
+                width: 0,
+              }}
+              initial={{
+                y: -10,
+                width: 0,
+              }}
+              style={{ overflow: "hidden" }}
+              transition={{ duration: 0.2, ease: "easeInOut" }}
+            >
+              <PenIcon className="size-4" />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </MotionButton>
+    </form>
   );
 }
