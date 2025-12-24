@@ -4,14 +4,15 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
-      "@repo/*": ["../../packages/*"]
-    }
+      "~/*": ["./*"],
+      "@repo/*": ["../../packages/*"],
+    },
   },
   "include": [
     "next-env.d.ts",
     "next.config.ts",
     "**/*.ts",
     "**/*.tsx",
-    ".next/types/**/*.ts"
-  ]
+    ".next/types/**/*.ts",
+  ],
 }
