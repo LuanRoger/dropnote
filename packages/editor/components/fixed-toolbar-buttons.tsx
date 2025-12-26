@@ -16,10 +16,6 @@ import { AlignToolbarButton } from "./align-toolbar-button";
 import { ExportToolbarButton } from "./export-toolbar-button";
 import { FontColorToolbarButton } from "./font-color-toolbar-button";
 import { RedoToolbarButton, UndoToolbarButton } from "./history-toolbar-button";
-import {
-  IndentToolbarButton,
-  OutdentToolbarButton,
-} from "./indent-toolbar-button";
 import { InsertToolbarButton } from "./insert-toolbar-button";
 import {
   BulletedListToolbarButton,
@@ -38,7 +34,7 @@ export function FixedToolbarButtons() {
   const readOnly = useEditorReadOnly();
 
   return (
-    <div className="flex min-w-max shrink-0 gap-0.5">
+    <div className="flex min-w-full shrink-0 gap-0.5">
       {!readOnly && (
         <>
           <ToolbarGroup>
@@ -109,15 +105,12 @@ export function FixedToolbarButtons() {
           </ToolbarGroup>
 
           <ToolbarGroup>
-            <OutdentToolbarButton />
-            <IndentToolbarButton />
-          </ToolbarGroup>
-
-          <ToolbarGroup>
             <MoreToolbarButton />
           </ToolbarGroup>
         </>
       )}
+
+      <div className="grow" />
 
       <ToolbarGroup>
         <ExportToolbarButton />
