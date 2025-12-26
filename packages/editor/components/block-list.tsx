@@ -7,17 +7,8 @@ import {
 } from "@platejs/list/react";
 import { Checkbox } from "@repo/design-system/components/ui/checkbox";
 import { cn } from "@repo/design-system/lib/utils";
-import type {
-  BasePluginContext,
-  Path,
-  PluginConfig,
-  RenderElementProps,
-  TElement,
-  TListElement,
-} from "platejs";
+import type { TListElement } from "platejs";
 import {
-  type EditorPlatePlugin,
-  type PlateEditor,
   type PlateElementProps,
   type RenderNodeWrapper,
   useReadOnly,
@@ -39,18 +30,7 @@ const config: Record<
 export const BlockList: RenderNodeWrapper = (props) => {
   if (!props.element.listStyleType) return;
 
-  const BlockListComponent = (
-    props: React.JSX.IntrinsicAttributes &
-      BasePluginContext<PluginConfig> & {
-        editor: PlateEditor;
-        plugin: EditorPlatePlugin<PluginConfig>;
-      } & { ref?: any } & RenderElementProps<TElement> & { path: Path } & {
-        className?: string;
-        style?: React.CSSProperties;
-      }
-  ) => <List {...props} />;
-  BlockListComponent.displayName = "BlockListComponent";
-  return BlockListComponent;
+  return (props) => <List {...props} />;
 };
 
 function List(props: PlateElementProps) {
@@ -80,7 +60,7 @@ function TodoMarker(props: PlateElementProps) {
       <Checkbox
         className={cn(
           "absolute top-1 -left-6",
-          readOnly && "pointer-events-none"
+          readOnly && "pointer-events-none",
         )}
         {...checkboxProps}
       />
@@ -94,7 +74,7 @@ function TodoLi(props: PlateElementProps) {
       className={cn(
         "list-none",
         (props.element.checked as boolean) &&
-          "text-muted-foreground line-through"
+          "text-muted-foreground line-through",
       )}
     >
       {props.children}

@@ -19,7 +19,7 @@ export function DateElement(props: PlateElementProps<TDateElement>) {
   const trigger = (
     <span
       className={cn(
-        "w-fit cursor-pointer rounded-sm bg-muted px-1 text-muted-foreground"
+        "w-fit cursor-pointer rounded-sm bg-muted px-1 text-muted-foreground",
       )}
       contentEditable={false}
       draggable
@@ -40,15 +40,9 @@ export function DateElement(props: PlateElementProps<TDateElement>) {
             new Date(today.setDate(today.getDate() + 2)).toDateString() ===
             elementDate.toDateString();
 
-          if (isToday) {
-            return "Today";
-          }
-          if (isYesterday) {
-            return "Yesterday";
-          }
-          if (isTomorrow) {
-            return "Tomorrow";
-          }
+          if (isToday) return "Today";
+          if (isYesterday) return "Yesterday";
+          if (isTomorrow) return "Tomorrow";
 
           return elementDate.toLocaleDateString(undefined, {
             day: "numeric",
@@ -69,29 +63,27 @@ export function DateElement(props: PlateElementProps<TDateElement>) {
   return (
     <PlateElement
       {...props}
+      className="inline-block"
       attributes={{
         ...props.attributes,
         contentEditable: false,
       }}
-      className="inline-block"
     >
       <Popover>
         <PopoverTrigger asChild>{trigger}</PopoverTrigger>
         <PopoverContent className="w-auto p-0">
           <Calendar
-            initialFocus
-            mode="single"
+            selected={new Date(element.date as string)}
             onSelect={(date) => {
-              if (!date) {
-                return;
-              }
+              if (!date) return;
 
               editor.tf.setNodes(
                 { date: date.toDateString() },
-                { at: element }
+                { at: element },
               );
             }}
-            selected={new Date(element.date as string)}
+            mode="single"
+            initialFocus
           />
         </PopoverContent>
       </Popover>

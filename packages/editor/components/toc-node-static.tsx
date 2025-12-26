@@ -1,10 +1,9 @@
 import { BaseTocPlugin, type Heading, isHeading } from "@platejs/toc";
+import { Button } from "@repo/design-system/components/ui/button";
 import { cva } from "class-variance-authority";
 import { NodeApi, type SlateEditor, type TElement } from "platejs";
 import type { SlateElementProps } from "platejs/static";
 import { SlateElement } from "platejs/static";
-
-import { Button } from "@/components/ui/button";
 
 const headingItemVariants = cva(
   "block h-auto w-full cursor-pointer truncate rounded-none px-0.5 py-1.5 text-left font-medium text-muted-foreground underline decoration-[0.5px] underline-offset-4 hover:bg-accent hover:text-muted-foreground",
@@ -16,7 +15,7 @@ const headingItemVariants = cva(
         3: "pl-[50px]",
       },
     },
-  }
+  },
 );
 
 export function TocElementStatic(props: SlateElementProps) {
@@ -76,7 +75,7 @@ const getHeadingList = (editor?: SlateEditor) => {
 
   if (!values) return [];
 
-  Array.from(values, ([node, path]) => {
+  Array.from(values).forEach(([node, path]) => {
     const { type } = node;
     const title = NodeApi.string(node);
     const depth = headingDepth[type];
