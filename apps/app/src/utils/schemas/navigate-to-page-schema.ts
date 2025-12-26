@@ -4,7 +4,7 @@ import { SLUG_REGEX } from "@/constants";
 export const navigateToPageSchema = z.object({
   code: z
     .string()
-    .min(1, "Code is required")
+    .min(3, "Code is required")
     .regex(SLUG_REGEX, "Code must be a valid slug"),
 });
 
