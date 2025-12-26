@@ -49,7 +49,7 @@ function RichEditorShell({ code }: { code: string }) {
   const { isSaving, setIsSaving } = useContext(EditorStateContext);
 
   const debouncedSave = useCallback(
-  (code: string, noteBody: any[]) => {
+    (code: string, noteBody: any[]) => {
       if (debounceRef.current) {
         clearTimeout(debounceRef.current);
       }
@@ -60,7 +60,7 @@ function RichEditorShell({ code }: { code: string }) {
         setIsSaving(false);
       }, EDITOR_DEBOUNCE_TIME_MS);
     },
-    [setIsSaving]
+    [setIsSaving],
   );
 
   useEffect(() => {
@@ -81,11 +81,8 @@ function RichEditorShell({ code }: { code: string }) {
 function RichEditorEmpty({ isLoading }: { isLoading?: boolean }) {
   return (
     <div className="relative size-full">
-      <LoadingSpinner
-        className="absolute right-10 bottom-10"
-        show={isLoading}
-      />
-      <RichEditor className="scrollbar-hide" />
+      <LoadingSpinner className="absolute right-2 bottom-2" show={isLoading} />
+      <RichEditor />
     </div>
   );
 }
