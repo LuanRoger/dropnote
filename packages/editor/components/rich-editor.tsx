@@ -6,8 +6,8 @@ export type RichEditorProps = {
 
 export default function RichEditor({ className }: RichEditorProps) {
   return (
-    <EditorContainer className={className}>
-      <Editor variant={"fullWidth"} />
+    <EditorContainer className={className} variant="minimal">
+      <Editor variant="minimal" />
     </EditorContainer>
   );
 }
