@@ -1,7 +1,6 @@
 "use client";
 
 import { setColumns } from "@platejs/layout";
-import { useDebouncePopoverOpen } from "@platejs/layout/react";
 import { ResizableProvider } from "@platejs/resizable";
 import { Button } from "@repo/design-system/components/ui/button";
 import {
@@ -18,13 +17,15 @@ import type { PlateElementProps } from "platejs/react";
 import {
   PlateElement,
   useEditorRef,
+  useEditorSelector,
   useElement,
-  usePluginOption,
+  useFocusedLast,
   useReadOnly,
   useRemoveNodeButton,
+  useSelected,
   withHOC,
 } from "platejs/react";
-import { memo } from "react";
+import type React from "react";
 
 export const ColumnElement = withHOC(
   ResizableProvider,
@@ -67,10 +68,15 @@ function ColumnFloatingToolbar({ children }: React.PropsWithChildren) {
   const editor = useEditorRef();
   const readOnly = useReadOnly();
   const element = useElement<TColumnElement>();
-
   const { props: buttonProps } = useRemoveNodeButton({ element });
+  const selected = useSelected();
+  const isCollapsed = useEditorSelector(
+    (editor) => editor.api.isCollapsed(),
+    [],
+  );
+  const isFocusedLast = useFocusedLast();
 
-  const isOpen = useDebouncePopoverOpen();
+  const open = isFocusedLast && !readOnly && selected && isCollapsed;
 
   const onColumnChange = (widths: string[]) => {
     setColumns(editor, {
@@ -79,12 +85,8 @@ function ColumnFloatingToolbar({ children }: React.PropsWithChildren) {
     });
   };
 
-  if (readOnly) {
-    return <>{children}</>;
-  }
-
   return (
-    <Popover modal={false} open={isOpen}>
+    <Popover modal={false} open={open}>
       <PopoverAnchor>{children}</PopoverAnchor>
       <PopoverContent
         align="center"

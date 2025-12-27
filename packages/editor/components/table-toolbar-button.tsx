@@ -26,15 +26,13 @@ import {
 } from "lucide-react";
 import { KEYS } from "platejs";
 import { useEditorPlugin, useEditorSelector } from "platejs/react";
-import { type ComponentPropsWithoutRef, useState } from "react";
+import { type ComponentProps, useState } from "react";
 import { ToolbarButton } from "./toolbar";
 
-export function TableToolbarButton(
-  props: ComponentPropsWithoutRef<typeof DropdownMenu>
-) {
+export function TableToolbarButton(props: ComponentProps<typeof DropdownMenu>) {
   const tableSelected = useEditorSelector(
     (editor) => editor.api.some({ match: { type: KEYS.table } }),
-    []
+    [],
   );
 
   const { editor, tf } = useEditorPlugin(TablePlugin);
@@ -236,6 +234,7 @@ function TablePicker() {
         tf.insert.table(tablePicker.size, { select: true });
         editor.tf.focus();
       }}
+      role="button"
     >
       <div className="grid size-[130px] grid-cols-8 gap-0.5 p-1">
         {tablePicker.grid.map((rows, rowIndex) =>
@@ -243,14 +242,14 @@ function TablePicker() {
             <div
               className={cn(
                 "col-span-1 size-3 border border-solid bg-secondary",
-                !!value && "border-current"
+                !!value && "border-current",
               )}
               key={`(${rowIndex},${columIndex})`}
               onMouseMove={() => {
                 onCellMove(rowIndex, columIndex);
               }}
             />
-          ))
+          )),
         )}
       </div>
 

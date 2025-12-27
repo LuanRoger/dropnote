@@ -1,13 +1,14 @@
 "use client";
 
+import { AIChatPlugin } from "@platejs/ai/react";
 import {
   type CursorData,
   type CursorOverlayState,
   useCursorOverlay,
 } from "@platejs/selection/react";
+import { cn } from "@repo/design-system/lib/utils";
 import { RangeApi } from "platejs";
-
-import { cn } from "@/utils/tailwind";
+import { usePluginOption } from "platejs/react";
 
 export function CursorOverlay() {
   const { cursors } = useCursorOverlay();
@@ -28,8 +29,11 @@ function Cursor({
   selection,
   selectionRects,
 }: CursorOverlayState<CursorData>) {
+  const streaming = usePluginOption(AIChatPlugin, "streaming");
   const { style, selectionStyle = style } = data ?? ({} as CursorData);
   const isCursor = RangeApi.isCollapsed(selection);
+
+  if (streaming) return null;
 
   return (
     <>
@@ -38,7 +42,7 @@ function Cursor({
           className={cn(
             "pointer-events-none absolute z-10",
             id === "selection" && "bg-brand/25",
-            id === "selection" && isCursor && "bg-primary"
+            id === "selection" && isCursor && "bg-primary",
           )}
           key={i}
           style={{
@@ -51,7 +55,7 @@ function Cursor({
         <div
           className={cn(
             "pointer-events-none absolute z-10 w-0.5",
-            id === "drag" && "w-px bg-brand"
+            id === "drag" && "w-px bg-brand",
           )}
           style={{ ...caretPosition, ...style }}
         />

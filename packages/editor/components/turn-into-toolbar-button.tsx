@@ -22,7 +22,7 @@ import {
 import type { TElement } from "platejs";
 import { KEYS } from "platejs";
 import { useEditorRef, useSelectionFragmentProp } from "platejs/react";
-import { ComponentProps, useMemo, useState } from "react";
+import { type ComponentProps, useMemo, useState } from "react";
 import { getBlockType, setBlockType } from "../utils/transforms";
 
 import { ToolbarButton, ToolbarMenuGroup } from "./toolbar";

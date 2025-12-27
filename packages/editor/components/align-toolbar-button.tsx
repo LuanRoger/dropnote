@@ -39,7 +39,9 @@ const items = [
   },
 ];
 
-export function AlignToolbarButton() {
+export function AlignToolbarButton(
+  props: React.ComponentProps<typeof DropdownMenu>,
+) {
   const { editor, tf } = useEditorPlugin(TextAlignPlugin);
   const value =
     useSelectionFragmentProp({
@@ -52,7 +54,7 @@ export function AlignToolbarButton() {
     items.find((item) => item.value === value)?.icon ?? AlignLeftIcon;
 
   return (
-    <DropdownMenu modal={false} onOpenChange={setOpen} open={open}>
+    <DropdownMenu modal={false} onOpenChange={setOpen} open={open} {...props}>
       <DropdownMenuTrigger asChild>
         <ToolbarButton isDropdown pressed={open} tooltip="Align">
           <IconValue />
