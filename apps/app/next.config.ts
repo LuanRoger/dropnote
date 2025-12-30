@@ -4,7 +4,7 @@ import { env } from "./env";
 
 let nextConfig: NextConfig = {
   ...config,
-  serverExternalPackages: ["mongoose"],
+  serverExternalPackages: ["mongoose", "@takumi-rs/image-response"],
 };
 
 if (env.ANALYZE === "true") {

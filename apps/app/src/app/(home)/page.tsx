@@ -1,6 +1,13 @@
+import { createMetadata } from "@repo/seo/metadata";
+import type { Metadata } from "next";
 import CenterSection from "./components/center-section";
 import Header from "./components/header";
 import SpecialRoutesSection from "./components/special-routes-section";
+
+export const generateMetadata = async (): Promise<Metadata> =>
+  createMetadata({
+    description: "Create, edit and share text instantly. No sign-up required.",
+  });
 
 export default function Home() {
   return (
