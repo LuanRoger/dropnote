@@ -7,6 +7,8 @@
     "typecheck": "tsc --noEmit --emitDeclarationOnly false"
   },
   "dependencies": {
+    "@takumi-rs/image-response": "^0.60.8",
+    "@takumi-rs/wasm": "^0.60.8",
     "lodash.merge": "^4.6.2",
     "react": "19.2.3",
     "schema-dts": "^1.1.5"
