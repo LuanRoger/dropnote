@@ -29,7 +29,7 @@ function RouteInfo({
 }) {
   return (
     <span className="flex items-center">
-      <Link href={route}>
+      <Link className="transition-transform hover:scale-105" href={route}>
         <Kbd>{routeName}</Kbd>
       </Link>
       <p className="text-muted-foreground text-sm"> - {description}.</p>
