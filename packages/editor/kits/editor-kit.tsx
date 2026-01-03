@@ -1,7 +1,4 @@
-"use client";
-
 import { type AnyPluginConfig, TrailingBlockPlugin } from "platejs";
-import { type TPlateEditor, useEditorRef } from "platejs/react";
 
 import { AlignKit } from "../plugins/align-kit";
 import { AutoformatKit } from "../plugins/autoformat-kit";
@@ -32,7 +29,18 @@ import { TocKit } from "../plugins/toc-kit";
 import { ToggleKit } from "../plugins/toggle-kit";
 import { YjsKit } from "../plugins/yjs-kit";
 
-export const EditorKit: AnyPluginConfig[] = [
+interface EditorKitOptions {
+  yjs: {
+    name: string;
+    color: string;
+    roomName: string;
+    wssUrl: string;
+  };
+}
+
+export const EditorKit: (options: EditorKitOptions) => AnyPluginConfig[] = (
+  options: EditorKitOptions,
+) => [
   // Elements
   ...BasicBlocksKit,
   ...CodeBlockKit,
@@ -65,7 +73,7 @@ export const EditorKit: AnyPluginConfig[] = [
   TrailingBlockPlugin,
 
   // Colaboration
-  ...YjsKit,
+  ...YjsKit(options.yjs),
 
   // Parsers
   ...DocxKit,
@@ -76,7 +84,3 @@ export const EditorKit: AnyPluginConfig[] = [
   ...FixedToolbarKit,
   ...FloatingToolbarKit,
 ];
-
-export type MyEditor = TPlateEditor;
-
-export const useEditor = (): MyEditor => useEditorRef<MyEditor>();

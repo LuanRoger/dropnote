@@ -1,7 +1,19 @@
+"use client";
+
 import { YjsPlugin } from "@platejs/yjs/react";
 import { RemoteCursorOverlay } from "../components/remote-cursor-overlay";
 
-export const YjsKit = [
+export const YjsKit = ({
+  name,
+  color,
+  roomName,
+  wssUrl,
+}: {
+  name: string;
+  color: string;
+  roomName: string;
+  wssUrl: string;
+}) => [
   YjsPlugin.configure({
     render: {
       afterEditable: RemoteCursorOverlay,
@@ -9,16 +21,16 @@ export const YjsKit = [
     options: {
       cursors: {
         data: {
-          name: "Anonimo",
-          color: "#aabbcc",
+          name,
+          color,
         },
       },
       providers: [
         {
           type: "hocuspocus",
           options: {
-            name: "test",
-            url: "ws://localhost:3001",
+            name: roomName,
+            url: wssUrl,
           },
         },
       ],
