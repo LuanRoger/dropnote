@@ -30,6 +30,7 @@ import { SlashKit } from "../plugins/slash-kit";
 import { TableKit } from "../plugins/table-kit";
 import { TocKit } from "../plugins/toc-kit";
 import { ToggleKit } from "../plugins/toggle-kit";
+import { YjsKit } from "../plugins/yjs-kit";
 
 export const EditorKit: AnyPluginConfig[] = [
   // Elements
@@ -62,6 +63,9 @@ export const EditorKit: AnyPluginConfig[] = [
   ...EmojiKit,
   ...ExitBreakKit,
   TrailingBlockPlugin,
+
+  // Colaboration
+  ...YjsKit,
 
   // Parsers
   ...DocxKit,
