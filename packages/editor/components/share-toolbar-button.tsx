@@ -37,7 +37,7 @@ export default function ShareToolbarButton() {
 
   return (
     <Popover>
-      <PopoverTrigger>
+      <PopoverTrigger asChild>
         <ToolbarButton tooltip="Share">
           <Share2Icon />
         </ToolbarButton>
