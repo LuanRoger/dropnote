@@ -1,13 +1,9 @@
 "use client";
 
-import { Plate, useEditorSelector, usePlateEditor } from "@repo/editor";
+import { Plate, usePlateEditor } from "@repo/editor";
 import RichEditor from "@repo/editor/components/rich-editor";
-import {
-  EditorStateContext,
-  EditorStateProvider,
-} from "@repo/editor/contexts/editor-state";
+import { useEditorMechanisms } from "@repo/editor/hooks/use-editor-mechanisms";
 import { EditorKit } from "@repo/editor/kits/editor-kit";
-import { useCallback, useContext, useEffect, useRef } from "react";
 import { updateNoteByCode } from "@/app/actions/notes";
 import { EDITOR_DEBOUNCE_TIME_MS } from "@/constants";
 import LoadingSpinner from "./loading-spinner";
@@ -32,48 +28,21 @@ export default function Editor({
 
   return (
     <Plate editor={editor} readOnly={readOnly}>
-      {noSave ? (
-        <RichEditorEmpty />
-      ) : (
-        <EditorStateProvider>
-          <RichEditorShell code={code} />
-        </EditorStateProvider>
-      )}
+      {noSave ? <RichEditorEmpty /> : <RichEditorShell code={code} />}
     </Plate>
   );
 }
 
-function RichEditorShell({ code }: { code: string }) {
-  const noteBody = useEditorSelector((editor) => editor.children, []);
-  const debounceRef = useRef<NodeJS.Timeout | null>(null);
-  const { isSaving, setIsSaving } = useContext(EditorStateContext);
+function RichEditorShell({ code }: { code: string; editor: EditorAny }) {
+  function saveNote(value: any) {
+    return updateNoteByCode(code, value);
+  }
 
-  const debouncedSave = useCallback(
-    (code: string, noteBody: any[]) => {
-      if (debounceRef.current) {
-        clearTimeout(debounceRef.current);
-      }
-
-      debounceRef.current = setTimeout(async () => {
-        setIsSaving(true);
-        await updateNoteByCode(code, noteBody);
-        setIsSaving(false);
-      }, EDITOR_DEBOUNCE_TIME_MS);
-    },
-    [setIsSaving],
-  );
-
-  useEffect(() => {
-    if (noteBody.length > 0) {
-      debouncedSave(code, noteBody);
-    }
-
-    return () => {
-      if (debounceRef.current) {
-        clearTimeout(debounceRef.current);
-      }
-    };
-  }, [noteBody, code, debouncedSave]);
+  const { isSaving } = useEditorMechanisms({
+    code,
+    debounceTimeMs: EDITOR_DEBOUNCE_TIME_MS,
+    onSave: saveNote,
+  });
 
   return <RichEditorEmpty isLoading={isSaving} />;
 }
