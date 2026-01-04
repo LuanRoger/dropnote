@@ -1,9 +1,9 @@
-import { notFound } from "next/navigation";
-import Editor from "@/components/editor";
-import { validateSlug } from "@/utils/slug";
-import { ensureCreated } from "../../actions/notes";
-import { Metadata } from "next";
 import { createMetadata } from "@repo/seo/metadata";
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import { ensureCreated } from "@/app/actions/notes";
+import RichEditorShell from "@/components/rich-editor-shell";
+import { validateSlug } from "@/utils/slug";
 
 type PageProps = {
   params: Promise<{
@@ -30,8 +30,9 @@ export default async function Page({ params }: PageProps) {
     notFound();
   }
 
+  const wssUrl = process.env.HOCUSPOCUS_WSS_URL;
   const note = await ensureCreated(code);
   const body = note?.body;
 
-  return <Editor code={code} initialValue={body} />;
+  return <RichEditorShell code={code} initialValue={body} wssUrl={wssUrl} />;
 }

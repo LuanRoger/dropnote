@@ -1,7 +1,4 @@
-"use client";
-
 import { type AnyPluginConfig, TrailingBlockPlugin } from "platejs";
-import { type TPlateEditor, useEditorRef } from "platejs/react";
 
 import { AlignKit } from "../plugins/align-kit";
 import { AutoformatKit } from "../plugins/autoformat-kit";
@@ -30,49 +27,67 @@ import { SlashKit } from "../plugins/slash-kit";
 import { TableKit } from "../plugins/table-kit";
 import { TocKit } from "../plugins/toc-kit";
 import { ToggleKit } from "../plugins/toggle-kit";
+import { YjsKit } from "../plugins/yjs-kit";
 
-export const EditorKit: AnyPluginConfig[] = [
-  // Elements
-  ...BasicBlocksKit,
-  ...CodeBlockKit,
-  ...TableKit,
-  ...ToggleKit,
-  ...TocKit,
-  ...MediaKit,
-  ...CalloutKit,
-  ...ColumnKit,
-  ...MathKit,
-  ...DateKit,
-  ...LinkKit,
+interface EditorKitOptions {
+  yjs?: {
+    name: string;
+    color: string;
+    roomName: string;
+    wssUrl: string;
+  };
+}
 
-  // Marks
-  ...BasicMarksKit,
-  ...FontKit,
+export const EditorKit: (options: EditorKitOptions) => AnyPluginConfig[] = (
+  options: EditorKitOptions,
+) => {
+  const { yjs } = options;
+  const kits = [
+    // Elements
+    ...BasicBlocksKit,
+    ...CodeBlockKit,
+    ...TableKit,
+    ...ToggleKit,
+    ...TocKit,
+    ...MediaKit,
+    ...CalloutKit,
+    ...ColumnKit,
+    ...MathKit,
+    ...DateKit,
+    ...LinkKit,
 
-  // Block Style
-  ...ListKit,
-  ...AlignKit,
-  ...LineHeightKit,
+    // Marks
+    ...BasicMarksKit,
+    ...FontKit,
 
-  // Editing
-  ...SlashKit,
-  ...AutoformatKit,
-  ...CursorOverlayKit,
-  ...BlockMenuKit,
-  ...EmojiKit,
-  ...ExitBreakKit,
-  TrailingBlockPlugin,
+    // Block Style
+    ...ListKit,
+    ...AlignKit,
+    ...LineHeightKit,
 
-  // Parsers
-  ...DocxKit,
-  ...MarkdownKit,
+    // Editing
+    ...SlashKit,
+    ...AutoformatKit,
+    ...CursorOverlayKit,
+    ...BlockMenuKit,
+    ...EmojiKit,
+    ...ExitBreakKit,
+    TrailingBlockPlugin,
 
-  // UI
-  ...BlockPlaceholderKit,
-  ...FixedToolbarKit,
-  ...FloatingToolbarKit,
-];
+    // Parsers
+    ...DocxKit,
+    ...MarkdownKit,
 
-export type MyEditor = TPlateEditor;
+    // UI
+    ...BlockPlaceholderKit,
+    ...FixedToolbarKit,
+    ...FloatingToolbarKit,
+  ];
 
-export const useEditor = (): MyEditor => useEditorRef<MyEditor>();
+  if (yjs) {
+    // Include Yjs plugins if configuration is provided
+    kits.push(...YjsKit(yjs));
+  }
+
+  return kits;
+};

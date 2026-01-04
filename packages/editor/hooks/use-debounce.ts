@@ -1,18 +1,13 @@
-import * as React from "react";
+import { useEffect, useState } from "react";
 
-export const useDebounce = <T>(value: T, delay = 500) => {
-  const [debouncedValue, setDebouncedValue] = React.useState(value);
+export function useDebounce<T>(value: T, delay = 500) {
+  const [debounced, setDebounced] = useState(value);
 
-  React.useEffect(() => {
-    const handler: NodeJS.Timeout = setTimeout(() => {
-      setDebouncedValue(value);
-    }, delay);
+  useEffect(() => {
+    const timer = setTimeout(() => setDebounced(value), delay);
 
-    // Cancel the timeout if value changes (also on delay change or unmount)
-    return () => {
-      clearTimeout(handler);
-    };
+    return () => clearTimeout(timer);
   }, [value, delay]);
 
-  return debouncedValue;
-};
+  return debounced;
+}
