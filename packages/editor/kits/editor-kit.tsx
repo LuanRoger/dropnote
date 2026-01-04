@@ -30,7 +30,7 @@ import { ToggleKit } from "../plugins/toggle-kit";
 import { YjsKit } from "../plugins/yjs-kit";
 
 interface EditorKitOptions {
-  yjs: {
+  yjs?: {
     name: string;
     color: string;
     roomName: string;
@@ -40,47 +40,54 @@ interface EditorKitOptions {
 
 export const EditorKit: (options: EditorKitOptions) => AnyPluginConfig[] = (
   options: EditorKitOptions,
-) => [
-  // Elements
-  ...BasicBlocksKit,
-  ...CodeBlockKit,
-  ...TableKit,
-  ...ToggleKit,
-  ...TocKit,
-  ...MediaKit,
-  ...CalloutKit,
-  ...ColumnKit,
-  ...MathKit,
-  ...DateKit,
-  ...LinkKit,
+) => {
+  const { yjs } = options;
+  const kits = [
+    // Elements
+    ...BasicBlocksKit,
+    ...CodeBlockKit,
+    ...TableKit,
+    ...ToggleKit,
+    ...TocKit,
+    ...MediaKit,
+    ...CalloutKit,
+    ...ColumnKit,
+    ...MathKit,
+    ...DateKit,
+    ...LinkKit,
 
-  // Marks
-  ...BasicMarksKit,
-  ...FontKit,
+    // Marks
+    ...BasicMarksKit,
+    ...FontKit,
 
-  // Block Style
-  ...ListKit,
-  ...AlignKit,
-  ...LineHeightKit,
+    // Block Style
+    ...ListKit,
+    ...AlignKit,
+    ...LineHeightKit,
 
-  // Editing
-  ...SlashKit,
-  ...AutoformatKit,
-  ...CursorOverlayKit,
-  ...BlockMenuKit,
-  ...EmojiKit,
-  ...ExitBreakKit,
-  TrailingBlockPlugin,
+    // Editing
+    ...SlashKit,
+    ...AutoformatKit,
+    ...CursorOverlayKit,
+    ...BlockMenuKit,
+    ...EmojiKit,
+    ...ExitBreakKit,
+    TrailingBlockPlugin,
 
-  // Colaboration
-  ...YjsKit(options.yjs),
+    // Parsers
+    ...DocxKit,
+    ...MarkdownKit,
 
-  // Parsers
-  ...DocxKit,
-  ...MarkdownKit,
+    // UI
+    ...BlockPlaceholderKit,
+    ...FixedToolbarKit,
+    ...FloatingToolbarKit,
+  ];
 
-  // UI
-  ...BlockPlaceholderKit,
-  ...FixedToolbarKit,
-  ...FloatingToolbarKit,
-];
+  if (yjs) {
+    // Include Yjs plugins if configuration is provided
+    kits.push(...YjsKit(yjs));
+  }
+
+  return kits;
+};

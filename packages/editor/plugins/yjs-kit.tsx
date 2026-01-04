@@ -1,6 +1,7 @@
 "use client";
 
 import { YjsPlugin } from "@platejs/yjs/react";
+import type { AnyPluginConfig } from "platejs";
 import { RemoteCursorOverlay } from "../components/remote-cursor-overlay";
 
 export const YjsKit = ({
@@ -13,7 +14,7 @@ export const YjsKit = ({
   color: string;
   roomName: string;
   wssUrl: string;
-}) => [
+}): AnyPluginConfig[] => [
   YjsPlugin.configure({
     render: {
       afterEditable: RemoteCursorOverlay,
