@@ -6,35 +6,40 @@ import { EditorKit } from "@repo/editor/kits/editor-kit";
 import { updateNoteByCode } from "@/app/actions/notes";
 import { EDITOR_DEBOUNCE_TIME_MS } from "@/constants";
 import { generateRandomHexColor } from "@/utils/color";
-import RichEditorEmpty from "./rich-editor-empty";
 import { generateRandomName } from "@/utils/name";
+import RichEditorEmpty from "./rich-editor-empty";
 
 interface RichEditorShellProps {
   code: string;
   initialValue?: any;
   wssUrl?: string;
+  noSave?: boolean;
 }
 
 export default function RichEditorShell({
   code,
   initialValue,
   wssUrl,
+  noSave,
 }: RichEditorShellProps) {
-  const editor = usePlateEditor({
-    plugins: EditorKit({
-      yjs: {
-        wssUrl: wssUrl ?? "",
+  const yjsOptions = wssUrl
+    ? {
+        wssUrl,
         name: generateRandomName(),
         color: generateRandomHexColor(),
         roomName: code,
-      },
+      }
+    : undefined;
+  const editor = usePlateEditor({
+    plugins: EditorKit({
+      yjs: yjsOptions,
     }),
     value: initialValue,
   });
 
   return (
     <Plate editor={editor}>
-      <RichEditorChildren code={code} />
+      {noSave ? <RichEditorEmpty /> : <RichEditorChildren code={code} />}
     </Plate>
   );
 }
