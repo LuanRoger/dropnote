@@ -1,5 +1,5 @@
-import Editor from "@/components/editor";
+import RichEditorEmpty from "@/components/rich-editor-empty";
 
 export default function NoSavePage() {
-  return <Editor code={"no-save"} noSave />;
+  return <RichEditorEmpty />;
 }
