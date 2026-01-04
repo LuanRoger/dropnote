@@ -36,7 +36,6 @@ export function useEditorMechanisms({
   }, [getApi, mounted, code]);
 
   useEffect(() => {
-    console.log("Auto-saving note...");
     performSave(async () => {
       await onSave(toSaveValue);
     });

@@ -28,6 +28,7 @@ if (!maxDebounce || Number.isNaN(maxDebounce)) {
 
 const server = new Server({
   name: serverName,
+  address: "::",
   port,
   timeout,
   debounce,
