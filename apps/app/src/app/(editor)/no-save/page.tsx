@@ -8,5 +8,5 @@ export const metadata: Metadata = createMetadata({
 });
 
 export default function NoSavePage() {
-  return <RichEditorShell code="no-save" />;
+  return <RichEditorShell code="no-save" noSave />;
 }
