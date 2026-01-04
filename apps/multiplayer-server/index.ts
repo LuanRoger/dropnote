@@ -2,11 +2,15 @@ import { Logger } from "@hocuspocus/extension-logger";
 import { Server } from "@hocuspocus/server";
 
 const serverName = "dropnote-multiplayer-server";
+const address = process.env.ADDRESS;
 const port = Number(process.env.PORT);
 const timeout = Number(process.env.TIMEOUT);
 const debounce = Number(process.env.DEBOUNCE);
 const maxDebounce = Number(process.env.MAX_DEBOUNCE);
 
+if (!address) {
+  throw new Error("ADDRESS environment variable is not set.");
+}
 if (!port || Number.isNaN(port)) {
   throw new Error("PORT environment variable is not set or is not a number.");
 }
@@ -28,7 +32,7 @@ if (!maxDebounce || Number.isNaN(maxDebounce)) {
 
 const server = new Server({
   name: serverName,
-  address: "::",
+  address,
   port,
   timeout,
   debounce,
