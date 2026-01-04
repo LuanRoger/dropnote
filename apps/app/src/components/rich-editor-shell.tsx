@@ -3,11 +3,11 @@
 import { Plate, usePlateEditor } from "@repo/editor";
 import { useEditorMechanisms } from "@repo/editor/hooks/use-editor-mechanisms";
 import { EditorKit } from "@repo/editor/kits/editor-kit";
-import { funAnimalName } from "fun-animal-names";
 import { updateNoteByCode } from "@/app/actions/notes";
 import { EDITOR_DEBOUNCE_TIME_MS } from "@/constants";
 import { generateRandomHexColor } from "@/utils/color";
 import RichEditorEmpty from "./rich-editor-empty";
+import { generateRandomName } from "@/utils/name";
 
 interface RichEditorShellProps {
   code: string;
@@ -24,7 +24,7 @@ export default function RichEditorShell({
     plugins: EditorKit({
       yjs: {
         wssUrl: wssUrl ?? "",
-        name: funAnimalName("Fun"),
+        name: generateRandomName(),
         color: generateRandomHexColor(),
         roomName: code,
       },
