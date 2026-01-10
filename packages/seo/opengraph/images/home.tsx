@@ -47,6 +47,5 @@ export function generateHomeImage() {
   return new ImageResponse(<Component />, {
     width: 1200,
     height: 630,
-    format: "webp",
   });
 }
