@@ -30,9 +30,8 @@ export default async function Page({ params }: PageProps) {
     notFound();
   }
 
-  const wssUrl = process.env.HOCUSPOCUS_WSS_URL;
   const note = await ensureCreated(code);
   const body = note?.body;
 
-  return <RichEditorShell code={code} initialValue={body} wssUrl={wssUrl} />;
+  return <RichEditorShell code={code} initialValue={body} />;
 }

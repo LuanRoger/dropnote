@@ -17,7 +17,7 @@ import {
   navigateToPageSchema,
 } from "@/utils/schemas/navigate-to-page-schema";
 
-const MotionButton = motion(Button);
+const MotionButton = motion.create(Button);
 
 export default function NavigateToPageForm() {
   const form = useForm<NavigateToPageSchema>({

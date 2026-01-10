@@ -4,9 +4,10 @@ import { z } from "zod";
 export const keys = () =>
   createEnv({
     server: {
-      HOCUSPOCUS_WSS_URL: z.url(),
+      NEXT_PUBLIC_HOCUSPOCUS_WSS_URL: z.url(),
     },
     runtimeEnv: {
-      HOCUSPOCUS_WSS_URL: process.env.HOCUSPOCUS_WSS_URL,
+      NEXT_PUBLIC_HOCUSPOCUS_WSS_URL:
+        process.env.NEXT_PUBLIC_HOCUSPOCUS_WSS_URL,
     },
   });

@@ -12,16 +12,17 @@ import RichEditorEmpty from "./rich-editor-empty";
 interface RichEditorShellProps {
   code: string;
   initialValue?: any;
-  wssUrl?: string;
   noSave?: boolean;
 }
 
 export default function RichEditorShell({
   code,
   initialValue,
-  wssUrl,
   noSave,
 }: RichEditorShellProps) {
+  const wssUrl = noSave
+    ? undefined
+    : process.env.NEXT_PUBLIC_HOCUSPOCUS_WSS_URL;
   const yjsOptions = wssUrl
     ? {
         wssUrl,
