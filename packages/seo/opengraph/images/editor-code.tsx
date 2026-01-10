@@ -39,6 +39,5 @@ export function generateEditorCodeImage(code: string) {
   return new ImageResponse(<Component code={code} />, {
     width: 1200,
     height: 630,
-    format: "webp",
   });
 }
