@@ -1,11 +1,6 @@
 import merge from "lodash.merge";
 import type { Metadata } from "next";
-import {
-  applicationName,
-  productionUrl,
-  protocol,
-  publisher,
-} from "./constants";
+import { applicationName, productionUrl, publisher } from "./constants";
 
 type MetadataGenerator = Omit<Metadata, "description" | "title"> & {
   title?: string;
@@ -28,9 +23,7 @@ export const createMetadata = ({
     title: parsedTitle,
     description,
     applicationName,
-    metadataBase: productionUrl
-      ? new URL(`${protocol}://${productionUrl}`)
-      : undefined,
+    metadataBase: productionUrl,
     authors: [author],
     creator: author.name,
     formatDetection: {
