@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/suspicious/useAwait: The signature of the function do not allow not async functions */
 import { Logger } from "@hocuspocus/extension-logger";
 import { Server } from "@hocuspocus/server";
 
