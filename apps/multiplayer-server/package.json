@@ -15,7 +15,7 @@
     "typescript": "^5"
   },
   "dependencies": {
-    "@hocuspocus/extension-logger": "^3.4.3",
-    "@hocuspocus/server": "^3.4.3"
+    "@hocuspocus/extension-logger": "^3.4.4",
+    "@hocuspocus/server": "^3.4.4"
   }
 }
