@@ -12,7 +12,7 @@ import RichEditorEmpty from "./rich-editor-empty";
 
 interface RichEditorShellProps {
   code: string;
-  noteSource: NoteSource;
+  noteSource?: NoteSource;
   initialValue?: NoteBody;
   wssUrl?: string;
 }
@@ -31,7 +31,7 @@ export default function RichEditorShell({
         roomName: code,
       }
     : undefined;
-  const source = createNoteSource(code, noteSource);
+  const source = noteSource ? createNoteSource(code, noteSource) : undefined;
 
   const editor = usePlateEditor({
     plugins: EditorKit({
@@ -42,7 +42,7 @@ export default function RichEditorShell({
 
   return (
     <Plate editor={editor}>
-      <RichEditorChildren source={source} />
+      {source ? <RichEditorChildren source={source} /> : <RichEditorEmpty />}
     </Plate>
   );
 }
