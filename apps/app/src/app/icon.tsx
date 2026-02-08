@@ -6,7 +6,7 @@ export const contentType = "image/png";
 
 export default async function Icon() {
   const geistFont = await readFile(
-    join(process.cwd(), "public", "Geist-Bold.ttf"),
+    join(process.cwd(), "public", "Geist-Bold.ttf")
   );
 
   return new ImageResponse(
@@ -34,6 +34,6 @@ export default async function Icon() {
           data: geistFont,
         },
       ],
-    },
+    }
   );
 }

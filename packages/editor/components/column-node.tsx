@@ -43,7 +43,7 @@ export const ColumnElement = withHOC(
           <div
             className={cn(
               "relative h-full border border-transparent p-1.5",
-              !readOnly && "rounded-lg border-border border-dashed",
+              !readOnly && "rounded-lg border-border border-dashed"
             )}
           >
             {props.children}
@@ -51,7 +51,7 @@ export const ColumnElement = withHOC(
         </PlateElement>
       </div>
     );
-  },
+  }
 );
 
 export function ColumnGroupElement(props: PlateElementProps) {
@@ -72,7 +72,7 @@ function ColumnFloatingToolbar({ children }: React.PropsWithChildren) {
   const selected = useSelected();
   const isCollapsed = useEditorSelector(
     (editor) => editor.api.isCollapsed(),
-    [],
+    []
   );
   const isFocusedLast = useFocusedLast();
 

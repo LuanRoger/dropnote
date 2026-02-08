@@ -27,11 +27,11 @@ import {
   useRemoveNodeButton,
   useSelected,
 } from "platejs/react";
-import { CaptionButton } from "./caption";
 import { useEffect } from "react";
+import { CaptionButton } from "./caption";
 
 const inputVariants = cva(
-  "flex h-[28px] w-full rounded-md border-none bg-transparent px-1.5 py-1 text-base placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-transparent md:text-sm",
+  "flex h-[28px] w-full rounded-md border-none bg-transparent px-1.5 py-1 text-base placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-transparent md:text-sm"
 );
 
 export function MediaToolbar({
@@ -47,7 +47,7 @@ export function MediaToolbar({
 
   const selectionCollapsed = useEditorSelector(
     (editor) => !editor.api.isExpanded(),
-    [],
+    []
   );
   const isImagePreviewOpen = useImagePreviewValue("isOpen", editor.id);
   const isOpen =

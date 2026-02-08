@@ -19,7 +19,7 @@ export function DateElement(props: PlateElementProps<TDateElement>) {
   const trigger = (
     <span
       className={cn(
-        "w-fit cursor-pointer rounded-sm bg-muted px-1 text-muted-foreground",
+        "w-fit cursor-pointer rounded-sm bg-muted px-1 text-muted-foreground"
       )}
       contentEditable={false}
       draggable
@@ -63,27 +63,27 @@ export function DateElement(props: PlateElementProps<TDateElement>) {
   return (
     <PlateElement
       {...props}
-      className="inline-block"
       attributes={{
         ...props.attributes,
         contentEditable: false,
       }}
+      className="inline-block"
     >
       <Popover>
         <PopoverTrigger asChild>{trigger}</PopoverTrigger>
         <PopoverContent className="w-auto p-0">
           <Calendar
-            selected={new Date(element.date as string)}
+            initialFocus
+            mode="single"
             onSelect={(date) => {
               if (!date) return;
 
               editor.tf.setNodes(
                 { date: date.toDateString() },
-                { at: element },
+                { at: element }
               );
             }}
-            mode="single"
-            initialFocus
+            selected={new Date(element.date as string)}
           />
         </PopoverContent>
       </Popover>

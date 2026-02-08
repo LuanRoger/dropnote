@@ -44,7 +44,7 @@ const items = [
 ];
 
 export function AlignToolbarButton(
-  props: React.ComponentProps<typeof DropdownMenu>,
+  props: React.ComponentProps<typeof DropdownMenu>
 ) {
   const { editor, tf } = useEditorPlugin(TextAlignPlugin);
   const value =

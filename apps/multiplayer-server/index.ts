@@ -11,17 +11,17 @@ const maxDebounce = Number(process.env.MAX_DEBOUNCE);
 
 if (!timeout || Number.isNaN(timeout)) {
   throw new Error(
-    "TIMEOUT environment variable is not set or is not a number.",
+    "TIMEOUT environment variable is not set or is not a number."
   );
 }
 if (!debounce || Number.isNaN(debounce)) {
   throw new Error(
-    "DEBOUNCE environment variable is not set or is not a number.",
+    "DEBOUNCE environment variable is not set or is not a number."
   );
 }
 if (!maxDebounce || Number.isNaN(maxDebounce)) {
   throw new Error(
-    "MAX_DEBOUNCE environment variable is not set or is not a number.",
+    "MAX_DEBOUNCE environment variable is not set or is not a number."
   );
 }
 

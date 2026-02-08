@@ -24,11 +24,11 @@ import {
 import { MarkToolbarButton } from "./mark-toolbar-button";
 import { MediaToolbarButton } from "./media-toolbar-button";
 import { MoreToolbarButton } from "./more-toolbar-button";
+import ShareToolbarButton from "./share-toolbar-button";
 import { TableToolbarButton } from "./table-toolbar-button";
 import { ToggleToolbarButton } from "./toggle-toolbar-button";
 import { ToolbarGroup } from "./toolbar";
 import { TurnIntoToolbarButton } from "./turn-into-toolbar-button";
-import ShareToolbarButton from "./share-toolbar-button";
 
 export function FixedToolbarButtons() {
   const readOnly = useEditorReadOnly();
