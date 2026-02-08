@@ -1,22 +1,29 @@
 import { YjsPlugin } from "@platejs/yjs/react";
 import { useEditorSelector } from "platejs/react";
-import { useEffect, useTransition } from "react";
+import { useCallback, useEffect, useTransition } from "react";
+import type { NotesSource } from "../types/notes";
 import { useDebounce } from "./use-debounce";
 import { useMounted } from "./use-mounted";
 
-export function useEditorMechanisms({
-  code,
-  debounceTimeMs,
-  onSave,
-}: {
-  code: string;
+export interface UseEditorMechanismsProps {
+  source: NotesSource;
   debounceTimeMs: number;
-  onSave: (value: any) => Promise<void>;
-}) {
+}
+
+export function useEditorMechanisms({
+  source,
+  debounceTimeMs,
+}: UseEditorMechanismsProps) {
+  const code = source.code;
+
   const noteBody = useEditorSelector((editor) => editor.children, []);
   const getApi = useEditorSelector((editor) => editor.getApi, []);
   const mounted = useMounted();
   const toSaveValue = useDebounce(noteBody, debounceTimeMs);
+  const saveNote = useCallback(
+    () => source.save(toSaveValue),
+    [toSaveValue, source],
+  );
   const [isSaving, performSave] = useTransition();
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: This is to be trigger only on mount/unmount
@@ -37,9 +44,9 @@ export function useEditorMechanisms({
 
   useEffect(() => {
     performSave(async () => {
-      await onSave(toSaveValue);
+      await saveNote();
     });
-  }, [toSaveValue, onSave]);
+  }, [saveNote]);
 
   return {
     isSaving,
