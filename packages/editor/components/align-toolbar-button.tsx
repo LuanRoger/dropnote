@@ -22,18 +22,22 @@ import { ToolbarButton } from "./toolbar";
 
 const items = [
   {
+    label: "Left",
     icon: AlignLeftIcon,
     value: "left",
   },
   {
+    label: "Center",
     icon: AlignCenterIcon,
     value: "center",
   },
   {
+    label: "Right",
     icon: AlignRightIcon,
     value: "right",
   },
   {
+    label: "Justify",
     icon: AlignJustifyIcon,
     value: "justify",
   },
@@ -61,7 +65,7 @@ export function AlignToolbarButton(
         </ToolbarButton>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent align="start" className="min-w-0">
+      <DropdownMenuContent align="start">
         <DropdownMenuRadioGroup
           onValueChange={(value) => {
             tf.textAlign.setNodes(value as Alignment);
@@ -69,13 +73,14 @@ export function AlignToolbarButton(
           }}
           value={value}
         >
-          {items.map(({ icon: Icon, value: itemValue }) => (
+          {items.map(({ label, icon: Icon, value: itemValue }) => (
             <DropdownMenuRadioItem
-              className="pl-2 data-[state=checked]:bg-accent *:first:[span]:hidden"
+              className="data-[state=checked]:bg-accent *:first:[span]:hidden"
               key={itemValue}
               value={itemValue}
             >
               <Icon />
+              {label}
             </DropdownMenuRadioItem>
           ))}
         </DropdownMenuRadioGroup>
