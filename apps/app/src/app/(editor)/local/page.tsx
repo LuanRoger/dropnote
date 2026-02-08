@@ -1,12 +1,12 @@
 import { createMetadata } from "@repo/seo/metadata";
 import type { Metadata } from "next";
-import RichEditorEmpty from "@/components/rich-editor-empty";
+import RichEditorShell from "@/components/rich-editor-shell";
 
 export const metadata: Metadata = createMetadata({
-  title: "no-save",
-  description: "Editing note with code: no-save",
+  title: "local",
+  description: "Editing note with code: local",
 });
 
 export default function NoSavePage() {
-  return <RichEditorEmpty />;
+  return <RichEditorShell code="no-save" noSave />;
 }

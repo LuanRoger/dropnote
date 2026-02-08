@@ -34,5 +34,12 @@ export default async function Page({ params }: PageProps) {
   const note = await ensureCreated(code);
   const body = note?.body;
 
-  return <RichEditorShell code={code} initialValue={body} wssUrl={wssUrl} />;
+  return (
+    <RichEditorShell
+      code={code}
+      initialValue={body}
+      noteSource="database"
+      wssUrl={wssUrl}
+    />
+  );
 }

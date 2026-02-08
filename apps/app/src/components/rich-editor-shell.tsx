@@ -3,24 +3,25 @@
 import { Plate, usePlateEditor } from "@repo/editor";
 import { useEditorMechanisms } from "@repo/editor/hooks/use-editor-mechanisms";
 import { EditorKit } from "@repo/editor/kits/editor-kit";
-import { updateNoteByCode } from "@/app/actions/notes";
+import type { NoteBody, NotesSource } from "@repo/editor/types/notes";
 import { EDITOR_DEBOUNCE_TIME_MS } from "@/constants";
+import { createNoteSource, type NoteSource } from "@/lib/sources/notes";
 import { generateRandomHexColor } from "@/utils/color";
 import { generateRandomName } from "@/utils/name";
 import RichEditorEmpty from "./rich-editor-empty";
 
 interface RichEditorShellProps {
   code: string;
-  initialValue?: any;
+  noteSource: NoteSource;
+  initialValue?: NoteBody;
   wssUrl?: string;
-  noSave?: boolean;
 }
 
 export default function RichEditorShell({
   code,
+  noteSource,
   initialValue,
   wssUrl,
-  noSave,
 }: RichEditorShellProps) {
   const yjsOptions = wssUrl
     ? {
@@ -30,6 +31,8 @@ export default function RichEditorShell({
         roomName: code,
       }
     : undefined;
+  const source = createNoteSource(code, noteSource);
+
   const editor = usePlateEditor({
     plugins: EditorKit({
       yjs: yjsOptions,
@@ -39,24 +42,19 @@ export default function RichEditorShell({
 
   return (
     <Plate editor={editor}>
-      {noSave ? <RichEditorEmpty /> : <RichEditorChildren code={code} />}
+      <RichEditorChildren source={source} />
     </Plate>
   );
 }
 
 interface RichEditorChildrenProps {
-  code: string;
+  source: NotesSource;
 }
 
-function RichEditorChildren({ code }: RichEditorChildrenProps) {
-  function saveNote(value: any) {
-    return updateNoteByCode(code, value);
-  }
-
+function RichEditorChildren({ source }: RichEditorChildrenProps) {
   const { isSaving } = useEditorMechanisms({
-    code,
+    source,
     debounceTimeMs: EDITOR_DEBOUNCE_TIME_MS,
-    onSave: saveNote,
   });
 
   return <RichEditorEmpty isLoading={isSaving} />;
