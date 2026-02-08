@@ -60,7 +60,7 @@ function TodoMarker(props: PlateElementProps) {
       <Checkbox
         className={cn(
           "absolute top-1 -left-6",
-          readOnly && "pointer-events-none",
+          readOnly && "pointer-events-none"
         )}
         {...checkboxProps}
       />
@@ -74,7 +74,7 @@ function TodoLi(props: PlateElementProps) {
       className={cn(
         "list-none",
         (props.element.checked as boolean) &&
-          "text-muted-foreground line-through",
+          "text-muted-foreground line-through"
       )}
     >
       {props.children}

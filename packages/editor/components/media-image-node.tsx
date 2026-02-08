@@ -42,7 +42,7 @@ export const ImageElement = withHOC(
                 className={cn(
                   "block w-full max-w-full cursor-pointer object-cover px-0",
                   "rounded-sm",
-                  focused && selected && "ring-2 ring-ring ring-offset-2",
+                  focused && selected && "ring-2 ring-ring ring-offset-2"
                 )}
               />
               <ResizeHandle
@@ -68,5 +68,5 @@ export const ImageElement = withHOC(
         </PlateElement>
       </MediaToolbar>
     );
-  },
+  }
 );

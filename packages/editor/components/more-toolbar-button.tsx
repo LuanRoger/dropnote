@@ -20,11 +20,11 @@ import {
 } from "lucide-react";
 import { KEYS } from "platejs";
 import { useEditorRef } from "platejs/react";
-import { ComponentPropsWithoutRef, useState } from "react";
+import { type ComponentPropsWithoutRef, useState } from "react";
 import { ToolbarButton } from "./toolbar";
 
 export function MoreToolbarButton(
-  props: ComponentPropsWithoutRef<typeof DropdownMenu>,
+  props: ComponentPropsWithoutRef<typeof DropdownMenu>
 ) {
   const editor = useEditorRef();
   const [open, setOpen] = useState(false);

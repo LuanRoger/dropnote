@@ -96,7 +96,7 @@ export const TableElement = withHOC(
     const readOnly = useReadOnly();
     const isSelectionAreaVisible = usePluginOption(
       BlockSelectionPlugin,
-      "isSelectionAreaVisible",
+      "isSelectionAreaVisible"
     );
     const hasControls = !(readOnly || isSelectionAreaVisible);
     const {
@@ -112,7 +112,7 @@ export const TableElement = withHOC(
         {...props}
         className={cn(
           "overflow-x-auto py-5",
-          hasControls && "-ml-2 *:data-[slot=block-selection]:left-2",
+          hasControls && "-ml-2 *:data-[slot=block-selection]:left-2"
         )}
         style={{ paddingLeft: marginLeft }}
       >
@@ -120,7 +120,7 @@ export const TableElement = withHOC(
           <table
             className={cn(
               "mr-0 ml-px table h-px table-fixed border-collapse",
-              isSelectingCell && "selection:bg-transparent",
+              isSelectingCell && "selection:bg-transparent"
             )}
             {...tableProps}
           >
@@ -139,7 +139,7 @@ export const TableElement = withHOC(
     }
 
     return <TableFloatingToolbar>{content}</TableFloatingToolbar>;
-  },
+  }
 );
 
 function TableFloatingToolbar({
@@ -152,7 +152,7 @@ function TableFloatingToolbar({
   const { props: buttonProps } = useRemoveNodeButton({ element });
   const collapsedInside = useEditorSelector(
     (editor) => selected && editor.api.isCollapsed(),
-    [selected],
+    [selected]
   );
   const isFocusedLast = useFocusedLast();
 
@@ -288,7 +288,7 @@ function TableFloatingToolbar({
 }
 
 function TableBordersDropdownMenuContent(
-  props: React.ComponentProps<typeof DropdownMenuContent>,
+  props: React.ComponentProps<typeof DropdownMenuContent>
 ) {
   const editor = useEditorRef();
   const {
@@ -381,7 +381,7 @@ function ColorDropdownMenu({
       setOpen(false);
       setCellBackground(editor, { color, selectedCells: selectedCells ?? [] });
     },
-    [selectedCells, editor],
+    [selectedCells, editor]
   );
 
   const onClearColor = useCallback(() => {
@@ -472,7 +472,7 @@ function TableCellResizeHandles({
         className={cn(
           "absolute top-0 z-30 hidden h-full w-1 bg-ring",
           "right-[-1.5px]",
-          columnResizeVariants({ colIndex: colIndex as any }),
+          columnResizeVariants({ colIndex: colIndex as any })
         )}
       />
       {colIndex === 0 && (
@@ -480,7 +480,7 @@ function TableCellResizeHandles({
           className={cn(
             "absolute top-0 z-30 h-full w-1 bg-ring",
             "left-[-1.5px]",
-            'fade-in hidden animate-in group-has-[[data-resizer-left]:hover]/table:block group-has-[[data-resizer-left][data-resizing="true"]]/table:block',
+            'fade-in hidden animate-in group-has-[[data-resizer-left]:hover]/table:block group-has-[[data-resizer-left][data-resizing="true"]]/table:block'
           )}
         />
       )}
@@ -508,7 +508,7 @@ export function TableCellElement({
   const isSelectingRow = useBlockSelected(rowId) || isSelectingTable;
   const isSelectionAreaVisible = usePluginOption(
     BlockSelectionPlugin,
-    "isSelectionAreaVisible",
+    "isSelectionAreaVisible"
   );
 
   const { borders, colIndex, colSpan, minHeight, rowIndex, selected, width } =
@@ -543,7 +543,7 @@ export function TableCellElement({
         borders.bottom?.size && "before:border-b before:border-b-border",
         borders.right?.size && "before:border-r before:border-r-border",
         borders.left?.size && "before:border-l before:border-l-border",
-        borders.top?.size && "before:border-t before:border-t-border",
+        borders.top?.size && "before:border-t before:border-t-border"
       )}
       style={
         {
@@ -586,7 +586,7 @@ export function TableCellElement({
 }
 
 export function TableCellHeaderElement(
-  props: React.ComponentProps<typeof TableCellElement>,
+  props: React.ComponentProps<typeof TableCellElement>
 ) {
   return <TableCellElement {...props} isHeader />;
 }

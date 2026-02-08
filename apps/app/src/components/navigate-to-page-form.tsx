@@ -1,6 +1,6 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
+import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { Button } from "@repo/design-system/components/ui/button";
 import {
   Field,
@@ -21,7 +21,7 @@ const MotionButton = motion.create(Button);
 
 export default function NavigateToPageForm() {
   const form = useForm<NavigateToPageSchema>({
-    resolver: zodResolver(navigateToPageSchema),
+    resolver: standardSchemaResolver(navigateToPageSchema),
     defaultValues: {
       code: "",
     },
