@@ -204,7 +204,7 @@ const groups: Group[] = [
 ];
 
 export function InsertToolbarButton(
-  props: ComponentPropsWithoutRef<typeof DropdownMenu>
+  props: ComponentPropsWithoutRef<typeof DropdownMenu>,
 ) {
   const editor = useEditorRef();
   const [open, setOpen] = useState(false);
@@ -217,15 +217,11 @@ export function InsertToolbarButton(
         </ToolbarButton>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent
-        align="start"
-        className="flex max-h-[500px] min-w-0 flex-col overflow-y-auto"
-      >
+      <DropdownMenuContent align="start" className="max-h-125">
         {groups.map(({ group, items: nestedItems }) => (
           <ToolbarMenuGroup key={group} label={group}>
             {nestedItems.map(({ icon, label, value, onSelect }) => (
               <DropdownMenuItem
-                className="min-w-[180px]"
                 key={value}
                 onSelect={() => {
                   onSelect(editor, value);
