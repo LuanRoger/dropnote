@@ -1,7 +1,7 @@
 // biome-ignore lint/suspicious/noExplicitAny: For now, I don't know the type, and the package do not export it, so I will use any
 export type NoteBody = any;
 
-export abstract class NotesSource {
+export abstract class NotesSaveSource {
   readonly code: string;
 
   constructor(code: string) {
