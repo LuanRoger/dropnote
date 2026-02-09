@@ -10,9 +10,14 @@ export default function SpecialRoutesSection() {
         <Separator className="flex-1" />
       </div>
       <RouteInfo
-        description="Create a new document without saving it"
+        description="Create a new note that won't be saved."
         route="/no-save"
         routeName="no-save"
+      />
+      <RouteInfo
+        description="Local note, saved locally in your browser."
+        route="/local"
+        routeName="local"
       />
     </div>
   );
@@ -32,7 +37,7 @@ function RouteInfo({
       <Link className="transition-transform hover:scale-105" href={route}>
         <Kbd>{routeName}</Kbd>
       </Link>
-      <p className="text-muted-foreground text-sm"> - {description}.</p>
+      <p className="text-muted-foreground text-sm"> - {description}</p>
     </span>
   );
 }
