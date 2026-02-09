@@ -1,8 +1,8 @@
 import type { NoteBody } from "@repo/editor/types/notes";
 import { NotesSaveSource } from "@repo/editor/types/notes";
 import { ensureCreated, updateNoteByCode } from "@/app/actions/notes";
-import { NotesLoadSource, type NoteSource } from "./types";
 import { LOCAL_NOTE_PREFIX } from "@/constants";
+import { type NoteSource, NotesLoadSource } from "./types";
 
 export class NotesDatabaseSaveSource extends NotesSaveSource {
   save(value: NoteBody): Promise<void> {

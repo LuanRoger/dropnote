@@ -1,7 +1,7 @@
 "use client";
 
 import type { NoteBody } from "@repo/editor/types/notes";
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useState } from "react";
 import EditorLoading from "@/components/editor-loading";
 import RichEditorShell from "@/components/rich-editor-shell";
 import { NotesLocalLoadSource } from "@/lib/sources/notes";

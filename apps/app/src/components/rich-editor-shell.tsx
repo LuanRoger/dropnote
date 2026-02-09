@@ -3,9 +3,10 @@
 import { Plate, usePlateEditor } from "@repo/editor";
 import { useEditorMechanisms } from "@repo/editor/hooks/use-editor-mechanisms";
 import { EditorKit } from "@repo/editor/kits/editor-kit";
-import type { NoteBody, NotesSource } from "@repo/editor/types/notes";
+import type { NoteBody, NotesSaveSource } from "@repo/editor/types/notes";
 import { EDITOR_DEBOUNCE_TIME_MS } from "@/constants";
-import { createNoteSource, type NoteSource } from "@/lib/sources/notes";
+import { createNoteSource } from "@/lib/sources/notes";
+import type { NoteSource } from "@/lib/sources/types";
 import { generateRandomHexColor } from "@/utils/color";
 import { generateRandomName } from "@/utils/name";
 import RichEditorEmpty from "./rich-editor-empty";
@@ -48,7 +49,7 @@ export default function RichEditorShell({
 }
 
 interface RichEditorChildrenProps {
-  source: NotesSource;
+  source: NotesSaveSource;
 }
 
 function RichEditorChildren({ source }: RichEditorChildrenProps) {
