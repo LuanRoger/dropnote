@@ -26,19 +26,19 @@ export function useEditorMechanisms({
   );
   const [isSaving, performSave] = useTransition();
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: This is to be trigger only on mount/unmount
+  // biome-ignore lint/correctness/useExhaustiveDependencies: This is to be trigger only on mount/unmount and change of code
   useEffect(() => {
     if (!mounted) {
       return;
     }
 
-    getApi(YjsPlugin).yjs.init({
+    getApi(YjsPlugin).yjs?.init({
       id: code,
       value: noteBody,
     });
 
     return () => {
-      getApi(YjsPlugin).yjs.destroy();
+      getApi(YjsPlugin).yjs?.destroy();
     };
   }, [getApi, mounted, code]);
 
