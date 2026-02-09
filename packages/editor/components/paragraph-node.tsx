@@ -4,7 +4,7 @@ import type { PlateElementProps } from "platejs/react";
 
 import { PlateElement } from "platejs/react";
 
-import { cn } from "@/utils/tailwind";
+import { cn } from "../utils/tailwind";
 
 export function ParagraphElement(props: PlateElementProps) {
   return (
