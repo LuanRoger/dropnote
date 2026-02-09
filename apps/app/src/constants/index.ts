@@ -1,4 +1,7 @@
 export const EDITOR_DEBOUNCE_TIME_MS = 600;
+
+export const LOCAL_NOTE_PREFIX = "dropnote.";
+
 /**
  * Regex for validating slugs:
  * - ^ and $ ensure the entire string is matched
