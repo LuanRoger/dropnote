@@ -1,12 +1,12 @@
 import { YjsPlugin } from "@platejs/yjs/react";
 import { useEditorSelector } from "platejs/react";
 import { useCallback, useEffect, useTransition } from "react";
-import type { NotesSource } from "../types/notes";
+import type { NotesSaveSource } from "../types/notes";
 import { useDebounce } from "./use-debounce";
 import { useMounted } from "./use-mounted";
 
 export interface UseEditorMechanismsProps {
-  source: NotesSource;
+  source: NotesSaveSource;
   debounceTimeMs: number;
 }
 
