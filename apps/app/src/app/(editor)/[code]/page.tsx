@@ -1,9 +1,9 @@
 import { createMetadata } from "@repo/seo/metadata";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { ensureCreated } from "@/app/actions/notes";
 import RichEditorShell from "@/components/rich-editor-shell";
 import { validateSlug } from "@/utils/slug";
+import { NotesDatabaseLoadSource } from "@/lib/sources/notes";
 
 type PageProps = {
   params: Promise<{
@@ -31,13 +31,13 @@ export default async function Page({ params }: PageProps) {
   }
 
   const wssUrl = process.env.HOCUSPOCUS_WSS_URL;
-  const note = await ensureCreated(code);
-  const body = note?.body;
+  const loader = new NotesDatabaseLoadSource(code);
+  const initialValue = await loader.load();
 
   return (
     <RichEditorShell
       code={code}
-      initialValue={body}
+      initialValue={initialValue}
       noteSource="database"
       wssUrl={wssUrl}
     />
