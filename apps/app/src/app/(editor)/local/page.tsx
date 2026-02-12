@@ -1,13 +1,13 @@
 import { createMetadata } from "@repo/seo/metadata";
 import type { Metadata } from "next";
-import RichEditorShell from "@/components/rich-editor-shell";
+import LocalEditor from "./components/local-editor";
 
-const code = "no-save";
+const code = "local";
 export const metadata: Metadata = createMetadata({
   title: code,
   description: `Editing note with code: ${code}`,
 });
 
-export default function NoSavePage() {
-  return <RichEditorShell code={code} />;
+export default function LocalPage() {
+  return <LocalEditor code={code} />;
 }
