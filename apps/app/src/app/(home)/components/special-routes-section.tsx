@@ -15,7 +15,7 @@ export default function SpecialRoutesSection() {
         routeName="no-save"
       />
       <RouteInfo
-        description="Local note, saved locally in your browser."
+        description="A note saved locally in your browser."
         route="/local"
         routeName="local"
       />
