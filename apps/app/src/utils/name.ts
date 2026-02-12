@@ -347,5 +347,6 @@ export function generateRandomName(): string {
     adjectives[Math.floor(Math.random() * adjectives.length)];
   const randomAnimal =
     animalNames[Math.floor(Math.random() * animalNames.length)];
+
   return `${randomAdjective} ${randomAnimal}`;
 }
