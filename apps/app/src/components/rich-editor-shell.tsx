@@ -13,6 +13,7 @@ import RichEditorEmpty from "./rich-editor-empty";
 
 interface RichEditorShellProps {
   code: string;
+  maxLength: number;
   noteSource?: NoteSource;
   initialValue?: NoteBody;
   wssUrl?: string;
@@ -20,6 +21,7 @@ interface RichEditorShellProps {
 
 export default function RichEditorShell({
   code,
+  maxLength,
   noteSource,
   initialValue,
   wssUrl,
@@ -37,6 +39,7 @@ export default function RichEditorShell({
   const editor = createEditor(
     {
       yjs: yjsOptions,
+      maxLength,
     },
     initialValue,
   );

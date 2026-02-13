@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import EditorLoading from "@/components/editor-loading";
 import RichEditorShell from "@/components/rich-editor-shell";
 import { NotesLocalLoadSource } from "@/lib/sources/notes";
+import { MAX_LENGHT_BASIC_NOTE } from "@/constants";
 
 interface LocalEditorProps {
   code: string;
@@ -31,6 +32,7 @@ export default function LocalEditor({ code }: LocalEditorProps) {
     <RichEditorShell
       code="local"
       initialValue={initialValue}
+      maxLength={MAX_LENGHT_BASIC_NOTE}
       noteSource="local"
     />
   );
