@@ -1,30 +1,102 @@
 "use client";
 
 import { AnimatePresence, motion } from "motion/react";
-import { useEditorSelector } from "platejs/react";
+import { useEditorPlugin, useEditorSelector } from "platejs/react";
+import { NoteBody } from "@/types/notes";
+import { useMemo } from "react";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@repo/design-system/components/ui/hover-card";
+import { AlertCircleIcon } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@repo/design-system/components/ui/tooltip";
+import { BottomStatusPlugin } from "../plugins/bottom-status-plugin";
 
 export default function BottomStatus() {
+  const { plugin } = useEditorPlugin(BottomStatusPlugin);
   const nodes = useEditorSelector((editor) => editor.children, []);
+  const textLenght = useMemo(() => {
+    let totalLength = 0;
+    const stack: NoteBody[] = [...nodes];
+
+    while (stack.length > 0) {
+      const node = stack.pop()!;
+
+      if (node.text) {
+        totalLength += node.text.length;
+      }
+
+      if (node.children && Array.isArray(node.children)) {
+        stack.push(...node.children);
+      }
+    }
+
+    return totalLength;
+  }, [nodes]);
+
+  const maxCharactersLenght = plugin.options.maxLenght;
   const nodeCount = nodes.length;
+  const reachCharacterLimit = maxCharactersLenght
+    ? textLenght >= maxCharactersLenght
+    : false;
 
   return (
-    <div className="w-full rounded-lg border border-border p-2 text-sm font-mono uppercase text-muted-foreground overflow-clip">
-      <p className="flex items-center gap-2">
-        <span>Blocks:</span>
-
-        <span className="relative inline-flex h-5 min-w-[2ch] items-center justify-center overflow-hidden">
-          <AnimatePresence mode="popLayout" initial={false}>
-            <motion.span
-              key={nodeCount}
-              initial={{ y: 10, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              exit={{ y: 10, opacity: 0 }}
-              transition={{ duration: 0.22, ease: "easeOut" }}
-            >
-              {nodeCount}
-            </motion.span>
-          </AnimatePresence>
-        </span>
+    <div className="flex justify-between w-full rounded-lg border border-border p-2 text-sm font-mono uppercase text-muted-foreground overflow-hidden">
+      <p className="flex items-center gap-3">
+        <HoverCard>
+          <HoverCardTrigger className="flex gap-1">
+            <AnimatePresence initial={false} mode="popLayout">
+              <motion.span
+                key={`textLenght-${textLenght}`}
+                initial={{ y: 10, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ y: 10, opacity: 0 }}
+                transition={{ duration: 0.22, ease: "easeOut" }}
+              >
+                {textLenght}
+              </motion.span>
+              <span>/</span>
+              <motion.span
+                key={`nodeCount-${nodeCount}`}
+                initial={{ y: 10, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ y: 10, opacity: 0 }}
+                transition={{ duration: 0.22, ease: "easeOut" }}
+              >
+                {nodeCount}
+              </motion.span>
+            </AnimatePresence>
+          </HoverCardTrigger>
+          <HoverCardContent side="top" align="start">
+            <p className="flex flex-col">
+              <span className="font-bold">Characters / Blocks</span>
+              <span>
+                This page have a limit of {maxCharactersLenght} characters.
+              </span>
+            </p>
+          </HoverCardContent>
+        </HoverCard>
+        {reachCharacterLimit && (
+          <Tooltip>
+            <TooltipTrigger>
+              <motion.div
+                initial={{ y: 10, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ y: 10, opacity: 0 }}
+              >
+                <AlertCircleIcon size={16} />
+              </motion.div>
+            </TooltipTrigger>
+            <TooltipContent>
+              You have reached the character limit of this note.
+            </TooltipContent>
+          </Tooltip>
+        )}
       </p>
     </div>
   );
