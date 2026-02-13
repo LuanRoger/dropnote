@@ -1,4 +1,5 @@
 import { type AnyPluginConfig, TrailingBlockPlugin } from "platejs";
+import { createPlateEditor } from "platejs/react";
 
 import { AlignKit } from "../plugins/align-kit";
 import { AutoformatKit } from "../plugins/autoformat-kit";
@@ -28,7 +29,8 @@ import { TableKit } from "../plugins/table-kit";
 import { TocKit } from "../plugins/toc-kit";
 import { ToggleKit } from "../plugins/toggle-kit";
 import { YjsKit } from "../plugins/yjs-kit";
-import { BottomStatusKit } from "../plugins/bottom-status-kit";
+import { BottomStatusPlugin } from "../plugins/bottom-status-plugin";
+import type { NoteBody } from "../types/notes";
 
 interface EditorKitOptions {
   yjs?: {
@@ -37,12 +39,14 @@ interface EditorKitOptions {
     roomName: string;
     wssUrl: string;
   };
+  maxLength: number;
 }
 
 export const EditorKit: (options: EditorKitOptions) => AnyPluginConfig[] = (
   options: EditorKitOptions,
 ) => {
-  const { yjs } = options;
+  const { yjs, maxLength } = options;
+
   const kits = [
     // Elements
     ...BasicBlocksKit,
@@ -83,13 +87,32 @@ export const EditorKit: (options: EditorKitOptions) => AnyPluginConfig[] = (
     ...BlockPlaceholderKit,
     ...FixedToolbarKit,
     ...FloatingToolbarKit,
-    ...BottomStatusKit,
+    BottomStatusPlugin.configure({
+      options: {
+        maxLength,
+      },
+    }),
   ];
 
   if (yjs) {
-    // Include Yjs plugins if configuration is provided
     kits.push(...YjsKit(yjs));
   }
 
   return kits;
 };
+
+export function createEditor(
+  options: EditorKitOptions,
+  initialValue: NoteBody,
+) {
+  const maxLength = 100;
+
+  return createPlateEditor({
+    plugins: EditorKit({
+      ...options,
+      maxLength,
+    }),
+    value: initialValue,
+    maxLength,
+  });
+}

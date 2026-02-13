@@ -1,1 +1,1 @@
-export { Plate, usePlateEditor } from "platejs/react";
+export { Plate } from "platejs/react";
