@@ -105,13 +105,10 @@ export function createEditor(
   options: EditorKitOptions,
   initialValue: NoteBody,
 ) {
-  const maxLength = 100;
+  const { maxLength } = options;
 
   return createPlateEditor({
-    plugins: EditorKit({
-      ...options,
-      maxLength,
-    }),
+    plugins: EditorKit(options),
     value: initialValue,
     maxLength,
   });

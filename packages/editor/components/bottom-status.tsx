@@ -39,10 +39,10 @@ export default function BottomStatus() {
     return totalLength;
   }, [nodes]);
 
-  const maxCharactersLenght = plugin.options.maxLenght;
+  const maxCharactersLength = plugin.options.maxLength;
   const nodeCount = nodes.length;
-  const reachCharacterLimit = maxCharactersLenght
-    ? textLenght >= maxCharactersLenght
+  const reachCharacterLimit = maxCharactersLength
+    ? textLenght >= maxCharactersLength
     : false;
 
   return (
@@ -76,7 +76,7 @@ export default function BottomStatus() {
             <p className="flex flex-col">
               <span className="font-bold">Characters / Blocks</span>
               <span>
-                This page have a limit of {maxCharactersLenght} characters.
+                This page have a limit of {maxCharactersLength} characters.
               </span>
             </p>
           </HoverCardContent>
