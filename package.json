@@ -32,10 +32,11 @@
     "tsup": "^8.5.1",
     "turbo": "^2.8.7",
     "typescript": "^5.9.3",
-    "ultracite": "^7.1.5"
+    "ultracite": "^7.1.5",
+    "vercel-seo-audit": "^0.2.0"
   },
   "engines": {
-    "node": ">=22"
+    "node": ">=24"
   },
   "packageManager": "pnpm@10.26.2",
   "dependencies": {

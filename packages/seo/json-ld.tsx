@@ -1,8 +1,4 @@
-import type { Thing, WithContext } from "schema-dts";
-
-type JsonLdProps = {
-  code: WithContext<Thing>;
-};
+import { jsonLd } from "./constants";
 
 const escapeJsonForHtml = (json: string): string =>
   json
@@ -12,12 +8,12 @@ const escapeJsonForHtml = (json: string): string =>
     .replace(/\u2028/g, "\\u2028")
     .replace(/\u2029/g, "\\u2029");
 
-export const JsonLd = ({ code }: JsonLdProps) => (
+export const JsonLd = () => (
   <script
-    dangerouslySetInnerHTML={{
-      __html: escapeJsonForHtml(JSON.stringify(code)),
-    }}
     // biome-ignore lint/security/noDangerouslySetInnerHtml: "This is a JSON-LD script with properly escaped content."
+    dangerouslySetInnerHTML={{
+      __html: escapeJsonForHtml(JSON.stringify(jsonLd)),
+    }}
     type="application/ld+json"
   />
 );
