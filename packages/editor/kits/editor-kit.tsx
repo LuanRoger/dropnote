@@ -28,6 +28,7 @@ import { TableKit } from "../plugins/table-kit";
 import { TocKit } from "../plugins/toc-kit";
 import { ToggleKit } from "../plugins/toggle-kit";
 import { YjsKit } from "../plugins/yjs-kit";
+import { BottomStatusKit } from "../plugins/bottom-status-kit";
 
 interface EditorKitOptions {
   yjs?: {
@@ -39,7 +40,7 @@ interface EditorKitOptions {
 }
 
 export const EditorKit: (options: EditorKitOptions) => AnyPluginConfig[] = (
-  options: EditorKitOptions
+  options: EditorKitOptions,
 ) => {
   const { yjs } = options;
   const kits = [
@@ -82,6 +83,7 @@ export const EditorKit: (options: EditorKitOptions) => AnyPluginConfig[] = (
     ...BlockPlaceholderKit,
     ...FixedToolbarKit,
     ...FloatingToolbarKit,
+    ...BottomStatusKit,
   ];
 
   if (yjs) {
