@@ -4,6 +4,7 @@ import { useCallback, useEffect, useTransition } from "react";
 import { useDebounce } from "react-haiku";
 import type { NotesSaveSource } from "../types/notes";
 import { useMounted } from "./use-mounted";
+import { toast } from "sonner";
 
 export interface UseEditorMechanismsProps {
   source: NotesSaveSource;
@@ -44,7 +45,15 @@ export function useEditorMechanisms({
 
   useEffect(() => {
     performSave(async () => {
-      await saveNote();
+      try {
+        await saveNote();
+      } catch (error) {
+        if (error instanceof Error) {
+          toast.error(`Failed to save note. ${error.message}`, {});
+          return;
+        }
+        toast.error("Failed to save note. Please try again.", {});
+      }
     });
   }, [saveNote]);
 

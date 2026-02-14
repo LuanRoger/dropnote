@@ -2,7 +2,6 @@
 
 import { AnimatePresence, motion } from "motion/react";
 import { useEditorPlugin, useEditorSelector } from "platejs/react";
-import { NoteBody } from "@/types/notes";
 import { useMemo } from "react";
 import {
   HoverCard,
@@ -16,28 +15,12 @@ import {
   TooltipTrigger,
 } from "@repo/design-system/components/ui/tooltip";
 import { BottomStatusPlugin } from "../plugins/bottom-status-plugin";
+import { countBodyLength } from "../utils/nodes";
 
 export default function BottomStatus() {
   const { plugin } = useEditorPlugin(BottomStatusPlugin);
   const nodes = useEditorSelector((editor) => editor.children, []);
-  const textLenght = useMemo(() => {
-    let totalLength = 0;
-    const stack: NoteBody[] = [...nodes];
-
-    while (stack.length > 0) {
-      const node = stack.pop()!;
-
-      if (node.text) {
-        totalLength += node.text.length;
-      }
-
-      if (node.children && Array.isArray(node.children)) {
-        stack.push(...node.children);
-      }
-    }
-
-    return totalLength;
-  }, [nodes]);
+  const textLenght = useMemo(() => countBodyLength(nodes), [nodes]);
 
   const maxCharactersLength = plugin.options.maxLength;
   const nodeCount = nodes.length;
