@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/suspicious/noExplicitAny: The body of the note can be any, since we don't know the structure of the note */
 import { ensureConnected } from "../client";
 import { Notes } from "../schemas/notes";
 
