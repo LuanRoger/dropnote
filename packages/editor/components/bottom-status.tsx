@@ -20,7 +20,7 @@ import { Badge } from "@repo/design-system/components/ui/badge";
 
 export default function BottomStatus() {
   return (
-    <div className="flex justify-between w-full flex-none rounded-md border border-border p-1 text-xs font-mono uppercase text-muted-foreground backdrop-blur-xs">
+    <div className="flex justify-between w-full flex-none rounded-md border border-border p-1 md:p-2 text-xs font-mono uppercase text-muted-foreground">
       <CharactersBlockCount />
       <NoteBadges />
     </div>

@@ -9,7 +9,7 @@ export function FixedToolbar(props: React.ComponentProps<typeof Toolbar>) {
     <Toolbar
       {...props}
       className={cn(
-        "scrollbar-hide flex-none w-full justify-between overflow-x-auto rounded-md border border-border p-1 backdrop-blur-xs",
+        "scrollbar-hide flex-none w-full justify-between overflow-x-auto rounded-md border border-border p-1",
         props.className,
       )}
     />
