@@ -1,5 +1,6 @@
 "use server";
 
+import { MAX_LENGHT_ADVANCED_NOTE, MAX_LENGHT_BASIC_NOTE } from "@/constants";
 import {
   createNote,
   findNoteByCode,
@@ -14,7 +15,7 @@ export async function ensureCreated(code: string) {
     return note;
   }
 
-  await createNote(code, []);
+  return await createNote(code, []);
 }
 
 export async function updateNoteBodyByCode(code: string, body: NoteBody) {
@@ -23,8 +24,12 @@ export async function updateNoteBodyByCode(code: string, body: NoteBody) {
     return;
   }
 
-  const maxCurrentBodyLenght = countBodyLength(body);
-  if (maxCurrentBodyLenght > note.charLimit) {
+  const { hasExtendedLimit } = note;
+  const currentBodyLenght = countBodyLength(body);
+  if (
+    (!hasExtendedLimit && currentBodyLenght > MAX_LENGHT_BASIC_NOTE) ||
+    (hasExtendedLimit && currentBodyLenght > MAX_LENGHT_ADVANCED_NOTE)
+  ) {
     throw new Error("Note body exceeds the character limit");
   }
 

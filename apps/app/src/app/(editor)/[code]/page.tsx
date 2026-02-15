@@ -33,7 +33,10 @@ export default async function Page({ params }: PageProps) {
 
   const wssUrl = process.env.HOCUSPOCUS_WSS_URL;
   const loader = new NotesDatabaseLoadSource(code);
-  const initialValue = await loader.load();
+  const note = await loader.loadNote();
+
+  const initialValue = note.body;
+
   const maxLength = MAX_LENGHT_BASIC_NOTE;
 
   return (
