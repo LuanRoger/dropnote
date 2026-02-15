@@ -10,10 +10,14 @@ export async function findNoteByCode(code: string): Promise<NoteModel | null> {
   return note;
 }
 
-export async function createNote(code: string, body: any): Promise<NoteModel> {
+export async function createNote(
+  code: string,
+  body: any,
+  expireAt?: Date,
+): Promise<NoteModel> {
   await ensureConnected();
 
-  return await Notes.create({ code, body });
+  return await Notes.create({ code, body, expireAt });
 }
 
 export async function updateNote(code: string, body: any) {

@@ -14,6 +14,7 @@ export interface NoteModel {
   password: string | null;
   aiCredits: number;
   hasExtendedLimit: boolean;
+  expireAt: Date;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -27,6 +28,7 @@ export const notesSchema = new mongoose.Schema(
     hasExtendedLimit: { type: Boolean, default: false },
     password: { type: String, default: null, select: false },
     aiCredits: { type: Number, default: 0 },
+    expireAt: { type: Date, expires: 0 },
   },
   { timestamps: true },
 );

@@ -1,6 +1,5 @@
 "use server";
 
-import { MAX_LENGHT_ADVANCED_NOTE, MAX_LENGHT_BASIC_NOTE } from "@/constants";
 import {
   createNote,
   findNoteByCode,
@@ -8,6 +7,7 @@ import {
 } from "@repo/database/queries/notes";
 import type { NoteBody } from "@repo/editor/types/notes";
 import { countBodyLength } from "@repo/editor/utils/nodes";
+import { MAX_LENGHT_ADVANCED_NOTE, MAX_LENGHT_BASIC_NOTE } from "@/constants";
 
 export async function ensureCreated(code: string) {
   const note = await findNoteByCode(code);

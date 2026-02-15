@@ -1,3 +1,8 @@
+export const TEST_NOTE_EXPIRE_TIME_MS = new Date(Date.now() + 20 * 1000); // 20 hours
+export const DEFAULT_NOTE_EXPIRE_TIME_MS = new Date(
+  Date.now() + 48 * 60 * 60 * 1000,
+); // 48 hours
+
 export const MAX_LENGHT_BASIC_NOTE = 1000;
 export const MAX_LENGHT_ADVANCED_NOTE = 10_000;
 
