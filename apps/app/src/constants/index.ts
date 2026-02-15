@@ -14,3 +14,31 @@ export const LOCAL_NOTE_PREFIX = "dropnote.";
  * - Only lowercase a–z, digits 0–9 and single hyphens between segments are allowed
  */
 export const SLUG_REGEX = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
+export const BADGES_DATA = {
+  SECURE: {
+    label: "Secure",
+    color: "#0F5A3B",
+    description: "This note is protected with a password.",
+  },
+  UNLIMITED: {
+    label: "Unlimited",
+    color: "#1E40AF",
+    description: "This note has extended character limit.",
+  },
+  SMART: {
+    label: "Smart",
+    color: "#9333EA",
+    description: "This note is enhanced with AI features.",
+  },
+  PERMANENT: {
+    label: "Permanent",
+    color: "#047857",
+    description: "This note will not be auto-deleted.",
+  },
+  COLLAB: {
+    label: "Collab",
+    color: "#B91C1C",
+    description: "This note can be edited by multiple users in real-time.",
+  },
+};

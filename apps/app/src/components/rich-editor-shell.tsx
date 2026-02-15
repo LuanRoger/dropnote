@@ -2,7 +2,8 @@
 
 import { Plate } from "@repo/editor";
 import { useEditorMechanisms } from "@repo/editor/hooks/use-editor-mechanisms";
-import { createEditor, EditorKit } from "@repo/editor/kits/editor-kit";
+import { createEditor } from "@repo/editor/kits/editor-kit";
+import type { Badge } from "@repo/editor/types/badge";
 import type { NoteBody, NotesSaveSource } from "@repo/editor/types/notes";
 import { EDITOR_DEBOUNCE_TIME_MS } from "@/constants";
 import { createNoteSource } from "@/lib/sources/notes";
@@ -17,6 +18,7 @@ interface RichEditorShellProps {
   noteSource?: NoteSource;
   initialValue?: NoteBody;
   wssUrl?: string;
+  badges?: Badge[];
 }
 
 export default function RichEditorShell({
@@ -25,6 +27,7 @@ export default function RichEditorShell({
   noteSource,
   initialValue,
   wssUrl,
+  badges = [],
 }: RichEditorShellProps) {
   const yjsOptions = wssUrl
     ? {
@@ -39,9 +42,12 @@ export default function RichEditorShell({
   const editor = createEditor(
     {
       yjs: yjsOptions,
-      maxLength,
+      bottomStatus: {
+        maxLength,
+        badges,
+      },
     },
-    initialValue,
+    initialValue
   );
 
   return (

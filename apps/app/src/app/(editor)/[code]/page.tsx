@@ -2,8 +2,9 @@ import { createMetadata } from "@repo/seo/metadata";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import RichEditorShell from "@/components/rich-editor-shell";
-import { MAX_LENGHT_BASIC_NOTE } from "@/constants";
+import { MAX_LENGHT_ADVANCED_NOTE, MAX_LENGHT_BASIC_NOTE } from "@/constants";
 import { NotesDatabaseLoadSource } from "@/lib/sources/notes";
+import { mapNotePropertiesToBadges } from "@/utils/badge";
 import { validateSlug } from "@/utils/slug";
 
 type PageProps = {
@@ -36,11 +37,14 @@ export default async function Page({ params }: PageProps) {
   const note = await loader.loadNote();
 
   const initialValue = note.body;
-
-  const maxLength = MAX_LENGHT_BASIC_NOTE;
+  const maxLength = note.hasExtendedLimit
+    ? MAX_LENGHT_ADVANCED_NOTE
+    : MAX_LENGHT_BASIC_NOTE;
+  const badges = mapNotePropertiesToBadges(note);
 
   return (
     <RichEditorShell
+      badges={badges}
       code={code}
       initialValue={initialValue}
       maxLength={maxLength}
