@@ -19,9 +19,8 @@ import { countBodyLength } from "../utils/nodes";
 import { Badge } from "@repo/design-system/components/ui/badge";
 
 export default function BottomStatus() {
-  console.log("render bottom status");
   return (
-    <div className="flex justify-between w-full rounded-md border border-border p-2 text-xs font-mono uppercase text-muted-foreground overflow-hidden">
+    <div className="flex justify-between w-full flex-none rounded-md border border-border p-1 text-xs font-mono uppercase text-muted-foreground backdrop-blur-xs">
       <CharactersBlockCount />
       <NoteBadges />
     </div>
@@ -67,7 +66,7 @@ function CharactersBlockCount() {
         </HoverCardTrigger>
         <HoverCardContent side="top" align="start">
           <p className="flex flex-col">
-            <span className="font-bold">Characters / Blocks</span>
+            <span className="font-bold">Characters:Blocks</span>
             <span>
               This page have a limit of {maxCharactersLength} characters.
             </span>
@@ -121,11 +120,9 @@ function NoteBadges() {
         return (
           <HoverCard key={`badge-${label}`}>
             <HoverCardTrigger>{badge}</HoverCardTrigger>
-            <HoverCardContent side="top">
-              <div className="flex flex-col gap-2">
-                {badge}
-                {description}
-              </div>
+            <HoverCardContent side="top" className="flex flex-col gap-2">
+              {badge}
+              {description}
             </HoverCardContent>
           </HoverCard>
         );
