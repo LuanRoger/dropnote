@@ -7,6 +7,7 @@ import { BasicBlocksKit } from "../plugins/basic-blocks-kit";
 import { BasicMarksKit } from "../plugins/basic-marks-kit";
 import { BlockMenuKit } from "../plugins/block-menu-kit";
 import { BlockPlaceholderKit } from "../plugins/block-placeholder-kit";
+import { BottomStatusPlugin } from "../plugins/bottom-status-plugin";
 import { CalloutKit } from "../plugins/callout-kit";
 import { CodeBlockKit } from "../plugins/code-block-kit";
 import { ColumnKit } from "../plugins/column-kit";
@@ -29,7 +30,7 @@ import { TableKit } from "../plugins/table-kit";
 import { TocKit } from "../plugins/toc-kit";
 import { ToggleKit } from "../plugins/toggle-kit";
 import { YjsKit } from "../plugins/yjs-kit";
-import { BottomStatusPlugin } from "../plugins/bottom-status-plugin";
+import type { Badge } from "../types/badge";
 import type { NoteBody } from "../types/notes";
 
 interface EditorKitOptions {
@@ -39,13 +40,16 @@ interface EditorKitOptions {
     roomName: string;
     wssUrl: string;
   };
-  maxLength: number;
+  bottomStatus?: {
+    maxLength: number;
+    badges: Badge[];
+  };
 }
 
 export const EditorKit: (options: EditorKitOptions) => AnyPluginConfig[] = (
   options: EditorKitOptions,
 ) => {
-  const { yjs, maxLength } = options;
+  const { yjs, bottomStatus } = options;
 
   const kits = [
     // Elements
@@ -88,9 +92,7 @@ export const EditorKit: (options: EditorKitOptions) => AnyPluginConfig[] = (
     ...FixedToolbarKit,
     ...FloatingToolbarKit,
     BottomStatusPlugin.configure({
-      options: {
-        maxLength,
-      },
+      options: bottomStatus,
     }),
   ];
 
@@ -105,11 +107,9 @@ export function createEditor(
   options: EditorKitOptions,
   initialValue: NoteBody,
 ) {
-  const { maxLength } = options;
-
   return createPlateEditor({
     plugins: EditorKit(options),
     value: initialValue,
-    maxLength,
+    maxLength: options.bottomStatus?.maxLength,
   });
 }
