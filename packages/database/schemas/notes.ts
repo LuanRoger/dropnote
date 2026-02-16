@@ -1,10 +1,5 @@
 import mongoose from "mongoose";
 
-export type NoteDocument =
-  | (mongoose.Document<unknown, {}, NoteModel> &
-      NoteModel & { _id: mongoose.Types.ObjectId })
-  | null;
-
 export interface NoteModel {
   code: string;
   // biome-ignore lint/suspicious/noExplicitAny: The body of the note can be any, since we don't know the structure of the note

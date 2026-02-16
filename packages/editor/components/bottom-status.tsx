@@ -8,7 +8,7 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@repo/design-system/components/ui/hover-card";
-import { AlertCircleIcon } from "lucide-react";
+import { AlertCircleIcon, ClockAlertIcon } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
@@ -17,11 +17,19 @@ import {
 import { BottomStatusPlugin } from "../plugins/bottom-status-plugin";
 import { countBodyLength } from "../utils/nodes";
 import { Badge } from "@repo/design-system/components/ui/badge";
+import { Separator } from "@repo/design-system/components/ui/separator";
 
 export default function BottomStatus() {
+  const noteExpiringIndicator = <NoteExpireAt />;
+  const doesHaveIndicators = !!noteExpiringIndicator;
+
   return (
     <div className="flex justify-between w-full flex-none rounded-md border border-border p-1 md:p-2 text-xs font-mono uppercase text-muted-foreground">
-      <CharactersBlockCount />
+      <div className="flex items-center gap-3">
+        <CharactersBlockCount />
+        {doesHaveIndicators && <Separator orientation="vertical" />}
+        {noteExpiringIndicator}
+      </div>
       <NoteBadges />
     </div>
   );
@@ -75,7 +83,7 @@ function CharactersBlockCount() {
       </HoverCard>
       {reachCharacterLimit && (
         <Tooltip>
-          <TooltipTrigger>
+          <TooltipTrigger asChild>
             <motion.div
               initial={{ y: 10, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
@@ -90,6 +98,26 @@ function CharactersBlockCount() {
         </Tooltip>
       )}
     </p>
+  );
+}
+
+function NoteExpireAt() {
+  const { plugin } = useEditorPlugin(BottomStatusPlugin);
+  const expireAt = plugin.options.expireAt;
+
+  if (!expireAt) {
+    return null;
+  }
+
+  return (
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <ClockAlertIcon size={14} style={{ color: "var(--destructive)" }} />
+      </TooltipTrigger>
+      <TooltipContent>
+        This note will expire and be deleted at {expireAt.toLocaleString()}.
+      </TooltipContent>
+    </Tooltip>
   );
 }
 

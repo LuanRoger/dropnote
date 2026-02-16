@@ -42,6 +42,7 @@ interface EditorKitOptions {
   };
   bottomStatus?: {
     maxLength: number;
+    expireAt?: Date;
     badges: Badge[];
   };
 }
