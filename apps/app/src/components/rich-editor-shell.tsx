@@ -18,6 +18,7 @@ interface RichEditorShellProps {
   noteSource?: NoteSource;
   initialValue?: NoteBody;
   wssUrl?: string;
+  expireAt?: Date;
   badges?: Badge[];
 }
 
@@ -27,6 +28,7 @@ export default function RichEditorShell({
   noteSource,
   initialValue,
   wssUrl,
+  expireAt,
   badges = [],
 }: RichEditorShellProps) {
   const yjsOptions = wssUrl
@@ -44,10 +46,11 @@ export default function RichEditorShell({
       yjs: yjsOptions,
       bottomStatus: {
         maxLength,
+        expireAt,
         badges,
       },
     },
-    initialValue
+    initialValue,
   );
 
   return (

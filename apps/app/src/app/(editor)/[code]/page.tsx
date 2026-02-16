@@ -40,12 +40,14 @@ export default async function Page({ params }: PageProps) {
   const maxLength = note.hasExtendedLimit
     ? MAX_LENGHT_ADVANCED_NOTE
     : MAX_LENGHT_BASIC_NOTE;
+  const expireAt = note.expireAt;
   const badges = mapNotePropertiesToBadges(note);
 
   return (
     <RichEditorShell
       badges={badges}
       code={code}
+      expireAt={expireAt}
       initialValue={initialValue}
       maxLength={maxLength}
       noteSource="database"
