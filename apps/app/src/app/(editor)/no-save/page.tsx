@@ -1,6 +1,7 @@
 import { createMetadata } from "@repo/seo/metadata";
 import type { Metadata } from "next";
 import RichEditorShell from "@/components/rich-editor-shell";
+import { MAX_LENGHT_BASIC_NOTE } from "@/constants";
 
 const code = "no-save";
 export const metadata: Metadata = createMetadata({
@@ -9,5 +10,5 @@ export const metadata: Metadata = createMetadata({
 });
 
 export default function NoSavePage() {
-  return <RichEditorShell code={code} />;
+  return <RichEditorShell code={code} maxLength={MAX_LENGHT_BASIC_NOTE} />;
 }
