@@ -20,15 +20,11 @@ import { Badge } from "@repo/design-system/components/ui/badge";
 import { Separator } from "@repo/design-system/components/ui/separator";
 
 export default function BottomStatus() {
-  const noteExpiringIndicator = <NoteExpireAt />;
-  const doesHaveIndicators = !!noteExpiringIndicator;
-
   return (
     <div className="flex justify-between w-full flex-none rounded-md border border-border p-1 md:p-2 text-xs font-mono uppercase text-muted-foreground">
       <div className="flex items-center gap-3">
         <CharactersBlockCount />
-        {doesHaveIndicators && <Separator orientation="vertical" />}
-        {noteExpiringIndicator}
+        <NoteIndicators />
       </div>
       <NoteBadges />
     </div>
@@ -101,7 +97,7 @@ function CharactersBlockCount() {
   );
 }
 
-function NoteExpireAt() {
+function NoteIndicators() {
   const { plugin } = useEditorPlugin(BottomStatusPlugin);
   const expireAt = plugin.options.expireAt;
 
@@ -109,6 +105,19 @@ function NoteExpireAt() {
     return null;
   }
 
+  return (
+    <>
+      <Separator orientation="vertical" />
+      <NoteExpireAt expireAt={expireAt} />
+    </>
+  );
+}
+
+type NoteExpireAtProps = {
+  expireAt: Date;
+};
+
+function NoteExpireAt({ expireAt }: NoteExpireAtProps) {
   return (
     <Tooltip>
       <TooltipTrigger asChild>
