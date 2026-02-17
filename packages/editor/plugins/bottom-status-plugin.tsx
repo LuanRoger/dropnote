@@ -9,10 +9,10 @@ type BottomStatusPluginConfig = {
 };
 
 export const BottomStatusPlugin = createPlatePlugin<
-  "bottom-status",
+  "bottom_status",
   BottomStatusPluginConfig
 >({
-  key: "bottom-status",
+  key: "bottom_status",
   options: {
     maxLength: 10,
     expireAt: undefined,
