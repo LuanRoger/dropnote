@@ -1,11 +1,14 @@
 "use client";
+
+import * as React from "react";
+
 import type { Emoji } from "@emoji-mart/data";
 
 import {
   type EmojiCategoryList,
   type EmojiIconList,
-  EmojiSettings,
   type GridRow,
+  EmojiSettings,
 } from "@platejs/emoji";
 import {
   type EmojiDropdownMenuOptions,
@@ -38,8 +41,14 @@ import {
   StarIcon,
   XIcon,
 } from "lucide-react";
-import { memo, useCallback } from "react";
 import { ToolbarButton } from "./toolbar";
+import { Input } from "@repo/design-system/components/ui/input";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+} from "@repo/design-system/components/ui/input-group";
 
 export function EmojiToolbarButton({
   options,
@@ -53,7 +62,7 @@ export function EmojiToolbarButton({
   return (
     <EmojiPopover
       control={
-        <ToolbarButton isDropdown pressed={isOpen} tooltip="Emoji" {...props}>
+        <ToolbarButton pressed={isOpen} tooltip="Emoji" isDropdown {...props}>
           <SmileIcon />
         </ToolbarButton>
       }
@@ -117,34 +126,29 @@ export function EmojiPicker({
   return (
     <div
       className={cn(
-        "flex flex-col rounded-xl bg-popover text-popover-foreground",
-        "h-[23rem] w-80 border shadow-md"
+        "flex flex-col gap-1 rounded-xl bg-popover text-popover-foreground",
+        "h-92 w-80 border shadow-md",
       )}
     >
       <EmojiPickerNavigation
+        onClick={handleCategoryClick}
         emojiLibrary={emojiLibrary}
         focusedCategory={focusedCategory}
         i18n={i18n}
         icons={icons}
-        onClick={handleCategoryClick}
       />
       <EmojiPickerSearchBar
         i18n={i18n}
         searchValue={searchValue}
         setSearch={setSearch}
-      >
-        <EmojiPickerSearchAndClear
-          clearSearch={clearSearch}
-          i18n={i18n}
-          searchValue={searchValue}
-        />
-      </EmojiPickerSearchBar>
+        clearSearch={clearSearch}
+      />
       <EmojiPickerContent
+        onMouseOver={onMouseOver}
+        onSelectEmoji={onSelectEmoji}
         emojiLibrary={emojiLibrary}
         i18n={i18n}
         isSearching={isSearching}
-        onMouseOver={onMouseOver}
-        onSelectEmoji={onSelectEmoji}
         refs={refs}
         searchResult={searchResult}
         settings={settings}
@@ -160,7 +164,7 @@ export function EmojiPicker({
   );
 }
 
-const EmojiButton = memo(function EmojiButton({
+const EmojiButton = React.memo(function EmojiButton({
   emoji,
   index,
   onMouseOver,
@@ -173,26 +177,26 @@ const EmojiButton = memo(function EmojiButton({
 }) {
   return (
     <button
-      aria-label={emoji.skins[0].native}
       className="group relative flex size-9 cursor-pointer items-center justify-center border-none bg-transparent text-2xl leading-none"
-      data-index={index}
       onClick={() => onSelect(emoji)}
       onMouseEnter={() => onMouseOver(emoji)}
       onMouseLeave={() => onMouseOver()}
+      aria-label={emoji.skins[0].native}
+      data-index={index}
       tabIndex={-1}
       type="button"
     >
       <div
-        aria-hidden="true"
         className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100"
+        aria-hidden="true"
       />
       <span
         className="relative"
-        data-emoji-set="native"
         style={{
           fontFamily:
             '"Apple Color Emoji", "Segoe UI Emoji", NotoColorEmoji, "Noto Color Emoji", "Segoe UI Symbol", "Android Emoji", EmojiSymbols',
         }}
+        data-emoji-set="native"
       >
         {emoji.skins[0].native}
       </span>
@@ -200,7 +204,7 @@ const EmojiButton = memo(function EmojiButton({
   );
 });
 
-const RowOfButtons = memo(function RowOfButtons({
+const RowOfButtons = React.memo(function RowOfButtons({
   emojiLibrary,
   row,
   onMouseOver,
@@ -212,14 +216,14 @@ const RowOfButtons = memo(function RowOfButtons({
   "emojiLibrary" | "onMouseOver" | "onSelectEmoji"
 >) {
   return (
-    <div className="flex" data-index={row.id} key={row.id}>
+    <div key={row.id} className="flex" data-index={row.id}>
       {row.elements.map((emojiId, index) => (
         <EmojiButton
-          emoji={emojiLibrary.getEmoji(emojiId)}
-          index={index}
           key={emojiId}
           onMouseOver={onMouseOver}
           onSelect={onSelectEmoji}
+          emoji={emojiLibrary.getEmoji(emojiId)}
+          index={index}
         />
       ))}
     </div>
@@ -250,15 +254,15 @@ function EmojiPickerContent({
 >) {
   const getRowWidth = settings.perLine.value * settings.buttonSize.value;
 
-  const isCategoryVisible = useCallback(
+  const isCategoryVisible = React.useCallback(
     (categoryId: any) =>
       visibleCategories.has(categoryId)
         ? visibleCategories.get(categoryId)
         : false,
-    [visibleCategories]
+    [visibleCategories],
   );
 
-  const EmojiList = useCallback(
+  const EmojiList = React.useCallback(
     () =>
       emojiLibrary
         .getGrid()
@@ -269,12 +273,12 @@ function EmojiPickerContent({
 
           return (
             <div
-              data-id={categoryId}
               key={categoryId}
               ref={section.root}
               style={{ width: getRowWidth }}
+              data-id={categoryId}
             >
-              <div className="sticky -top-px z-1 bg-popover/90 p-1 py-2 font-semibold text-sm backdrop-blur-xs">
+              <div className="-top-px sticky z-1 bg-popover/90 p-1 py-2 font-semibold text-sm backdrop-blur-xs">
                 {i18n.categories[categoryId]}
               </div>
               <div
@@ -286,10 +290,10 @@ function EmojiPickerContent({
                     .getRows()
                     .map((row: GridRow) => (
                       <RowOfButtons
-                        emojiLibrary={emojiLibrary}
                         key={row.id}
                         onMouseOver={onMouseOver}
                         onSelectEmoji={onSelectEmoji}
+                        emojiLibrary={emojiLibrary}
                         row={row}
                       />
                     ))}
@@ -305,23 +309,23 @@ function EmojiPickerContent({
       onSelectEmoji,
       onMouseOver,
       settings,
-    ]
+    ],
   );
 
-  const SearchList = useCallback(
+  const SearchList = React.useCallback(
     () => (
-      <div data-id="search" style={{ width: getRowWidth }}>
-        <div className="sticky -top-px z-1 bg-popover/90 p-1 py-2 font-semibold text-card-foreground text-sm backdrop-blur-xs">
+      <div style={{ width: getRowWidth }} data-id="search">
+        <div className="-top-px sticky z-1 bg-popover/90 p-1 py-2 font-semibold text-card-foreground text-sm backdrop-blur-xs">
           {i18n.searchResult}
         </div>
         <div className="relative flex flex-wrap">
           {searchResult.map((emoji: Emoji, index: number) => (
             <EmojiButton
-              emoji={emojiLibrary.getEmoji(emoji.id)}
-              index={index}
               key={emoji.id}
               onMouseOver={onMouseOver}
               onSelect={onSelectEmoji}
+              emoji={emojiLibrary.getEmoji(emoji.id)}
+              index={index}
             />
           ))}
         </div>
@@ -334,22 +338,22 @@ function EmojiPickerContent({
       searchResult,
       onSelectEmoji,
       onMouseOver,
-    ]
+    ],
   );
 
   return (
     <div
+      ref={refs.current.contentRoot}
       className={cn(
         "h-full min-h-[50%] overflow-y-auto overflow-x-hidden px-2",
         "[&::-webkit-scrollbar]:w-4",
         "[&::-webkit-scrollbar-button]:hidden [&::-webkit-scrollbar-button]:size-0",
         "[&::-webkit-scrollbar-thumb]:min-h-11 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-muted [&::-webkit-scrollbar-thumb]:hover:bg-muted-foreground/25",
-        "[&::-webkit-scrollbar-thumb]:border-4 [&::-webkit-scrollbar-thumb]:border-popover [&::-webkit-scrollbar-thumb]:border-solid [&::-webkit-scrollbar-thumb]:bg-clip-padding"
+        "[&::-webkit-scrollbar-thumb]:border-4 [&::-webkit-scrollbar-thumb]:border-popover [&::-webkit-scrollbar-thumb]:border-solid [&::-webkit-scrollbar-thumb]:bg-clip-padding",
       )}
       data-id="scroll"
-      ref={refs.current.contentRoot}
     >
-      <div className="h-full" ref={refs.current.content}>
+      <div ref={refs.current.content} className="h-full">
         {isSearching ? SearchList() : EmojiList()}
       </div>
     </div>
@@ -357,62 +361,36 @@ function EmojiPickerContent({
 }
 
 function EmojiPickerSearchBar({
-  children,
   i18n,
   searchValue,
   setSearch,
-}: {
-  children: React.ReactNode;
-} & Pick<UseEmojiPickerType, "i18n" | "searchValue" | "setSearch">) {
-  return (
-    <div className="flex items-center px-2">
-      <div className="relative flex grow items-center">
-        <input
-          aria-label="Search"
-          autoComplete="off"
-          autoFocus
-          className="block w-full appearance-none rounded-full border-0 bg-muted px-10 py-2 text-sm outline-none placeholder:text-muted-foreground focus-visible:outline-none"
-          onChange={(event) => setSearch(event.target.value)}
-          placeholder={i18n.search}
-          type="text"
-          value={searchValue}
-        />
-        {children}
-      </div>
-    </div>
-  );
-}
-
-function EmojiPickerSearchAndClear({
   clearSearch,
-  i18n,
-  searchValue,
-}: Pick<UseEmojiPickerType, "clearSearch" | "i18n" | "searchValue">) {
+}: Pick<
+  UseEmojiPickerType,
+  "clearSearch" | "i18n" | "searchValue" | "setSearch"
+>) {
   return (
-    <div className="flex items-center text-foreground">
-      <div
-        className={cn(
-          "absolute top-1/2 left-2.5 z-10 flex size-5 -translate-y-1/2 items-center justify-center text-foreground"
-        )}
-      >
-        {emojiSearchIcons.loupe}
-      </div>
+    <InputGroup>
+      <InputGroupAddon>
+        <SearchIcon />
+      </InputGroupAddon>
+      <InputGroupInput
+        value={searchValue}
+        onChange={(event) => setSearch(event.target.value)}
+        placeholder={i18n.search}
+        aria-label="Search"
+        autoComplete="off"
+        type="text"
+        autoFocus
+      />
       {searchValue && (
-        <Button
-          aria-label="Clear"
-          className={cn(
-            "absolute top-1/2 right-0.5 flex size-8 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border-none bg-transparent text-popover-foreground hover:bg-transparent"
-          )}
-          onClick={clearSearch}
-          size="icon"
-          title={i18n.clear}
-          type="button"
-          variant="ghost"
-        >
-          {emojiSearchIcons.delete}
-        </Button>
+        <InputGroupAddon align={"inline-end"}>
+          <InputGroupButton onClick={clearSearch}>
+            <XIcon />
+          </InputGroupButton>
+        </InputGroupAddon>
       )}
-    </div>
+    </InputGroup>
   );
 }
 
@@ -490,8 +468,8 @@ function EmojiPickerNavigation({
   return (
     <TooltipProvider delayDuration={500}>
       <nav
-        className="mb-2.5 border-0 border-b border-b-border border-solid p-1.5"
         id="emoji-nav"
+        className="mb-2.5 border-0 border-b border-b-border border-solid p-1.5"
       >
         <div className="relative flex items-center justify-evenly">
           {emojiLibrary
@@ -501,18 +479,18 @@ function EmojiPickerNavigation({
               <Tooltip key={id}>
                 <TooltipTrigger asChild>
                   <Button
-                    aria-label={i18n.categories[id]}
+                    size="sm"
+                    variant="ghost"
                     className={cn(
                       "h-fit rounded-full fill-current p-1.5 text-muted-foreground hover:bg-muted hover:text-muted-foreground",
                       id === focusedCategory &&
-                        "pointer-events-none bg-accent fill-current text-accent-foreground"
+                        "pointer-events-none bg-accent fill-current text-accent-foreground",
                     )}
                     onClick={() => {
                       onClick(id);
                     }}
-                    size="sm"
+                    aria-label={i18n.categories[id]}
                     type="button"
-                    variant="ghost"
                   >
                     <span className="inline-flex size-5 items-center justify-center">
                       {icons.categories[id].outline}

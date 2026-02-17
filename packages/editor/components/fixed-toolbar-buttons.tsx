@@ -29,6 +29,8 @@ import { TableToolbarButton } from "./table-toolbar-button";
 import { ToggleToolbarButton } from "./toggle-toolbar-button";
 import { ToolbarGroup } from "./toolbar";
 import { TurnIntoToolbarButton } from "./turn-into-toolbar-button";
+import { EmojiToolbarButton } from "./emoji-toolbar-button";
+import { LinkToolbarButton } from "./link-toolbar-button";
 
 export function FixedToolbarButtons() {
   const readOnly = useEditorReadOnly();
@@ -92,9 +94,11 @@ export function FixedToolbarButtons() {
 
           <ToolbarGroup>
             <TableToolbarButton />
+            <EmojiToolbarButton />
           </ToolbarGroup>
 
           <ToolbarGroup>
+            <LinkToolbarButton />
             <MediaToolbarButton nodeType={KEYS.img} />
             <MediaToolbarButton nodeType={KEYS.video} />
           </ToolbarGroup>
