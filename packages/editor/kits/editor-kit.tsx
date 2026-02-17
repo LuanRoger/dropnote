@@ -32,6 +32,7 @@ import { TocKit } from "../plugins/toc-kit";
 import { ToggleKit } from "../plugins/toggle-kit";
 import { YjsKit } from "../plugins/yjs-kit";
 import { BlockSelectionKit } from "../plugins/block-selection-kit";
+import { DndKit } from "../plugins/dnd-kit";
 import type { Badge } from "../types/badge";
 import type { NoteBody } from "../types/notes";
 
@@ -83,6 +84,7 @@ export const EditorKit: (options: EditorKitOptions) => AnyPluginConfig[] = (
     ...AutoformatKit,
     ...BlockSelectionKit,
     ...CursorOverlayKit,
+    ...DndKit,
     ...BlockMenuKit,
     ...EmojiKit,
     ...ExitBreakKit,
