@@ -22,7 +22,9 @@ import { useEditorRef } from "platejs/react";
 import { type ComponentPropsWithoutRef, useState } from "react";
 import { ToolbarButton } from "./toolbar";
 
-export function MoreToolbarButton(props: DropdownMenuProps) {
+export function MoreToolbarButton(
+  props: ComponentPropsWithoutRef<typeof DropdownMenu>,
+) {
   const editor = useEditorRef();
   const [open, setOpen] = useState(false);
 

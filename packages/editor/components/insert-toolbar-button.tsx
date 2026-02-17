@@ -32,7 +32,7 @@ import {
 } from "lucide-react";
 import { KEYS } from "platejs";
 import { type PlateEditor, useEditorRef } from "platejs/react";
-import { useState } from "react";
+import { ComponentPropsWithoutRef, useState } from "react";
 import { insertBlock, insertInlineElement } from "../utils/transforms";
 import { ToolbarButton, ToolbarMenuGroup } from "./toolbar";
 
@@ -210,7 +210,9 @@ const groups: Group[] = [
   },
 ];
 
-export function InsertToolbarButton(props: DropdownMenuProps) {
+export function InsertToolbarButton(
+  props: ComponentPropsWithoutRef<typeof DropdownMenu>,
+) {
   const editor = useEditorRef();
   const [open, setOpen] = useState(false);
 
