@@ -31,6 +31,7 @@ import { TableKit } from "../plugins/table-kit";
 import { TocKit } from "../plugins/toc-kit";
 import { ToggleKit } from "../plugins/toggle-kit";
 import { YjsKit } from "../plugins/yjs-kit";
+import { BlockSelectionKit } from "../plugins/block-selection-kit";
 import type { Badge } from "../types/badge";
 import type { NoteBody } from "../types/notes";
 
@@ -80,6 +81,7 @@ export const EditorKit: (options: EditorKitOptions) => AnyPluginConfig[] = (
     // Editing
     ...SlashKit,
     ...AutoformatKit,
+    ...BlockSelectionKit,
     ...CursorOverlayKit,
     ...BlockMenuKit,
     ...EmojiKit,
