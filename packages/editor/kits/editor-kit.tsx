@@ -10,6 +10,7 @@ import { BlockPlaceholderKit } from "../plugins/block-placeholder-kit";
 import { BottomStatusPlugin } from "../plugins/bottom-status-plugin";
 import { CalloutKit } from "../plugins/callout-kit";
 import { CodeBlockKit } from "../plugins/code-block-kit";
+import { CodeDrawingKit } from "../plugins/code-drawing-kit";
 import { ColumnKit } from "../plugins/column-kit";
 import { CursorOverlayKit } from "../plugins/cursor-overlay-kit";
 import { DateKit } from "../plugins/date-kit";
@@ -65,6 +66,7 @@ export const EditorKit: (options: EditorKitOptions) => AnyPluginConfig[] = (
     ...MathKit,
     ...DateKit,
     ...LinkKit,
+    ...CodeDrawingKit,
 
     // Marks
     ...BasicMarksKit,
