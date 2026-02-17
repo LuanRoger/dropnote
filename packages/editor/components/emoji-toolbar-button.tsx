@@ -42,7 +42,6 @@ import {
   XIcon,
 } from "lucide-react";
 import { ToolbarButton } from "./toolbar";
-import { Input } from "@repo/design-system/components/ui/input";
 import {
   InputGroup,
   InputGroupAddon,
@@ -94,7 +93,7 @@ export function EmojiPopover({
     <Popover onOpenChange={setIsOpen} open={isOpen}>
       <PopoverTrigger asChild>{control}</PopoverTrigger>
 
-      <PopoverContent className="z-100">{children}</PopoverContent>
+      <PopoverContent className="z-100 w-fit p-0">{children}</PopoverContent>
     </Popover>
   );
 }
@@ -124,12 +123,7 @@ export function EmojiPicker({
   icons?: EmojiIconList<React.ReactElement>;
 }) {
   return (
-    <div
-      className={cn(
-        "flex flex-col gap-1 rounded-xl bg-popover text-popover-foreground",
-        "h-92 w-80 border shadow-md",
-      )}
-    >
+    <div className={cn("flex flex-col gap-1", "h-92 border shadow-md")}>
       <EmojiPickerNavigation
         onClick={handleCategoryClick}
         emojiLibrary={emojiLibrary}
