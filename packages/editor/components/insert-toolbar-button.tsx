@@ -6,9 +6,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@repo/design-system/components/ui/dropdown-menu";
+
 import {
   CalendarIcon,
   ChevronRightIcon,
+  Code2,
   Columns3Icon,
   FileCodeIcon,
   FilmIcon,
@@ -30,7 +32,7 @@ import {
 } from "lucide-react";
 import { KEYS } from "platejs";
 import { type PlateEditor, useEditorRef } from "platejs/react";
-import { type ComponentPropsWithoutRef, useState } from "react";
+import { useState } from "react";
 import { insertBlock, insertInlineElement } from "../utils/transforms";
 import { ToolbarButton, ToolbarMenuGroup } from "./toolbar";
 
@@ -167,6 +169,11 @@ const groups: Group[] = [
         label: "Equation",
         value: KEYS.equation,
       },
+      {
+        icon: <Code2 />,
+        label: "Code Drawing",
+        value: "codeDrawing",
+      },
     ].map((item) => ({
       ...item,
       onSelect: (editor, value) => {
@@ -203,21 +210,22 @@ const groups: Group[] = [
   },
 ];
 
-export function InsertToolbarButton(
-  props: ComponentPropsWithoutRef<typeof DropdownMenu>
-) {
+export function InsertToolbarButton(props: DropdownMenuProps) {
   const editor = useEditorRef();
   const [open, setOpen] = useState(false);
 
   return (
-    <DropdownMenu modal={false} onOpenChange={setOpen} open={open} {...props}>
+    <DropdownMenu open={open} onOpenChange={setOpen} modal={false} {...props}>
       <DropdownMenuTrigger asChild>
-        <ToolbarButton isDropdown pressed={open} tooltip="Insert">
+        <ToolbarButton pressed={open} tooltip="Insert" isDropdown>
           <PlusIcon />
         </ToolbarButton>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent align="start" className="max-h-125">
+      <DropdownMenuContent
+        className="flex max-h-125 min-w-45 flex-col overflow-y-auto"
+        align="start"
+      >
         {groups.map(({ group, items: nestedItems }) => (
           <ToolbarMenuGroup key={group} label={group}>
             {nestedItems.map(({ icon, label, value, onSelect }) => (

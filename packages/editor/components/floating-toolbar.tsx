@@ -7,7 +7,6 @@ import {
   useFloatingToolbar,
   useFloatingToolbarState,
 } from "@platejs/floating";
-import { cn } from "@repo/design-system/lib/utils";
 import { useComposedRef } from "@udecode/cn";
 import { KEYS } from "platejs";
 import {
@@ -15,6 +14,7 @@ import {
   useEventEditorValue,
   usePluginOption,
 } from "platejs/react";
+import { cn } from "../utils/tailwind";
 
 import { Toolbar } from "./toolbar";
 
@@ -72,12 +72,12 @@ export function FloatingToolbar({
       <Toolbar
         {...props}
         {...rootProps}
+        ref={ref}
         className={cn(
           "scrollbar-hide absolute z-50 overflow-x-auto whitespace-nowrap rounded-md border bg-popover p-1 opacity-100 shadow-md print:hidden",
           "max-w-[80vw]",
-          className
+          className,
         )}
-        ref={ref}
       >
         {children}
       </Toolbar>

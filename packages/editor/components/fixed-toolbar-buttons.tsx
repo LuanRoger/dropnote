@@ -31,6 +31,7 @@ import { ToolbarGroup } from "./toolbar";
 import { TurnIntoToolbarButton } from "./turn-into-toolbar-button";
 import { EmojiToolbarButton } from "./emoji-toolbar-button";
 import { LinkToolbarButton } from "./link-toolbar-button";
+import { InlineEquationToolbarButton } from "./equation-toolbar-button";
 
 export function FixedToolbarButtons() {
   const readOnly = useEditorReadOnly();
@@ -70,6 +71,8 @@ export function FixedToolbarButtons() {
             <MarkToolbarButton nodeType={KEYS.code} tooltip="Code (⌘+E)">
               <Code2Icon />
             </MarkToolbarButton>
+
+            <InlineEquationToolbarButton />
 
             <FontColorToolbarButton nodeType={KEYS.color} tooltip="Text color">
               <BaselineIcon />
