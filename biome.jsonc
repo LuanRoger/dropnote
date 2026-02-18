@@ -9,6 +9,9 @@
       "!packages/design-system/lib",
       "!packages/design-system/hooks",
       "!packages/editor/components"
-    ]
+    ],
+  },
+  "javascript": {
+    "globals": ["Bun"]
   }
 }
