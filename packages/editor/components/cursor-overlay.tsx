@@ -6,9 +6,9 @@ import {
   type CursorOverlayState,
   useCursorOverlay,
 } from "@platejs/selection/react";
-import { cn } from "@repo/design-system/lib/utils";
 import { RangeApi } from "platejs";
 import { usePluginOption } from "platejs/react";
+import { cn } from "../utils/tailwind";
 
 export function CursorOverlay() {
   const { cursors } = useCursorOverlay();
@@ -40,9 +40,9 @@ function Cursor({
       {selectionRects.map((position, i) => (
         <div
           className={cn(
-            "pointer-events-none absolute z-10",
-            id === "selection" && "bg-brand/25",
-            id === "selection" && isCursor && "bg-primary"
+            "pointer-events-none absolute z-100",
+            id === "selection" && "bg-primary/25",
+            id === "selection" && isCursor && "bg-primary",
           )}
           key={i}
           style={{
@@ -55,7 +55,7 @@ function Cursor({
         <div
           className={cn(
             "pointer-events-none absolute z-10 w-0.5",
-            id === "drag" && "w-px bg-brand"
+            id === "drag" && "w-px bg-primary",
           )}
           style={{ ...caretPosition, ...style }}
         />

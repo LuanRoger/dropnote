@@ -1,15 +1,17 @@
 "use client";
 
+import * as React from "react";
+
 import type { VariantProps } from "class-variance-authority";
+import type { PlateContentProps, PlateViewProps } from "platejs/react";
+
 import { cva } from "class-variance-authority";
-import type { PlateContentProps } from "platejs/react";
-import { PlateContainer, PlateContent } from "platejs/react";
-import type React from "react";
+import { PlateContainer, PlateContent, PlateView } from "platejs/react";
 
 import { cn } from "../utils/tailwind";
 
 const editorContainerVariants = cva(
-  "relative size-full select-text caret-primary selection:bg-brand/25 focus-visible:outline-none [&_.slate-selection-area]:z-50 [&_.slate-selection-area]:border [&_.slate-selection-area]:border-brand/25 [&_.slate-selection-area]:bg-brand/15",
+  "relative size-full select-text caret-primary selection:bg-primary/25 focus-visible:outline-none [&_.slate-selection-area]:z-50 [&_.slate-selection-area]:border [&_.slate-selection-area]:border-brand/25 [&_.slate-selection-area]:bg-brand/15",
   {
     defaultVariants: {
       variant: "default",
@@ -19,7 +21,7 @@ const editorContainerVariants = cva(
         comment: cn(
           "flex flex-wrap justify-between gap-1 px-1 py-0.5 text-sm",
           "rounded-md border-[1.5px] border-transparent bg-transparent",
-          "has-[[data-slate-editor]:focus]:border-brand/50 has-[[data-slate-editor]:focus]:ring-2 has-[[data-slate-editor]:focus]:ring-brand/30",
+          "has-[[data-slate-editor]:focus]:border-primary/50 has-[[data-slate-editor]:focus]:ring-2 has-[[data-slate-editor]:focus]:ring-primary/30",
           "has-aria-disabled:border-input has-aria-disabled:bg-muted",
         ),
         default: "",
@@ -53,9 +55,9 @@ export function EditorContainer({
 const editorVariants = cva(
   cn(
     "group/editor",
-    "wrap-break-word relative w-full cursor-text select-text overflow-x-hidden whitespace-pre-wrap",
+    "relative w-full cursor-text select-text overflow-x-hidden whitespace-pre-wrap wrap-break-words",
     "rounded-md ring-offset-background focus-visible:outline-none",
-    "placeholder:text-muted-foreground/80 **:data-slate-placeholder:top-[auto_!important] **:data-slate-placeholder:text-muted-foreground/80 **:data-slate-placeholder:opacity-100!",
+    "**:data-slate-placeholder:!top-1/2 **:data-slate-placeholder:-translate-y-1/2 placeholder:text-muted-foreground/80 **:data-slate-placeholder:text-muted-foreground/80 **:data-slate-placeholder:opacity-100!",
     "[&_strong]:font-bold",
   ),
   {
@@ -70,7 +72,10 @@ const editorVariants = cva(
         true: "ring-2 ring-ring ring-offset-2",
       },
       variant: {
-        comment: "rounded-none border-none bg-transparent text-sm",
+        ai: "w-full px-0 text-base md:text-sm",
+        aiChat:
+          "max-h-[min(70vh,320px)] w-full overflow-y-auto px-3 py-2 text-base md:text-sm",
+        comment: cn("rounded-none border-none bg-transparent text-sm"),
         default:
           "size-full px-16 pt-4 pb-72 text-base sm:px-[max(64px,calc(50%-350px))]",
         fullWidth: "size-full px-16 pt-4 pb-72 text-base sm:px-24",
@@ -86,30 +91,43 @@ const editorVariants = cva(
 export type EditorProps = PlateContentProps &
   VariantProps<typeof editorVariants>;
 
-export function Editor({
+export const Editor = ({
   className,
   disabled,
   focused,
   variant,
   ref,
   ...props
-}: EditorProps & { ref?: React.Ref<HTMLDivElement> }) {
+}: EditorProps & { ref?: React.RefObject<HTMLDivElement | null> }) => (
+  <PlateContent
+    ref={ref}
+    className={cn(
+      editorVariants({
+        disabled,
+        focused,
+        variant,
+      }),
+      className,
+    )}
+    disabled={disabled}
+    disableDefaultStyles
+    {...props}
+  />
+);
+
+Editor.displayName = "Editor";
+
+export function EditorView({
+  className,
+  variant,
+  ...props
+}: PlateViewProps & VariantProps<typeof editorVariants>) {
   return (
-    <PlateContent
-      className={cn(
-        editorVariants({
-          disabled,
-          focused,
-          variant,
-        }),
-        className,
-      )}
-      disableDefaultStyles
-      disabled={disabled}
-      ref={ref}
+    <PlateView
       {...props}
+      className={cn(editorVariants({ variant }), className)}
     />
   );
 }
 
-Editor.displayName = "Editor";
+EditorView.displayName = "EditorView";

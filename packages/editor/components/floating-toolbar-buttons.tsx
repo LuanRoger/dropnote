@@ -1,5 +1,7 @@
 "use client";
 
+import * as React from "react";
+
 import {
   BoldIcon,
   Code2Icon,
@@ -11,6 +13,7 @@ import { KEYS } from "platejs";
 import { useEditorReadOnly } from "platejs/react";
 
 import { InlineEquationToolbarButton } from "./equation-toolbar-button";
+import { LinkToolbarButton } from "./link-toolbar-button";
 import { MarkToolbarButton } from "./mark-toolbar-button";
 import { MoreToolbarButton } from "./more-toolbar-button";
 import { ToolbarGroup } from "./toolbar";
@@ -53,6 +56,8 @@ export function FloatingToolbarButtons() {
             </MarkToolbarButton>
 
             <InlineEquationToolbarButton />
+
+            <LinkToolbarButton />
           </ToolbarGroup>
         </>
       )}
