@@ -7,7 +7,7 @@ import { useEditorRef } from "platejs/react";
 import { ToolbarButton } from "./toolbar";
 
 export function InlineEquationToolbarButton(
-  props: React.ComponentProps<typeof ToolbarButton>
+  props: React.ComponentProps<typeof ToolbarButton>,
 ) {
   const editor = useEditorRef();
 
@@ -17,7 +17,7 @@ export function InlineEquationToolbarButton(
       onClick={() => {
         insertInlineEquation(editor);
       }}
-      tooltip="Mark as equation"
+      tooltip="Inline equation"
     >
       <RadicalIcon />
     </ToolbarButton>

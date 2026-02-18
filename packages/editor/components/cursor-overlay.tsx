@@ -12,7 +12,6 @@ import { cn } from "../utils/tailwind";
 
 export function CursorOverlay() {
   const { cursors } = useCursorOverlay();
-  console.log(cursors);
 
   return (
     <>
@@ -33,7 +32,6 @@ function Cursor({
   const streaming = usePluginOption(AIChatPlugin, "streaming");
   const { style, selectionStyle = style } = data ?? ({} as CursorData);
   const isCursor = RangeApi.isCollapsed(selection);
-  console.log("cursor possition", caretPosition);
 
   if (streaming) return null;
 
