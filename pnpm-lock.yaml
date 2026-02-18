@@ -151,9 +151,15 @@ importers:
       '@hocuspocus/server':
         specifier: ^3.4.4
         version: 3.4.4(bufferutil@4.0.9)(y-protocols@1.0.7(yjs@13.6.29))(yjs@13.6.29)
+      '@t3-oss/env-nextjs':
+        specifier: ^0.13.10
+        version: 0.13.10(arktype@2.1.20)(typescript@5.9.3)(zod@4.3.6)
       typescript:
         specifier: ^5
         version: 5.9.3
+      zod:
+        specifier: ^4.3.6
+        version: 4.3.6
     devDependencies:
       '@types/bun':
         specifier: latest
