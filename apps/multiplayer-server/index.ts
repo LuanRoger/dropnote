@@ -5,7 +5,8 @@ import { env } from "./env";
 
 const serverName = "dropnote-multiplayer-server";
 const address = env.ADDRESS;
-const port = env.PORT;
+const wssPort = env.WSS_PORT;
+const httpPort = env.HTTP_PORT;
 const timeout = env.TIMEOUT;
 const debounce = env.DEBOUNCE;
 const maxDebounce = env.MAX_DEBOUNCE;
@@ -30,7 +31,7 @@ if (!maxDebounce || Number.isNaN(maxDebounce)) {
 const server = new Server({
   name: serverName,
   address,
-  port,
+  port: wssPort,
   timeout,
   debounce,
   maxDebounce,
@@ -69,4 +70,36 @@ const server = new Server({
   },
 });
 
+function getRoomUserCount(roomName: string): number {
+  const doc = server.hocuspocus.documents.get(roomName);
+  if (!doc) {
+    return 0;
+  }
+
+  return doc.getConnectionsCount();
+}
+
 server.listen();
+
+Bun.serve({
+  port: httpPort,
+  routes: {
+    "/rooms/:id": (req) => {
+      const name = req.params.id;
+      const count = getRoomUserCount(name);
+      const isFull = count >= maxUsersPerRoom;
+
+      return Response.json({
+        room: name,
+        count,
+        maxUsers: maxUsersPerRoom,
+        isFull,
+      });
+    },
+  },
+  fetch(_) {
+    return new Response("Not found", { status: 404 });
+  },
+});
+
+console.log(`🌐 ${serverName} HTTP API is listening on ${address}:${httpPort}`);
