@@ -3,10 +3,15 @@ import { keys as editor } from "@repo/editor/keys";
 import { keys as core } from "@repo/next-config/keys";
 import { keys as product } from "@repo/product/keys";
 import { createEnv } from "@t3-oss/env-nextjs";
+import z from "zod";
 
 export const env = createEnv({
   extends: [product(), core(), database(), editor()],
-  server: {},
+  server: {
+    HOCUSPOCUS_API_URL: z.url(),
+  },
   client: {},
-  runtimeEnv: {},
+  runtimeEnv: {
+    HOCUSPOCUS_API_URL: process.env.HOCUSPOCUS_API_URL,
+  },
 });
