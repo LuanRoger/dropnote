@@ -16,6 +16,8 @@
       "env": [
         "DATABASE_URL",
         "HOCUSPOCUS_WSS_URL",
+        "HOCUSPOCUS_API_URL",
+        "HOCUSPOCUS_API_KEY",
         "NEXT_PUBLIC_POSTHOG_KEY",
         "NEXT_PUBLIC_POSTHOG_HOST",
         "NEXT_PUBLIC_APP_URL"
