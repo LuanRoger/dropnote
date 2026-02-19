@@ -9,9 +9,11 @@ export const env = createEnv({
   extends: [product(), core(), database(), editor()],
   server: {
     HOCUSPOCUS_API_URL: z.url(),
+    HOCUSPOCUS_API_KEY: z.string(),
   },
   client: {},
   runtimeEnv: {
     HOCUSPOCUS_API_URL: process.env.HOCUSPOCUS_API_URL,
+    HOCUSPOCUS_API_KEY: process.env.HOCUSPOCUS_API_KEY,
   },
 });

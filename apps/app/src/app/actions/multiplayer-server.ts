@@ -8,8 +8,13 @@ export async function checkNoteMultiplayerAccess(
   code: string,
 ): Promise<Result<NoteRoomInformation>> {
   const apiUrl = env.HOCUSPOCUS_API_URL;
+  const apiKey = env.HOCUSPOCUS_API_KEY;
 
-  const response = await fetch(`${apiUrl}/rooms/${code}`);
+  const response = await fetch(`${apiUrl}/rooms/${code}`, {
+    headers: {
+      "api-key": apiKey,
+    },
+  });
   if (!response.ok) {
     return error(
       new Error(`Failed to check room access: ${response.statusText}`),

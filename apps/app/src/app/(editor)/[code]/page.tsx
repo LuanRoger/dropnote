@@ -45,7 +45,9 @@ export default async function Page({ params }: PageProps) {
     throw new NoteRoomFullError(code);
   }
 
-  const wssUrl = env.HOCUSPOCUS_WSS_URL;
+  const multiplayerServerWssUrl = env.HOCUSPOCUS_WSS_URL;
+  const multiplayerServerApiKey = env.HOCUSPOCUS_API_KEY;
+
   const loader = new NotesDatabaseLoadSource(code);
   const note = await loader.loadNote();
 
@@ -64,7 +66,8 @@ export default async function Page({ params }: PageProps) {
       initialValue={initialValue}
       maxLength={maxLength}
       noteSource="database"
-      wssUrl={wssUrl}
+      wssUrl={multiplayerServerWssUrl}
+      apiKey={multiplayerServerApiKey}
     />
   );
 }
