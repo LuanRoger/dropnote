@@ -41,6 +41,7 @@ interface EditorKitOptions {
     color: string;
     roomName: string;
     wssUrl: string;
+    token: string;
   };
   bottomStatus?: {
     maxLength: number;

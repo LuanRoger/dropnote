@@ -18,6 +18,7 @@ interface RichEditorShellProps {
   noteSource?: NoteSource;
   initialValue?: NoteBody;
   wssUrl?: string;
+  apiKey?: string;
   expireAt?: Date;
   badges?: Badge[];
 }
@@ -28,17 +29,20 @@ export default function RichEditorShell({
   noteSource,
   initialValue,
   wssUrl,
+  apiKey,
   expireAt,
   badges = [],
 }: RichEditorShellProps) {
-  const yjsOptions = wssUrl
-    ? {
-        wssUrl,
-        name: generateRandomName(),
-        color: generateRandomHexColor(),
-        roomName: code,
-      }
-    : undefined;
+  const yjsOptions =
+    wssUrl && apiKey
+      ? {
+          wssUrl,
+          name: generateRandomName(),
+          color: generateRandomHexColor(),
+          roomName: code,
+          token: apiKey,
+        }
+      : undefined;
   const source = noteSource ? createNoteSource(code, noteSource) : undefined;
 
   const editor = createEditor(

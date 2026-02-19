@@ -1,11 +1,17 @@
 /** biome-ignore-all lint/suspicious/useAwait: The signature of the function do not allow not async functions */
 import { Logger } from "@hocuspocus/extension-logger";
+import { Throttle } from "@hocuspocus/extension-throttle";
 import { Server } from "@hocuspocus/server";
 import { env } from "./env";
+import { DropnoteMultiplayerServerExtension } from "./extension";
+import { getRoomUserCount } from "./utils/documents";
+import { isAuthValid } from "./utils/auth";
 
 const serverName = "dropnote-multiplayer-server";
 const address = env.ADDRESS;
-const port = env.PORT;
+const wssPort = env.WSS_PORT;
+const httpPort = env.HTTP_PORT;
+const apiKey = env.API_KEY;
 const timeout = env.TIMEOUT;
 const debounce = env.DEBOUNCE;
 const maxDebounce = env.MAX_DEBOUNCE;
@@ -30,43 +36,52 @@ if (!maxDebounce || Number.isNaN(maxDebounce)) {
 const server = new Server({
   name: serverName,
   address,
-  port,
+  port: wssPort,
   timeout,
   debounce,
   maxDebounce,
-  extensions: [new Logger()],
-  async onListen(data) {
-    console.log(`🚀 ${serverName} is listening on ${address}:${data.port}`);
-    console.log(`   IPv6 enabled: ${address === "::" || address === "::0"}`);
-  },
-  async onConnect(data) {
-    console.log(`📥 Client connected to room: ${data.documentName}`);
-  },
-  async beforeHandleMessage(data) {
-    const awarenessStates = data.document.awareness.getStates();
-    const activeUsers = awarenessStates.size;
-
-    if (activeUsers > maxUsersPerRoom) {
-      console.log(
-        `❌ Room ${data.documentName} is full: ${activeUsers}/${maxUsersPerRoom} users`,
-      );
-      throw new Error(
-        `Room is full. Maximum ${maxUsersPerRoom} users allowed.`,
-      );
-    }
-  },
-  async onAwarenessUpdate(data) {
-    const activeUsers = data.states.length;
-    console.log(
-      `👥 Active users in room ${data.documentName}: ${activeUsers}/${maxUsersPerRoom}`,
-    );
-  },
-  async onDisconnect(data) {
-    console.log(`📤 Client disconnected from room: ${data.documentName}`);
-  },
-  async onDestroy() {
-    console.log(`🛑 ${serverName} is shutting down`);
-  },
+  extensions: [
+    new Throttle({
+      throttle: 10,
+      banTime: 10,
+    }),
+    new Logger(),
+    new DropnoteMultiplayerServerExtension(
+      serverName,
+      address,
+      apiKey,
+      maxUsersPerRoom,
+    ),
+  ],
 });
 
 server.listen();
+
+Bun.serve({
+  port: httpPort,
+  routes: {
+    "/rooms/:id": (req) => {
+      const apiKeyHeader = req.headers.get("api-key") ?? undefined;
+      const isAuthenticated = isAuthValid(apiKey, apiKeyHeader);
+      if (!isAuthenticated) {
+        return new Response("Unauthorized", { status: 401 });
+      }
+
+      const name = req.params.id;
+      const count = getRoomUserCount(server, name);
+      const isFull = count >= maxUsersPerRoom;
+
+      return Response.json({
+        room: name,
+        count,
+        maxUsers: maxUsersPerRoom,
+        isFull,
+      });
+    },
+  },
+  fetch(_) {
+    return new Response("Not found", { status: 404 });
+  },
+});
+
+console.log(`🌐 ${serverName} HTTP API is listening on ${address}:${httpPort}`);
