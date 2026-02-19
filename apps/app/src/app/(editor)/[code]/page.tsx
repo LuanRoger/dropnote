@@ -60,6 +60,7 @@ export default async function Page({ params }: PageProps) {
 
   return (
     <RichEditorShell
+      apiKey={multiplayerServerApiKey}
       badges={badges}
       code={code}
       expireAt={expireAt}
@@ -67,7 +68,6 @@ export default async function Page({ params }: PageProps) {
       maxLength={maxLength}
       noteSource="database"
       wssUrl={multiplayerServerWssUrl}
-      apiKey={multiplayerServerApiKey}
     />
   );
 }

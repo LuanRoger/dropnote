@@ -1,17 +1,8 @@
 "use client";
 
+import * as React from "react";
+
 import { TablePlugin, useTableMergeState } from "@platejs/table/react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
-  DropdownMenuTrigger,
-} from "@repo/design-system/components/ui/dropdown-menu";
-import { cn } from "@repo/design-system/lib/utils";
 import {
   ArrowDown,
   ArrowLeft,
@@ -26,30 +17,44 @@ import {
 } from "lucide-react";
 import { KEYS } from "platejs";
 import { useEditorPlugin, useEditorSelector } from "platejs/react";
-import { type ComponentProps, useState } from "react";
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from "@repo/design-system/components/ui/dropdown-menu";
+import { cn } from "../utils/tailwind";
+
 import { ToolbarButton } from "./toolbar";
 
-export function TableToolbarButton(props: ComponentProps<typeof DropdownMenu>) {
+export function TableToolbarButton(
+  props: React.ComponentProps<typeof DropdownMenu>,
+) {
   const tableSelected = useEditorSelector(
     (editor) => editor.api.some({ match: { type: KEYS.table } }),
-    []
+    [],
   );
 
   const { editor, tf } = useEditorPlugin(TablePlugin);
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = React.useState(false);
   const mergeState = useTableMergeState();
 
   return (
-    <DropdownMenu modal={false} onOpenChange={setOpen} open={open} {...props}>
+    <DropdownMenu open={open} onOpenChange={setOpen} modal={false} {...props}>
       <DropdownMenuTrigger asChild>
-        <ToolbarButton isDropdown pressed={open} tooltip="Table">
+        <ToolbarButton pressed={open} tooltip="Table" isDropdown>
           <Table />
         </ToolbarButton>
       </DropdownMenuTrigger>
 
       <DropdownMenuContent
-        align="start"
         className="flex w-[180px] min-w-0 flex-col"
+        align="start"
       >
         <DropdownMenuGroup>
           <DropdownMenuSub>
@@ -206,7 +211,7 @@ export function TableToolbarButton(props: ComponentProps<typeof DropdownMenu>) {
 function TablePicker() {
   const { editor, tf } = useEditorPlugin(TablePlugin);
 
-  const [tablePicker, setTablePicker] = useState({
+  const [tablePicker, setTablePicker] = React.useState({
     grid: Array.from({ length: 8 }, () => Array.from({ length: 8 }).fill(0)),
     size: { colCount: 0, rowCount: 0 },
   });
@@ -240,16 +245,16 @@ function TablePicker() {
         {tablePicker.grid.map((rows, rowIndex) =>
           rows.map((value, columIndex) => (
             <div
+              key={`(${rowIndex},${columIndex})`}
               className={cn(
                 "col-span-1 size-3 border border-solid bg-secondary",
-                !!value && "border-current"
+                !!value && "border-current",
               )}
-              key={`(${rowIndex},${columIndex})`}
               onMouseMove={() => {
                 onCellMove(rowIndex, columIndex);
               }}
             />
-          ))
+          )),
         )}
       </div>
 
