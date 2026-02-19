@@ -29,6 +29,9 @@ import { TableToolbarButton } from "./table-toolbar-button";
 import { ToggleToolbarButton } from "./toggle-toolbar-button";
 import { ToolbarGroup } from "./toolbar";
 import { TurnIntoToolbarButton } from "./turn-into-toolbar-button";
+import { EmojiToolbarButton } from "./emoji-toolbar-button";
+import { LinkToolbarButton } from "./link-toolbar-button";
+import { InlineEquationToolbarButton } from "./equation-toolbar-button";
 
 export function FixedToolbarButtons() {
   const readOnly = useEditorReadOnly();
@@ -69,6 +72,8 @@ export function FixedToolbarButtons() {
               <Code2Icon />
             </MarkToolbarButton>
 
+            <InlineEquationToolbarButton />
+
             <FontColorToolbarButton nodeType={KEYS.color} tooltip="Text color">
               <BaselineIcon />
             </FontColorToolbarButton>
@@ -92,9 +97,11 @@ export function FixedToolbarButtons() {
 
           <ToolbarGroup>
             <TableToolbarButton />
+            <EmojiToolbarButton />
           </ToolbarGroup>
 
           <ToolbarGroup>
+            <LinkToolbarButton />
             <MediaToolbarButton nodeType={KEYS.img} />
             <MediaToolbarButton nodeType={KEYS.video} />
           </ToolbarGroup>

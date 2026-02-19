@@ -13,7 +13,6 @@ import {
 } from "@repo/design-system/components/ui/dropdown-menu";
 import {
   KeyboardIcon,
-  LinkIcon,
   MoreHorizontalIcon,
   SubscriptIcon,
   SuperscriptIcon,
@@ -24,15 +23,13 @@ import { type ComponentPropsWithoutRef, useState } from "react";
 import { ToolbarButton } from "./toolbar";
 
 export function MoreToolbarButton(
-  props: ComponentPropsWithoutRef<typeof DropdownMenu>
+  props: ComponentPropsWithoutRef<typeof DropdownMenu>,
 ) {
   const editor = useEditorRef();
   const [open, setOpen] = useState(false);
-  const stateLink = useLinkToolbarButtonState();
-  const { props: buttonProps } = useLinkToolbarButton(stateLink);
 
   return (
-    <DropdownMenu modal={false} onOpenChange={setOpen} open={open} {...props}>
+    <DropdownMenu open={open} onOpenChange={setOpen} modal={false} {...props}>
       <DropdownMenuTrigger asChild>
         <ToolbarButton pressed={open} tooltip="Insert">
           <MoreHorizontalIcon />
@@ -40,14 +37,10 @@ export function MoreToolbarButton(
       </DropdownMenuTrigger>
 
       <DropdownMenuContent
-        align="start"
         className="ignore-click-outside/toolbar flex max-h-[500px] min-w-[180px] flex-col overflow-y-auto"
+        align="start"
       >
         <DropdownMenuGroup>
-          <DropdownMenuItem onClick={buttonProps.onClick}>
-            <LinkIcon />
-            Link
-          </DropdownMenuItem>
           <DropdownMenuItem
             onSelect={() => {
               editor.tf.toggleMark(KEYS.kbd);

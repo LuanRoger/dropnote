@@ -1,4 +1,5 @@
 import { type AnyPluginConfig, TrailingBlockPlugin } from "platejs";
+import { createPlateEditor } from "platejs/react";
 
 import { AlignKit } from "../plugins/align-kit";
 import { AutoformatKit } from "../plugins/autoformat-kit";
@@ -6,6 +7,7 @@ import { BasicBlocksKit } from "../plugins/basic-blocks-kit";
 import { BasicMarksKit } from "../plugins/basic-marks-kit";
 import { BlockMenuKit } from "../plugins/block-menu-kit";
 import { BlockPlaceholderKit } from "../plugins/block-placeholder-kit";
+import { BottomStatusPlugin } from "../plugins/bottom-status-plugin";
 import { CalloutKit } from "../plugins/callout-kit";
 import { CodeBlockKit } from "../plugins/code-block-kit";
 import { ColumnKit } from "../plugins/column-kit";
@@ -28,6 +30,10 @@ import { TableKit } from "../plugins/table-kit";
 import { TocKit } from "../plugins/toc-kit";
 import { ToggleKit } from "../plugins/toggle-kit";
 import { YjsKit } from "../plugins/yjs-kit";
+import { BlockSelectionKit } from "../plugins/block-selection-kit";
+import { DndKit } from "../plugins/dnd-kit";
+import type { Badge } from "../types/badge";
+import type { NoteBody } from "../types/notes";
 
 interface EditorKitOptions {
   yjs?: {
@@ -35,13 +41,20 @@ interface EditorKitOptions {
     color: string;
     roomName: string;
     wssUrl: string;
+    token: string;
+  };
+  bottomStatus?: {
+    maxLength: number;
+    expireAt?: Date;
+    badges: Badge[];
   };
 }
 
 export const EditorKit: (options: EditorKitOptions) => AnyPluginConfig[] = (
-  options: EditorKitOptions
+  options: EditorKitOptions,
 ) => {
-  const { yjs } = options;
+  const { yjs, bottomStatus } = options;
+
   const kits = [
     // Elements
     ...BasicBlocksKit,
@@ -68,7 +81,9 @@ export const EditorKit: (options: EditorKitOptions) => AnyPluginConfig[] = (
     // Editing
     ...SlashKit,
     ...AutoformatKit,
+    ...BlockSelectionKit,
     ...CursorOverlayKit,
+    ...DndKit,
     ...BlockMenuKit,
     ...EmojiKit,
     ...ExitBreakKit,
@@ -82,12 +97,25 @@ export const EditorKit: (options: EditorKitOptions) => AnyPluginConfig[] = (
     ...BlockPlaceholderKit,
     ...FixedToolbarKit,
     ...FloatingToolbarKit,
+    BottomStatusPlugin.configure({
+      options: bottomStatus,
+    }),
   ];
 
   if (yjs) {
-    // Include Yjs plugins if configuration is provided
     kits.push(...YjsKit(yjs));
   }
 
   return kits;
 };
+
+export function createEditor(
+  options: EditorKitOptions,
+  initialValue: NoteBody,
+) {
+  return createPlateEditor({
+    plugins: EditorKit(options),
+    value: initialValue,
+    maxLength: options.bottomStatus?.maxLength,
+  });
+}

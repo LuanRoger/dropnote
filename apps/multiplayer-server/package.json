@@ -16,6 +16,9 @@
   },
   "dependencies": {
     "@hocuspocus/extension-logger": "^3.4.4",
-    "@hocuspocus/server": "^3.4.4"
+    "@hocuspocus/extension-throttle": "^3.4.4",
+    "@hocuspocus/server": "^3.4.4",
+    "@t3-oss/env-nextjs": "^0.13.10",
+    "zod": "^4.3.6"
   }
 }

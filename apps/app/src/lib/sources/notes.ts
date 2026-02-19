@@ -1,20 +1,34 @@
+import type { NoteModel } from "@repo/database/schemas/notes";
 import type { NoteBody } from "@repo/editor/types/notes";
 import { NotesSaveSource } from "@repo/editor/types/notes";
-import { ensureCreated, updateNoteByCode } from "@/app/actions/notes";
+import { ensureCreated, updateNoteBodyByCode } from "@/app/actions/notes";
 import { LOCAL_NOTE_PREFIX } from "@/constants";
 import { type NoteSource, NotesLoadSource } from "./types";
 
 export class NotesDatabaseSaveSource extends NotesSaveSource {
   save(value: NoteBody): Promise<void> {
-    return updateNoteByCode(this.code, value);
+    return updateNoteBodyByCode(this.code, value);
   }
 }
 
 export class NotesDatabaseLoadSource extends NotesLoadSource {
-  async load(): Promise<NoteBody | undefined> {
-    const note = await ensureCreated(this.code);
+  private note: NoteModel | undefined;
 
-    return note?.body;
+  async loadNote(): Promise<NoteModel> {
+    if (this.note) {
+      return this.note;
+    }
+
+    const note = await ensureCreated(this.code);
+    this.note = note;
+
+    return note;
+  }
+
+  async load(): Promise<NoteBody | undefined> {
+    const note = await this.loadNote();
+
+    return note.body;
   }
 }
 

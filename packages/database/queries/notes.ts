@@ -1,7 +1,8 @@
+/** biome-ignore-all lint/suspicious/noExplicitAny: The body of the note can be any, since we don't know the structure of the note */
 import { ensureConnected } from "../client";
-import { Notes } from "../schemas/notes";
+import { type NoteModel, Notes } from "../schemas/notes";
 
-export async function findNoteByCode(code: string) {
+export async function findNoteByCode(code: string): Promise<NoteModel | null> {
   await ensureConnected();
 
   const note = await Notes.findOne({ code });
@@ -9,10 +10,14 @@ export async function findNoteByCode(code: string) {
   return note;
 }
 
-export async function createNote(code: string, body: any) {
+export async function createNote(
+  code: string,
+  body: any,
+  expireAt?: Date,
+): Promise<NoteModel> {
   await ensureConnected();
 
-  await Notes.create({ code, body });
+  return await Notes.create({ code, body, expireAt });
 }
 
 export async function updateNote(code: string, body: any) {

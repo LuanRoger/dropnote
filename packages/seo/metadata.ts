@@ -41,6 +41,9 @@ export const createMetadata = ({
       siteName: applicationName,
       locale: "en_US",
     },
+    twitter: {
+      card: "summary_large_image",
+    },
     publisher,
   };
 

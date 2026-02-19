@@ -6,6 +6,8 @@ import {
   updateNote,
 } from "@repo/database/queries/notes";
 import type { NoteBody } from "@repo/editor/types/notes";
+import { countBodyLength } from "@repo/editor/utils/nodes";
+import { MAX_LENGHT_ADVANCED_NOTE, MAX_LENGHT_BASIC_NOTE } from "@/constants";
 
 export async function ensureCreated(code: string) {
   const note = await findNoteByCode(code);
@@ -13,9 +15,23 @@ export async function ensureCreated(code: string) {
     return note;
   }
 
-  await createNote(code, []);
+  return await createNote(code, []);
 }
 
-export async function updateNoteByCode(code: string, note: NoteBody) {
-  await updateNote(code, note);
+export async function updateNoteBodyByCode(code: string, body: NoteBody) {
+  const note = await findNoteByCode(code);
+  if (!note) {
+    return;
+  }
+
+  const { hasExtendedLimit } = note;
+  const currentBodyLenght = countBodyLength(body);
+  if (
+    (!hasExtendedLimit && currentBodyLenght > MAX_LENGHT_BASIC_NOTE) ||
+    (hasExtendedLimit && currentBodyLenght > MAX_LENGHT_ADVANCED_NOTE)
+  ) {
+    throw new Error("Note body exceeds the character limit");
+  }
+
+  await updateNote(code, body);
 }

@@ -9,11 +9,13 @@ export const YjsKit = ({
   color,
   roomName,
   wssUrl,
+  token,
 }: {
   name: string;
   color: string;
   roomName: string;
   wssUrl: string;
+  token: string;
 }): AnyPluginConfig[] => [
   YjsPlugin.configure({
     render: {
@@ -32,6 +34,7 @@ export const YjsKit = ({
           options: {
             name: roomName,
             url: wssUrl,
+            token,
           },
         },
       ],
