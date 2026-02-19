@@ -5,11 +5,13 @@ import { Server } from "@hocuspocus/server";
 import { env } from "./env";
 import { DropnoteMultiplayerServerExtension } from "./extension";
 import { getRoomUserCount } from "./utils/documents";
+import { isAuthValid } from "./utils/auth";
 
 const serverName = "dropnote-multiplayer-server";
 const address = env.ADDRESS;
 const wssPort = env.WSS_PORT;
 const httpPort = env.HTTP_PORT;
+const apiKey = env.API_KEY;
 const timeout = env.TIMEOUT;
 const debounce = env.DEBOUNCE;
 const maxDebounce = env.MAX_DEBOUNCE;
@@ -47,6 +49,7 @@ const server = new Server({
     new DropnoteMultiplayerServerExtension(
       serverName,
       address,
+      apiKey,
       maxUsersPerRoom,
     ),
   ],
@@ -58,6 +61,12 @@ Bun.serve({
   port: httpPort,
   routes: {
     "/rooms/:id": (req) => {
+      const apiKeyHeader = req.headers.get("api-key") ?? undefined;
+      const isAuthenticated = isAuthValid(apiKey, apiKeyHeader);
+      if (!isAuthenticated) {
+        return new Response("Unauthorized", { status: 401 });
+      }
+
       const name = req.params.id;
       const count = getRoomUserCount(server, name);
       const isFull = count >= maxUsersPerRoom;

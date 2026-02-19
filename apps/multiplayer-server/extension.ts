@@ -1,21 +1,30 @@
 import type {
   beforeHandleMessagePayload,
   Extension,
+  onAuthenticatePayload,
   onAwarenessUpdatePayload,
   onConnectPayload,
   onDestroyPayload,
   onDisconnectPayload,
   onListenPayload,
 } from "@hocuspocus/server";
+import { isAuthValid } from "./utils/auth";
 
 export class DropnoteMultiplayerServerExtension implements Extension {
   private readonly serverName: string;
   private readonly address: string;
+  private readonly apiKey: string;
   private readonly maxUsersPerRoom: number;
 
-  constructor(serverName: string, address: string, maxUsersPerRoom: number) {
+  constructor(
+    serverName: string,
+    address: string,
+    apiKey: string,
+    maxUsersPerRoom: number,
+  ) {
     this.serverName = serverName;
     this.address = address;
+    this.apiKey = apiKey;
     this.maxUsersPerRoom = maxUsersPerRoom;
   }
 
@@ -32,6 +41,21 @@ export class DropnoteMultiplayerServerExtension implements Extension {
     console.log(`📥 Client connected to room: ${data.documentName}`);
 
     return Promise.resolve();
+  }
+
+  onAuthenticate(data: onAuthenticatePayload): Promise<void> {
+    const { token } = data;
+    const isAuthenticated = isAuthValid(this.apiKey, token);
+
+    if (isAuthenticated) {
+      console.log(
+        `✅ Authentication successful for room: ${data.documentName}`,
+      );
+      return Promise.resolve();
+    }
+
+    console.log(`❌ Authentication failed for room: ${data.documentName}`);
+    throw new Error("Invalid API key.");
   }
 
   beforeHandleMessage(data: beforeHandleMessagePayload): Promise<void> {
