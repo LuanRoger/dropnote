@@ -14,7 +14,7 @@ export const env = createEnv({
   },
   runtimeEnv: {
     ADDRESS: process.env.ADDRESS,
-    WSS_PORT: process.env.PORT,
+    WSS_PORT: process.env.WSS_PORT,
     HTTP_PORT: process.env.HTTP_PORT,
     API_KEY: process.env.API_KEY,
     TIMEOUT: process.env.TIMEOUT,
