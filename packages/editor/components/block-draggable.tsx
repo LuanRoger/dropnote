@@ -19,7 +19,7 @@ import {
 import { useSelected } from "platejs/react";
 
 import { Button } from "@repo/design-system/components/ui/button";
-import { cn } from "../utils/tailwind";
+import { cn } from "@repo/design-system/lib/utils";
 
 const UNDRAGGABLE_KEYS = [KEYS.column, KEYS.tr, KEYS.td];
 

@@ -2,7 +2,7 @@ import type { SlateElementProps } from "platejs/static";
 
 import { SlateElement } from "platejs/static";
 
-import { cn } from "../utils/tailwind";
+import { cn } from "@repo/design-system/lib/utils";
 
 export function ParagraphElementStatic(props: SlateElementProps) {
   return (

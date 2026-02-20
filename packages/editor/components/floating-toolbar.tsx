@@ -14,7 +14,7 @@ import {
   useEventEditorValue,
   usePluginOption,
 } from "platejs/react";
-import { cn } from "../utils/tailwind";
+import { cn } from "@repo/design-system/lib/utils";
 
 import { Toolbar } from "./toolbar";
 

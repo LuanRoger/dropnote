@@ -8,7 +8,7 @@ import type { PlateContentProps, PlateViewProps } from "platejs/react";
 import { cva } from "class-variance-authority";
 import { PlateContainer, PlateContent, PlateView } from "platejs/react";
 
-import { cn } from "../utils/tailwind";
+import { cn } from "@repo/design-system/lib/utils";
 
 const editorContainerVariants = cva(
   "relative size-full select-text caret-primary selection:bg-primary/25 focus-visible:outline-none [&_.slate-selection-area]:z-50 [&_.slate-selection-area]:border [&_.slate-selection-area]:border-brand/25 [&_.slate-selection-area]:bg-brand/15",

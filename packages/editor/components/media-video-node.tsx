@@ -9,7 +9,7 @@ import { PlateElement, useEditorMounted, withHOC } from "platejs/react";
 import LiteYouTubeEmbed from "react-lite-youtube-embed";
 import ReactPlayer from "react-player";
 
-import { cn } from "../utils/tailwind";
+import { cn } from "@repo/design-system/lib/utils";
 
 import { Caption, CaptionTextarea } from "./caption";
 import {
