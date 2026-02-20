@@ -7,12 +7,14 @@ import { BasicBlocksKit } from "../plugins/basic-blocks-kit";
 import { BasicMarksKit } from "../plugins/basic-marks-kit";
 import { BlockMenuKit } from "../plugins/block-menu-kit";
 import { BlockPlaceholderKit } from "../plugins/block-placeholder-kit";
+import { BlockSelectionKit } from "../plugins/block-selection-kit";
 import { BottomStatusPlugin } from "../plugins/bottom-status-plugin";
 import { CalloutKit } from "../plugins/callout-kit";
 import { CodeBlockKit } from "../plugins/code-block-kit";
 import { ColumnKit } from "../plugins/column-kit";
 import { CursorOverlayKit } from "../plugins/cursor-overlay-kit";
 import { DateKit } from "../plugins/date-kit";
+import { DndKit } from "../plugins/dnd-kit";
 import { DocxKit } from "../plugins/docx-kit";
 import { EmojiKit } from "../plugins/emoji-kit";
 import { ExitBreakKit } from "../plugins/exit-break-kit";
@@ -30,12 +32,10 @@ import { TableKit } from "../plugins/table-kit";
 import { TocKit } from "../plugins/toc-kit";
 import { ToggleKit } from "../plugins/toggle-kit";
 import { YjsKit } from "../plugins/yjs-kit";
-import { BlockSelectionKit } from "../plugins/block-selection-kit";
-import { DndKit } from "../plugins/dnd-kit";
 import type { Badge } from "../types/badge";
 import type { NoteBody } from "../types/notes";
 
-interface EditorKitOptions {
+type EditorKitOptions = {
   yjs?: {
     name: string;
     color: string;
@@ -48,10 +48,10 @@ interface EditorKitOptions {
     expireAt?: Date;
     badges: Badge[];
   };
-}
+};
 
 export const EditorKit: (options: EditorKitOptions) => AnyPluginConfig[] = (
-  options: EditorKitOptions,
+  options: EditorKitOptions
 ) => {
   const { yjs, bottomStatus } = options;
 
@@ -111,7 +111,7 @@ export const EditorKit: (options: EditorKitOptions) => AnyPluginConfig[] = (
 
 export function createEditor(
   options: EditorKitOptions,
-  initialValue: NoteBody,
+  initialValue: NoteBody
 ) {
   return createPlateEditor({
     plugins: EditorKit(options),

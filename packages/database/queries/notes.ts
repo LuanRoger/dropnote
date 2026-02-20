@@ -13,7 +13,7 @@ export async function findNoteByCode(code: string): Promise<NoteModel | null> {
 export async function createNote(
   code: string,
   body: any,
-  expireAt?: Date,
+  expireAt?: Date
 ): Promise<NoteModel> {
   await ensureConnected();
 

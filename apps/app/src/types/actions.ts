@@ -13,13 +13,13 @@ export const error = <E>(error: E): Result<never, E> => ({
 });
 
 export function isOk<T, E>(
-  result: Result<T, E>,
+  result: Result<T, E>
 ): result is { status: "ok"; data: T } {
   return result.status === "ok";
 }
 
 export function isError<T, E>(
-  result: Result<T, E>,
+  result: Result<T, E>
 ): result is { status: "error"; error: E } {
   return result.status === "error";
 }

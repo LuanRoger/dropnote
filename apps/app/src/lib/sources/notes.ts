@@ -60,7 +60,7 @@ export class NotesLocalLoadSource extends NotesLoadSource {
 
 export function createNoteSource(
   code: string,
-  type: NoteSource,
+  type: NoteSource
 ): NotesSaveSource {
   switch (type) {
     case "database":

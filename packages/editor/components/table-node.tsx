@@ -69,7 +69,7 @@ import {
 import { useElementSelector } from "platejs/react";
 
 import { Button } from "@repo/design-system/components/ui/button";
-import { cn } from "../utils/tailwind";
+import { cn } from "@repo/design-system/lib/utils";
 
 import { blockSelectionVariants } from "./block-selection";
 import {

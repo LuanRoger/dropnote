@@ -2,14 +2,14 @@ import { YjsPlugin } from "@platejs/yjs/react";
 import { useEditorSelector } from "platejs/react";
 import { useCallback, useEffect, useTransition } from "react";
 import { useDebounce } from "react-haiku";
+import { toast } from "sonner";
 import type { NotesSaveSource } from "../types/notes";
 import { useMounted } from "./use-mounted";
-import { toast } from "sonner";
 
-export interface UseEditorMechanismsProps {
+export type UseEditorMechanismsProps = {
   source: NotesSaveSource;
   debounceTimeMs: number;
-}
+};
 
 export function useEditorMechanisms({
   source,
@@ -23,7 +23,7 @@ export function useEditorMechanisms({
   const toSaveValue = useDebounce(noteBody, debounceTimeMs);
   const saveNote = useCallback(
     () => source.save(toSaveValue),
-    [toSaveValue, source],
+    [toSaveValue, source]
   );
   const [isSaving, performSave] = useTransition();
 

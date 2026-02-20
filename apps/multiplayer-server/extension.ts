@@ -20,7 +20,7 @@ export class DropnoteMultiplayerServerExtension implements Extension {
     serverName: string,
     address: string,
     apiKey: string,
-    maxUsersPerRoom: number,
+    maxUsersPerRoom: number
   ) {
     this.serverName = serverName;
     this.address = address;
@@ -30,7 +30,7 @@ export class DropnoteMultiplayerServerExtension implements Extension {
 
   onListen(data: onListenPayload): Promise<void> {
     console.log(
-      `🚀 ${this.serverName} is listening on ${this.address}:${data.port}`,
+      `🚀 ${this.serverName} is listening on ${this.address}:${data.port}`
     );
     console.log(`IPv6 enabled: ${this.address}`);
 
@@ -49,7 +49,7 @@ export class DropnoteMultiplayerServerExtension implements Extension {
 
     if (isAuthenticated) {
       console.log(
-        `✅ Authentication successful for room: ${data.documentName}`,
+        `✅ Authentication successful for room: ${data.documentName}`
       );
       return Promise.resolve();
     }
@@ -64,10 +64,10 @@ export class DropnoteMultiplayerServerExtension implements Extension {
 
     if (activeUsers > this.maxUsersPerRoom) {
       console.log(
-        `❌ Room ${data.documentName} is full: ${activeUsers}/${this.maxUsersPerRoom} users`,
+        `❌ Room ${data.documentName} is full: ${activeUsers}/${this.maxUsersPerRoom} users`
       );
       throw new Error(
-        `Room is full. Maximum ${this.maxUsersPerRoom} users allowed.`,
+        `Room is full. Maximum ${this.maxUsersPerRoom} users allowed.`
       );
     }
 
@@ -77,7 +77,7 @@ export class DropnoteMultiplayerServerExtension implements Extension {
   onAwarenessUpdate(data: onAwarenessUpdatePayload): Promise<void> {
     const activeUsers = data.states.length;
     console.log(
-      `👥 Active users in room ${data.documentName}: ${activeUsers}/${this.maxUsersPerRoom}`,
+      `👥 Active users in room ${data.documentName}: ${activeUsers}/${this.maxUsersPerRoom}`
     );
 
     return Promise.resolve();

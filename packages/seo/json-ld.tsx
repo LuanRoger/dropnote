@@ -17,5 +17,3 @@ export const JsonLd = () => (
     type="application/ld+json"
   />
 );
-
-export * from "schema-dts";

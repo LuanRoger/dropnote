@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/suspicious/noExplicitAny: Types here are very complex */
 import { MongoClient, ServerApiVersion } from "mongodb";
 
 const url = process.env.DATABASE_URL;
@@ -43,10 +44,10 @@ async function cleanupEmptyNotes() {
     const allNotes = await notes.find({}).toArray();
     console.log(`Found ${allNotes.length} total notes`);
 
-    const emptyNoteIds = [];
+    const emptyNoteIds: string[] = [];
     for (const note of allNotes) {
       if (isBodyEmpty(note.body)) {
-        emptyNoteIds.push(note._id);
+        emptyNoteIds.push(note._id as string);
       }
     }
 

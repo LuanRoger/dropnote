@@ -8,7 +8,7 @@ import {
 } from "@platejs/selection/react";
 import { RangeApi } from "platejs";
 import { usePluginOption } from "platejs/react";
-import { cn } from "../utils/tailwind";
+import { cn } from "@repo/design-system/lib/utils";
 
 export function CursorOverlay() {
   const { cursors } = useCursorOverlay();
