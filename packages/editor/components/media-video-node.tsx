@@ -1,13 +1,18 @@
 "use client";
 
+import * as React from "react";
+
+import LiteYouTubeEmbed from "react-lite-youtube-embed";
+import ReactPlayer from "react-player";
+
+import type { TResizableProps, TVideoElement } from "platejs";
+import type { PlateElementProps } from "platejs/react";
+
+import { useDraggable } from "@platejs/dnd";
 import { parseTwitterUrl, parseVideoUrl } from "@platejs/media";
 import { useMediaState } from "@platejs/media/react";
 import { ResizableProvider, useResizableValue } from "@platejs/resizable";
-import type { TResizableProps, TVideoElement } from "platejs";
-import type { PlateElementProps } from "platejs/react";
 import { PlateElement, useEditorMounted, withHOC } from "platejs/react";
-import LiteYouTubeEmbed from "react-lite-youtube-embed";
-import ReactPlayer from "react-player";
 
 import { cn } from "@repo/design-system/lib/utils";
 
@@ -21,7 +26,7 @@ import {
 export const VideoElement = withHOC(
   ResizableProvider,
   function VideoElement(
-    props: PlateElementProps<TVideoElement & TResizableProps>
+    props: PlateElementProps<TVideoElement & TResizableProps>,
   ) {
     const {
       align = "center",
@@ -39,10 +44,15 @@ export const VideoElement = withHOC(
 
     const isTweet = true;
 
+    const { isDragging, handleRef } = useDraggable({
+      element: props.element,
+    });
+
     return (
       <PlateElement className="py-2.5" {...props}>
         <figure className="relative m-0 cursor-default" contentEditable={false}>
           <Resizable
+            className={cn(isDragging && "opacity-50")}
             align={align}
             options={{
               align,
@@ -63,7 +73,7 @@ export const VideoElement = withHOC(
               />
 
               {!isUpload && isYoutube && (
-                <div>
+                <div ref={handleRef}>
                   <LiteYouTubeEmbed
                     id={embed!.id!}
                     title="youtube"
@@ -81,34 +91,34 @@ export const VideoElement = withHOC(
                       "[&_>_.lty-playbtn]:before:absolute [&_>_.lty-playbtn]:before:top-1/2 [&_>_.lty-playbtn]:before:left-1/2 [&_>_.lty-playbtn]:before:[transform:translate3d(-50%,-50%,0)]",
                       "[&.lyt-activated]:cursor-[unset]",
                       "[&.lyt-activated]:before:pointer-events-none [&.lyt-activated]:before:opacity-0",
-                      "[&.lyt-activated_>_.lty-playbtn]:pointer-events-none [&.lyt-activated_>_.lty-playbtn]:opacity-0!"
+                      "[&.lyt-activated_>_.lty-playbtn]:pointer-events-none [&.lyt-activated_>_.lty-playbtn]:opacity-0!",
                     )}
                   />
                 </div>
               )}
 
               {isUpload && isEditorMounted && (
-                <div>
+                <div ref={handleRef}>
                   <ReactPlayer
-                    controls
                     height="100%"
                     src={unsafeUrl}
                     width="100%"
+                    controls
                   />
                 </div>
               )}
             </div>
           </Resizable>
 
-          <Caption align={align} style={{ width }}>
+          <Caption style={{ width }} align={align}>
             <CaptionTextarea
-              placeholder="Write a caption..."
               readOnly={readOnly}
+              placeholder="Write a caption..."
             />
           </Caption>
         </figure>
         {props.children}
       </PlateElement>
     );
-  }
+  },
 );

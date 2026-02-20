@@ -1,18 +1,13 @@
 {
   "$schema": "https://turborepo.com/schema.json",
   "globalDependencies": ["**/.env.*local", ".env", ".env.local"],
+  "globalEnv": ["NODE_ENV", "CI"],
   "ui": "stream",
   "envMode": "strict",
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "inputs": [
-        "$TURBO_DEFAULT$",
-        ".env",
-        ".env.local",
-        ".env.production",
-        ".env.production.local"
-      ],
+      "inputs": ["$TURBO_DEFAULT$"],
       "env": [
         "DATABASE_URL",
         "HOCUSPOCUS_WSS_URL",
@@ -31,23 +26,49 @@
         "dist/**"
       ]
     },
+    "dev": {
+      "cache": false,
+      "persistent": true,
+      "env": [
+        "DATABASE_URL",
+        "HOCUSPOCUS_WSS_URL",
+        "HOCUSPOCUS_API_URL",
+        "HOCUSPOCUS_API_KEY",
+        "NEXT_PUBLIC_POSTHOG_KEY",
+        "NEXT_PUBLIC_POSTHOG_HOST",
+        "NEXT_PUBLIC_APP_URL"
+      ]
+    },
     "start": {
       "cache": false,
       "dependsOn": ["build"],
-      "persistent": true
+      "persistent": true,
+      "env": [
+        "DATABASE_URL",
+        "HOCUSPOCUS_WSS_URL",
+        "HOCUSPOCUS_API_URL",
+        "HOCUSPOCUS_API_KEY",
+        "NEXT_PUBLIC_POSTHOG_KEY",
+        "NEXT_PUBLIC_POSTHOG_HOST",
+        "NEXT_PUBLIC_APP_URL"
+      ]
     },
     "typecheck": {
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", "tsconfig.json"],
       "outputs": []
     },
+    "lint": {
+      "dependsOn": ["^build"],
+      "inputs": ["$TURBO_DEFAULT$"],
+      "outputs": []
+    },
     "analyze": {
       "dependsOn": ["build"],
       "outputs": ["analyze/**", ".next/analyze/**"]
     },
-    "dev": {
-      "cache": false,
-      "persistent": true
+    "generate": {
+      "cache": false
     },
     "clean": {
       "cache": false
