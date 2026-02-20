@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-export interface NoteModel {
+export type NoteModel = {
   code: string;
   // biome-ignore lint/suspicious/noExplicitAny: The body of the note can be any, since we don't know the structure of the note
   body: any;
@@ -18,7 +18,7 @@ export interface NoteModel {
   expireAt: Date;
   createdAt?: Date;
   updatedAt?: Date;
-}
+};
 
 export const notesSchema = new mongoose.Schema(
   {
@@ -42,7 +42,7 @@ export const notesSchema = new mongoose.Schema(
     },
     expireAt: { type: Date, expires: 0 },
   },
-  { timestamps: true },
+  { timestamps: true }
 );
 
 export const Notes =

@@ -1,9 +1,9 @@
 import RichEditor from "@repo/editor/components/rich-editor";
 import LoadingSpinner from "./loading-spinner";
 
-export interface RichEditorEmptyProps {
+type RichEditorEmptyProps = {
   isLoading?: boolean;
-}
+};
 
 export default function RichEditorEmpty({ isLoading }: RichEditorEmptyProps) {
   return (

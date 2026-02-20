@@ -4,12 +4,12 @@ import type { NoteBody } from "@repo/editor/types/notes";
 import { useEffect, useState } from "react";
 import EditorLoading from "@/components/editor-loading";
 import RichEditorShell from "@/components/rich-editor-shell";
-import { NotesLocalLoadSource } from "@/lib/sources/notes";
 import { MAX_LENGHT_BASIC_NOTE } from "@/constants";
+import { NotesLocalLoadSource } from "@/lib/sources/notes";
 
-interface LocalEditorProps {
+type LocalEditorProps = {
   code: string;
-}
+};
 
 export default function LocalEditor({ code }: LocalEditorProps) {
   const [isLoading, setIsLoading] = useState<boolean>(true);

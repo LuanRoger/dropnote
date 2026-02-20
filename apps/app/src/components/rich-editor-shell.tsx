@@ -12,7 +12,7 @@ import { generateRandomHexColor } from "@/utils/color";
 import { generateRandomName } from "@/utils/name";
 import RichEditorEmpty from "./rich-editor-empty";
 
-interface RichEditorShellProps {
+type RichEditorShellProps = {
   code: string;
   maxLength: number;
   noteSource?: NoteSource;
@@ -21,7 +21,7 @@ interface RichEditorShellProps {
   apiKey?: string;
   expireAt?: Date;
   badges?: Badge[];
-}
+};
 
 export default function RichEditorShell({
   code,
@@ -54,7 +54,7 @@ export default function RichEditorShell({
         badges,
       },
     },
-    initialValue,
+    initialValue
   );
 
   return (
@@ -64,9 +64,9 @@ export default function RichEditorShell({
   );
 }
 
-interface RichEditorChildrenProps {
+type RichEditorChildrenProps = {
   source: NotesSaveSource;
-}
+};
 
 function RichEditorChildren({ source }: RichEditorChildrenProps) {
   const { isSaving } = useEditorMechanisms({

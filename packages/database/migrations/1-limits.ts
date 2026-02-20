@@ -16,7 +16,7 @@ export default async function migrate(db: mongo.Db): Promise<void> {
         aiCredits: 0,
         badges: [],
       },
-    },
+    }
   );
 
   console.log(`✅ ${result.modifiedCount} document(s) updated.`);
