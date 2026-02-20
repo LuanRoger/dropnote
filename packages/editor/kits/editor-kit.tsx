@@ -33,6 +33,7 @@ import { TocKit } from "../plugins/toc-kit";
 import { ToggleKit } from "../plugins/toggle-kit";
 import { YjsKit } from "../plugins/yjs-kit";
 import type { Badge } from "../types/badge";
+import type { EditorOptions } from "../types/editor";
 import type { NoteBody } from "../types/notes";
 
 type EditorKitOptions = {
@@ -51,7 +52,7 @@ type EditorKitOptions = {
 };
 
 export const EditorKit: (options: EditorKitOptions) => AnyPluginConfig[] = (
-  options: EditorKitOptions
+  options: EditorKitOptions,
 ) => {
   const { yjs, bottomStatus } = options;
 
@@ -109,13 +110,19 @@ export const EditorKit: (options: EditorKitOptions) => AnyPluginConfig[] = (
   return kits;
 };
 
-export function createEditor(
-  options: EditorKitOptions,
-  initialValue: NoteBody
-) {
+export function createEditor(options: EditorOptions, initialValue: NoteBody) {
+  const { maxLength, badges = [], colabration, expireAt } = options;
+
   return createPlateEditor({
-    plugins: EditorKit(options),
+    plugins: EditorKit({
+      yjs: colabration,
+      bottomStatus: {
+        maxLength,
+        expireAt,
+        badges,
+      },
+    }),
     value: initialValue,
-    maxLength: options.bottomStatus?.maxLength,
+    maxLength,
   });
 }

@@ -3,59 +3,30 @@
 import { Plate } from "@repo/editor";
 import { useEditorMechanisms } from "@repo/editor/hooks/use-editor-mechanisms";
 import { createEditor } from "@repo/editor/kits/editor-kit";
-import type { Badge } from "@repo/editor/types/badge";
 import type { NoteBody, NotesSaveSource } from "@repo/editor/types/notes";
 import { EDITOR_DEBOUNCE_TIME_MS } from "@/constants";
 import { createNoteSource } from "@/lib/sources/notes";
-import type { NoteSource } from "@/lib/sources/types";
 import { generateRandomHexColor } from "@/utils/color";
 import { generateRandomName } from "@/utils/name";
 import RichEditorEmpty from "./rich-editor-empty";
+import { EditorOptions } from "@repo/editor/types/editor";
 
 type RichEditorShellProps = {
   code: string;
-  maxLength: number;
-  noteSource?: NoteSource;
   initialValue?: NoteBody;
-  wssUrl?: string;
-  apiKey?: string;
-  expireAt?: Date;
-  badges?: Badge[];
+  noteSource?: NoteBody;
+  options: EditorOptions;
 };
 
 export default function RichEditorShell({
   code,
-  maxLength,
   noteSource,
   initialValue,
-  wssUrl,
-  apiKey,
-  expireAt,
-  badges = [],
+  options,
 }: RichEditorShellProps) {
-  const yjsOptions =
-    wssUrl && apiKey
-      ? {
-          wssUrl,
-          name: generateRandomName(),
-          color: generateRandomHexColor(),
-          roomName: code,
-          token: apiKey,
-        }
-      : undefined;
   const source = noteSource ? createNoteSource(code, noteSource) : undefined;
 
-  const editor = createEditor(
-    {
-      yjs: yjsOptions,
-      bottomStatus: {
-        maxLength,
-        expireAt,
-        badges,
-      },
-    },
-    initialValue
-  );
+  const editor = createEditor(options, initialValue);
 
   return (
     <Plate editor={editor}>
