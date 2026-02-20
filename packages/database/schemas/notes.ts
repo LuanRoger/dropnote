@@ -14,7 +14,7 @@ export type NoteModel = {
     color: string;
     description: string;
     isSpecial: boolean;
-  };
+  }[];
   expireAt: Date;
   createdAt?: Date;
   updatedAt?: Date;
@@ -42,7 +42,7 @@ export const notesSchema = new mongoose.Schema(
     },
     expireAt: { type: Date, expires: 0 },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 export const Notes =

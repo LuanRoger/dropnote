@@ -5,7 +5,7 @@ import { type NoteModel, Notes } from "../schemas/notes";
 export async function findNoteByCode(code: string): Promise<NoteModel | null> {
   await ensureConnected();
 
-  const note = await Notes.findOne({ code });
+  const note = await Notes.findOne({ code }).lean();
 
   return note;
 }
@@ -13,7 +13,7 @@ export async function findNoteByCode(code: string): Promise<NoteModel | null> {
 export async function createNote(
   code: string,
   body: any,
-  expireAt?: Date
+  expireAt?: Date,
 ): Promise<NoteModel> {
   await ensureConnected();
 
@@ -29,7 +29,7 @@ export async function updateNote(code: string, body: any) {
 export async function createOrUpdateNote(code: string, body: any) {
   await ensureConnected();
 
-  const note = await Notes.findOne({ code });
+  const note = await Notes.findOne({ code }).lean();
   if (note) {
     await Notes.updateOne({ code }, { body });
   } else {
