@@ -10,5 +10,12 @@ export const metadata: Metadata = createMetadata({
 });
 
 export default function NoSavePage() {
-  return <RichEditorShell code={code} maxLength={MAX_LENGHT_BASIC_NOTE} />;
+  return (
+    <RichEditorShell
+      code={code}
+      options={{
+        maxLength: MAX_LENGHT_BASIC_NOTE,
+      }}
+    />
+  );
 }

@@ -32,8 +32,10 @@ export default function LocalEditor({ code }: LocalEditorProps) {
     <RichEditorShell
       code="local"
       initialValue={initialValue}
-      maxLength={MAX_LENGHT_BASIC_NOTE}
       noteSource="local"
+      options={{
+        maxLength: MAX_LENGHT_BASIC_NOTE,
+      }}
     />
   );
 }
