@@ -44,7 +44,7 @@ function CharactersBlockCount() {
     : false;
 
   return (
-    <p className="flex items-center gap-2 font-mono upercase">
+    <div className="flex items-center gap-2 font-mono upercase">
       <HoverCard>
         <HoverCardTrigger>
           <AnimatePresence initial={false} mode="popLayout">
@@ -94,7 +94,7 @@ function CharactersBlockCount() {
           </TooltipContent>
         </Tooltip>
       )}
-    </p>
+    </div>
   );
 }
 
