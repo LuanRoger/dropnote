@@ -13,7 +13,7 @@ export async function findNoteByCode(code: string): Promise<NoteModel | null> {
 export async function createNote(
   code: string,
   body: any,
-  expireAt?: Date
+  expireAt?: Date,
 ): Promise<NoteModel> {
   await ensureConnected();
 
@@ -26,7 +26,7 @@ export async function updateNote(code: string, body: any) {
   await Notes.updateOne({ code }, { body });
 }
 
-export async function createOrUpdateNote(code: string, body: any) {
+export async function createOrUpdateNoteBody(code: string, body: any) {
   await ensureConnected();
 
   const note = await Notes.findOne({ code }).lean();
@@ -35,4 +35,10 @@ export async function createOrUpdateNote(code: string, body: any) {
   } else {
     await Notes.create({ code, body });
   }
+}
+
+export async function setPasswordForNote(code: string, password: string) {
+  await ensureConnected();
+
+  await Notes.updateOne({ code }, { password, hasPassword: true });
 }
