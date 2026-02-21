@@ -1,10 +1,13 @@
 "use client";
 
+import * as React from "react";
+
 import { useCalloutEmojiPicker } from "@platejs/callout/react";
 import { useEmojiDropdownMenuState } from "@platejs/emoji/react";
+import { PlateElement } from "platejs/react";
+
 import { Button } from "@repo/design-system/components/ui/button";
 import { cn } from "@repo/design-system/lib/utils";
-import { PlateElement } from "platejs/react";
 
 import { EmojiPicker, EmojiPopover } from "./emoji-toolbar-button";
 
@@ -26,13 +29,13 @@ export function CalloutElement({
 
   return (
     <PlateElement
-      attributes={{
-        ...attributes,
-        "data-plate-open-context-menu": true,
-      }}
       className={cn("my-1 flex rounded-sm bg-muted p-4 pl-3", className)}
       style={{
         backgroundColor: props.element.backgroundColor as any,
+      }}
+      attributes={{
+        ...attributes,
+        "data-plate-open-context-menu": true,
       }}
       {...props}
     >
@@ -41,13 +44,13 @@ export function CalloutElement({
           {...emojiToolbarDropdownProps}
           control={
             <Button
+              variant="ghost"
               className="size-6 select-none p-1 text-[18px] hover:bg-muted-foreground/15"
-              contentEditable={false}
               style={{
                 fontFamily:
                   '"Apple Color Emoji", "Segoe UI Emoji", NotoColorEmoji, "Noto Color Emoji", "Segoe UI Symbol", "Android Emoji", EmojiSymbols',
               }}
-              variant="ghost"
+              contentEditable={false}
             >
               {(props.element.icon as any) || "💡"}
             </Button>

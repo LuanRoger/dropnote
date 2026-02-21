@@ -1,6 +1,18 @@
 "use client";
 
+import * as React from "react";
+
 import { formatCodeBlock, isLangSupported } from "@platejs/code-block";
+import { BracesIcon, Check, CheckIcon, CopyIcon } from "lucide-react";
+import { type TCodeBlockElement, type TCodeSyntaxLeaf, NodeApi } from "platejs";
+import {
+  type PlateElementProps,
+  type PlateLeafProps,
+  PlateElement,
+  PlateLeaf,
+} from "platejs/react";
+import { useEditorRef, useElement, useReadOnly } from "platejs/react";
+
 import { Button } from "@repo/design-system/components/ui/button";
 import {
   Command,
@@ -16,18 +28,6 @@ import {
   PopoverTrigger,
 } from "@repo/design-system/components/ui/popover";
 import { cn } from "@repo/design-system/lib/utils";
-import { BracesIcon, Check, CheckIcon, CopyIcon } from "lucide-react";
-import { NodeApi, type TCodeBlockElement, type TCodeSyntaxLeaf } from "platejs";
-import {
-  PlateElement,
-  type PlateElementProps,
-  PlateLeaf,
-  type PlateLeafProps,
-  useEditorRef,
-  useElement,
-  useReadOnly,
-} from "platejs/react";
-import React from "react";
 
 export function CodeBlockElement(props: PlateElementProps<TCodeBlockElement>) {
   const { editor, element } = props;
@@ -48,11 +48,11 @@ export function CodeBlockElement(props: PlateElementProps<TCodeBlockElement>) {
         >
           {isLangSupported(element.lang) && (
             <Button
+              size="icon"
+              variant="ghost"
               className="size-6 text-xs"
               onClick={() => formatCodeBlock(editor, { element })}
-              size="icon"
               title="Format code"
-              variant="ghost"
             >
               <BracesIcon className="!size-3.5 text-muted-foreground" />
             </Button>
@@ -61,10 +61,10 @@ export function CodeBlockElement(props: PlateElementProps<TCodeBlockElement>) {
           <CodeBlockCombobox />
 
           <CopyButton
-            className="size-6 gap-1 text-muted-foreground text-xs"
             size="icon"
-            value={() => NodeApi.string(element)}
             variant="ghost"
+            className="size-6 gap-1 text-muted-foreground text-xs"
+            value={() => NodeApi.string(element)}
           />
         </div>
       </div>
@@ -85,22 +85,22 @@ function CodeBlockCombobox() {
       languages.filter(
         (language) =>
           !searchValue ||
-          language.label.toLowerCase().includes(searchValue.toLowerCase())
+          language.label.toLowerCase().includes(searchValue.toLowerCase()),
       ),
-    [searchValue]
+    [searchValue],
   );
 
   if (readOnly) return null;
 
   return (
-    <Popover onOpenChange={setOpen} open={open}>
+    <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
-          aria-expanded={open}
-          className="h-6 select-none justify-between gap-1 px-2 text-muted-foreground text-xs"
-          role="combobox"
           size="sm"
           variant="ghost"
+          className="h-6 select-none justify-between gap-1 px-2 text-muted-foreground text-xs"
+          aria-expanded={open}
+          role="combobox"
         >
           {languages.find((language) => language.value === value)?.label ??
             "Plain Text"}
@@ -113,9 +113,9 @@ function CodeBlockCombobox() {
         <Command shouldFilter={false}>
           <CommandInput
             className="h-9"
+            value={searchValue}
             onValueChange={(value) => setSearchValue(value)}
             placeholder="Search language..."
-            value={searchValue}
           />
           <CommandEmpty>No language found.</CommandEmpty>
 
@@ -123,21 +123,21 @@ function CodeBlockCombobox() {
             <CommandGroup>
               {items.map((language) => (
                 <CommandItem
-                  className="cursor-pointer"
                   key={language.label}
+                  className="cursor-pointer"
+                  value={language.value}
                   onSelect={(value) => {
                     editor.tf.setNodes<TCodeBlockElement>(
                       { lang: value },
-                      { at: element }
+                      { at: element },
                     );
                     setSearchValue(value);
                     setOpen(false);
                   }}
-                  value={language.value}
                 >
                   <Check
                     className={cn(
-                      value === language.value ? "opacity-100" : "opacity-0"
+                      value === language.value ? "opacity-100" : "opacity-0",
                     )}
                   />
                   {language.label}
@@ -170,7 +170,7 @@ function CopyButton({
     <Button
       onClick={() => {
         void navigator.clipboard.writeText(
-          typeof value === "function" ? value() : value
+          typeof value === "function" ? value() : value,
         );
         setHasCopied(true);
       }}

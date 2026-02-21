@@ -1,7 +1,31 @@
 "use client";
 
+import * as React from "react";
+
+import type { TColumnElement } from "platejs";
+import type { PlateElementProps } from "platejs/react";
+
+import { useDraggable, useDropLine } from "@platejs/dnd";
 import { setColumns } from "@platejs/layout";
 import { ResizableProvider } from "@platejs/resizable";
+import { BlockSelectionPlugin } from "@platejs/selection/react";
+import { useComposedRef } from "@udecode/cn";
+import { type LucideProps, Trash2Icon } from "lucide-react";
+import { GripHorizontal } from "lucide-react";
+import { PathApi } from "platejs";
+import {
+  PlateElement,
+  useEditorRef,
+  useEditorSelector,
+  useElement,
+  useFocusedLast,
+  usePluginOption,
+  useReadOnly,
+  useRemoveNodeButton,
+  useSelected,
+  withHOC,
+} from "platejs/react";
+
 import { Button } from "@repo/design-system/components/ui/button";
 import {
   Popover,
@@ -9,50 +33,112 @@ import {
   PopoverContent,
 } from "@repo/design-system/components/ui/popover";
 import { Separator } from "@repo/design-system/components/ui/separator";
-import { cn } from "@repo/design-system/lib/utils";
-import { useComposedRef } from "@udecode/cn";
-import { type LucideProps, Trash2Icon } from "lucide-react";
-import type { TColumnElement } from "platejs";
-import type { PlateElementProps } from "platejs/react";
 import {
-  PlateElement,
-  useEditorRef,
-  useEditorSelector,
-  useElement,
-  useFocusedLast,
-  useReadOnly,
-  useRemoveNodeButton,
-  useSelected,
-  withHOC,
-} from "platejs/react";
-import type React from "react";
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@repo/design-system/components/ui/tooltip";
+import { cn } from "@repo/design-system/lib/utils";
 
 export const ColumnElement = withHOC(
   ResizableProvider,
   function ColumnElement(props: PlateElementProps<TColumnElement>) {
     const { width } = props.element;
     const readOnly = useReadOnly();
+    const isSelectionAreaVisible = usePluginOption(
+      BlockSelectionPlugin,
+      "isSelectionAreaVisible",
+    );
+
+    const { isDragging, previewRef, handleRef } = useDraggable({
+      element: props.element,
+      orientation: "horizontal",
+      type: "column",
+      canDropNode: ({ dragEntry, dropEntry }) =>
+        PathApi.equals(
+          PathApi.parent(dragEntry[1]),
+          PathApi.parent(dropEntry[1]),
+        ),
+    });
 
     return (
       <div className="group/column relative" style={{ width: width ?? "100%" }}>
+        {!readOnly && !isSelectionAreaVisible && (
+          <div
+            ref={handleRef}
+            className={cn(
+              "-translate-x-1/2 -translate-y-1/2 absolute top-2 left-1/2 z-50",
+              "pointer-events-auto flex items-center",
+              "opacity-0 transition-opacity group-hover/column:opacity-100",
+            )}
+          >
+            <ColumnDragHandle />
+          </div>
+        )}
+
         <PlateElement
           {...props}
+          ref={useComposedRef(props.ref, previewRef)}
           className="h-full px-2 pt-2 group-first/column:pl-0 group-last/column:pr-0"
-          ref={useComposedRef(props.ref)}
         >
           <div
             className={cn(
               "relative h-full border border-transparent p-1.5",
-              !readOnly && "rounded-lg border-border border-dashed"
+              !readOnly && "rounded-lg border-border border-dashed",
+              isDragging && "opacity-50",
             )}
           >
             {props.children}
+
+            {!readOnly && !isSelectionAreaVisible && <DropLine />}
           </div>
         </PlateElement>
       </div>
     );
-  }
+  },
 );
+
+const ColumnDragHandle = React.memo(function ColumnDragHandle() {
+  return (
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button variant="ghost" className="!px-1 h-5">
+            <GripHorizontal
+              className="text-muted-foreground"
+              onClick={(event) => {
+                event.stopPropagation();
+                event.preventDefault();
+              }}
+            />
+          </Button>
+        </TooltipTrigger>
+
+        <TooltipContent>Drag to move column</TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
+  );
+});
+
+function DropLine() {
+  const { dropLine } = useDropLine({ orientation: "horizontal" });
+
+  if (!dropLine) return null;
+
+  return (
+    <div
+      className={cn(
+        "slate-dropLine",
+        "absolute bg-brand/50",
+        dropLine === "left" &&
+          "group-first/column:-left-1 inset-y-0 left-[-10.5px] w-1",
+        dropLine === "right" &&
+          "group-last/column:-right-1 inset-y-0 right-[-11px] w-1",
+      )}
+    />
+  );
+}
 
 export function ColumnGroupElement(props: PlateElementProps) {
   return (
@@ -72,7 +158,7 @@ function ColumnFloatingToolbar({ children }: React.PropsWithChildren) {
   const selected = useSelected();
   const isCollapsed = useEditorSelector(
     (editor) => editor.api.isCollapsed(),
-    []
+    [],
   );
   const isFocusedLast = useFocusedLast();
 
@@ -86,54 +172,54 @@ function ColumnFloatingToolbar({ children }: React.PropsWithChildren) {
   };
 
   return (
-    <Popover modal={false} open={open}>
+    <Popover open={open} modal={false}>
       <PopoverAnchor>{children}</PopoverAnchor>
       <PopoverContent
-        align="center"
         className="w-auto p-1"
         onOpenAutoFocus={(e) => e.preventDefault()}
+        align="center"
         side="top"
         sideOffset={10}
       >
         <div className="box-content flex h-8 items-center">
           <Button
+            variant="ghost"
             className="size-8"
             onClick={() => onColumnChange(["50%", "50%"])}
-            variant="ghost"
           >
             <DoubleColumnOutlined />
           </Button>
           <Button
+            variant="ghost"
             className="size-8"
             onClick={() => onColumnChange(["33%", "33%", "33%"])}
-            variant="ghost"
           >
             <ThreeColumnOutlined />
           </Button>
           <Button
+            variant="ghost"
             className="size-8"
             onClick={() => onColumnChange(["70%", "30%"])}
-            variant="ghost"
           >
             <RightSideDoubleColumnOutlined />
           </Button>
           <Button
+            variant="ghost"
             className="size-8"
             onClick={() => onColumnChange(["30%", "70%"])}
-            variant="ghost"
           >
             <LeftSideDoubleColumnOutlined />
           </Button>
           <Button
+            variant="ghost"
             className="size-8"
             onClick={() => onColumnChange(["25%", "50%", "25%"])}
-            variant="ghost"
           >
             <DoubleSideDoubleColumnOutlined />
           </Button>
 
-          <Separator className="mx-1 h-6" orientation="vertical" />
-          <Button className="size-8" variant="ghost" {...buttonProps}>
+          <Separator orientation="vertical" className="mx-1 h-6" />
+          <Button variant="ghost" className="size-8" {...buttonProps}>
             <Trash2Icon />
           </Button>
         </div>
