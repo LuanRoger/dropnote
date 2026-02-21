@@ -1,6 +1,6 @@
 import "server-only";
 import bcrypt from "bcrypt";
-import { keys as env } from "./env";
+import { keys as env } from "./keys";
 
 export function hashPassword(password: string) {
   const saltRounds = env().SALT_ROUNDS;
