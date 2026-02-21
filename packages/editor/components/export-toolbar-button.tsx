@@ -17,7 +17,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@repo/design-system/components/ui/dropdown-menu";
-import { StaticEditorKit } from "../kits/editor-kit";
+import { StaticEditorKit } from "../kits/static-editor-kit";
 
 import { EditorStatic } from "./editor-static";
 import { ToolbarButton } from "./toolbar";
