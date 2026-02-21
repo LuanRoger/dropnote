@@ -23,7 +23,7 @@ type EditorKitOptions = {
 };
 
 export const EditorKit: (options: EditorKitOptions) => AnyPluginConfig[] = (
-  options: EditorKitOptions,
+  options: EditorKitOptions
 ) => {
   const { yjs, bottomStatus } = options;
 
