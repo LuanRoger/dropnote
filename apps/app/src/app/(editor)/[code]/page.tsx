@@ -59,7 +59,6 @@ export default async function Page({ params }: PageProps) {
     ? MAX_LENGHT_ADVANCED_NOTE
     : MAX_LENGHT_BASIC_NOTE;
   const expireAt = note.expireAt;
-  console.log(note);
   const badges = mapNotePropertiesToBadges(note);
 
   const colabration: ColaborationOptions | undefined =
