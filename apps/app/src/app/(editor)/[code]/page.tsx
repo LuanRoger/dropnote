@@ -1,3 +1,4 @@
+import type { ColaborationOptions } from "@repo/editor/types/editor";
 import { createMetadata } from "@repo/seo/metadata";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -7,6 +8,8 @@ import { MAX_LENGHT_ADVANCED_NOTE, MAX_LENGHT_BASIC_NOTE } from "@/constants";
 import { NotesDatabaseLoadSource } from "@/lib/sources/notes";
 import { NoteRoomFullError } from "@/types/errors";
 import { mapNotePropertiesToBadges } from "@/utils/badge";
+import { generateRandomHexColor } from "@/utils/color";
+import { generateRandomName } from "@/utils/name";
 import { validateSlug } from "@/utils/slug";
 import { env } from "~/env";
 
@@ -58,16 +61,28 @@ export default async function Page({ params }: PageProps) {
   const expireAt = note.expireAt;
   const badges = mapNotePropertiesToBadges(note);
 
+  const colabration: ColaborationOptions | undefined =
+    multiplayerServerWssUrl && multiplayerServerApiKey
+      ? {
+          wssUrl: multiplayerServerWssUrl,
+          name: generateRandomName(),
+          color: generateRandomHexColor(),
+          roomName: code,
+          token: multiplayerServerApiKey,
+        }
+      : undefined;
+
   return (
     <RichEditorShell
-      apiKey={multiplayerServerApiKey}
-      badges={badges}
       code={code}
-      expireAt={expireAt}
       initialValue={initialValue}
-      maxLength={maxLength}
       noteSource="database"
-      wssUrl={multiplayerServerWssUrl}
+      options={{
+        maxLength,
+        expireAt,
+        badges,
+        colabration,
+      }}
     />
   );
 }

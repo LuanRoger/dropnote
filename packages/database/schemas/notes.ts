@@ -14,7 +14,7 @@ export type NoteModel = {
     color: string;
     description: string;
     isSpecial: boolean;
-  };
+  }[];
   expireAt: Date;
   createdAt?: Date;
   updatedAt?: Date;

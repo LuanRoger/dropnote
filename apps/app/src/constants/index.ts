@@ -1,3 +1,5 @@
+import type { Badge } from "@repo/editor/types/badge";
+
 export const TEST_NOTE_EXPIRE_TIME_MS = new Date(Date.now() + 20 * 1000); // 20 seconds
 export const DEFAULT_NOTE_EXPIRE_TIME_MS = new Date(
   Date.now() + 48 * 60 * 60 * 1000
@@ -20,7 +22,18 @@ export const LOCAL_NOTE_PREFIX = "dropnote.";
  */
 export const SLUG_REGEX = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
-export const BADGES_DATA = {
+export const BADGES_DATA: Record<string, Badge> = {
+  LOCAL: {
+    label: "Local",
+    color: "#6B7280",
+    description: "This note is stored locally on your device.",
+  },
+  NO_SAVE: {
+    label: "No Save",
+    color: "#DC2626",
+    description: "This note will not be saved and will be lost when you leave.",
+  },
+
   SECURE: {
     label: "Secure",
     color: "#0F5A3B",

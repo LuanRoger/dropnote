@@ -1,11 +1,16 @@
 "use client";
 
+import * as React from "react";
+
 import { AIChatPlugin } from "@platejs/ai/react";
 import {
   BLOCK_CONTEXT_MENU_ID,
   BlockMenuPlugin,
   BlockSelectionPlugin,
 } from "@platejs/selection/react";
+import { KEYS } from "platejs";
+import { useEditorPlugin, usePlateState, usePluginOption } from "platejs/react";
+
 import {
   ContextMenu,
   ContextMenuContent,
@@ -16,22 +21,19 @@ import {
   ContextMenuSubTrigger,
   ContextMenuTrigger,
 } from "@repo/design-system/components/ui/context-menu";
-import { KEYS } from "platejs";
-import { useEditorPlugin, usePlateState, usePluginOption } from "platejs/react";
-import { useCallback, useState } from "react";
 import { useIsTouchDevice } from "../hooks/use-is-touch-device";
 
 type Value = "askAI" | null;
 
 export function BlockContextMenu({ children }: { children: React.ReactNode }) {
   const { api, editor } = useEditorPlugin(BlockMenuPlugin);
-  const [value, setValue] = useState<Value>(null);
+  const [value, setValue] = React.useState<Value>(null);
   const isTouch = useIsTouchDevice();
   const [readOnly] = usePlateState("readOnly");
   const openId = usePluginOption(BlockMenuPlugin, "openId");
   const isOpen = openId === BLOCK_CONTEXT_MENU_ID;
 
-  const handleTurnInto = useCallback(
+  const handleTurnInto = React.useCallback(
     (type: string) => {
       editor
         .getApi(BlockSelectionPlugin)
@@ -46,16 +48,16 @@ export function BlockContextMenu({ children }: { children: React.ReactNode }) {
           editor.tf.toggleBlock(type, { at: path });
         });
     },
-    [editor]
+    [editor],
   );
 
-  const handleAlign = useCallback(
+  const handleAlign = React.useCallback(
     (align: "center" | "left" | "right") => {
       editor
         .getTransforms(BlockSelectionPlugin)
         .blockSelection.setNodes({ align });
     },
-    [editor]
+    [editor],
   );
 
   if (isTouch) {
@@ -64,12 +66,12 @@ export function BlockContextMenu({ children }: { children: React.ReactNode }) {
 
   return (
     <ContextMenu
-      modal={false}
       onOpenChange={(open) => {
         if (!open) {
           api.blockMenu.hide();
         }
       }}
+      modal={false}
     >
       <ContextMenuTrigger
         asChild
@@ -90,7 +92,7 @@ export function BlockContextMenu({ children }: { children: React.ReactNode }) {
           }, 0);
         }}
       >
-        {children}
+        <div className="contents">{children}</div>
       </ContextMenuTrigger>
       {isOpen && (
         <ContextMenuContent

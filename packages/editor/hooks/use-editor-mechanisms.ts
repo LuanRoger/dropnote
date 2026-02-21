@@ -1,8 +1,8 @@
 import { YjsPlugin } from "@platejs/yjs/react";
+import { handleError } from "@repo/design-system/lib/utils";
 import { useEditorSelector } from "platejs/react";
 import { useCallback, useEffect, useTransition } from "react";
 import { useDebounce } from "react-haiku";
-import { toast } from "sonner";
 import type { NotesSaveSource } from "../types/notes";
 import { useMounted } from "./use-mounted";
 
@@ -48,11 +48,7 @@ export function useEditorMechanisms({
       try {
         await saveNote();
       } catch (error) {
-        if (error instanceof Error) {
-          toast.error(`Failed to save note. ${error.message}`, {});
-          return;
-        }
-        toast.error("Failed to save note. Please try again.", {});
+        handleError(error);
       }
     });
   }, [saveNote]);
