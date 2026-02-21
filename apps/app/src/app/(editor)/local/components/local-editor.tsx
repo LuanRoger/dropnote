@@ -4,7 +4,7 @@ import type { NoteBody } from "@repo/editor/types/notes";
 import { useEffect, useState } from "react";
 import EditorLoading from "@/components/editor-loading";
 import RichEditorShell from "@/components/rich-editor-shell";
-import { MAX_LENGHT_BASIC_NOTE } from "@/constants";
+import { BADGES_DATA, MAX_LENGHT_BASIC_NOTE } from "@/constants";
 import { NotesLocalLoadSource } from "@/lib/sources/notes";
 
 type LocalEditorProps = {
@@ -35,6 +35,7 @@ export default function LocalEditor({ code }: LocalEditorProps) {
       noteSource="local"
       options={{
         maxLength: MAX_LENGHT_BASIC_NOTE,
+        badges: [BADGES_DATA.LOCAL],
       }}
     />
   );
