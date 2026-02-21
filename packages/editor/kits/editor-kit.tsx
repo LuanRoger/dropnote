@@ -32,6 +32,7 @@ import { TableKit } from "../plugins/table-kit";
 import { TocKit } from "../plugins/toc-kit";
 import { ToggleKit } from "../plugins/toggle-kit";
 import { YjsKit } from "../plugins/yjs-kit";
+import { DocxExportKit } from "../plugins/docx-export-kit";
 import type { Badge } from "../types/badge";
 import type { EditorOptions } from "../types/editor";
 import type { NoteBody } from "../types/notes";
@@ -51,53 +52,58 @@ type EditorKitOptions = {
   };
 };
 
+export const BasicEditorKit: AnyPluginConfig[] = [
+  // Elements
+  ...BasicBlocksKit,
+  ...CodeBlockKit,
+  ...TableKit,
+  ...ToggleKit,
+  ...TocKit,
+  ...MediaKit,
+  ...CalloutKit,
+  ...ColumnKit,
+  ...MathKit,
+  ...DateKit,
+  ...LinkKit,
+
+  // Marks
+  ...BasicMarksKit,
+  ...FontKit,
+
+  // Block Style
+  ...ListKit,
+  ...AlignKit,
+  ...LineHeightKit,
+
+  // Editing
+  ...SlashKit,
+  ...AutoformatKit,
+  ...BlockSelectionKit,
+  ...CursorOverlayKit,
+  ...DndKit,
+  ...BlockMenuKit,
+  ...EmojiKit,
+  ...ExitBreakKit,
+  TrailingBlockPlugin,
+
+  // Parsers
+  ...DocxKit,
+  ...DocxExportKit,
+  ...MarkdownKit,
+
+  // UI
+  ...BlockPlaceholderKit,
+  ...FixedToolbarKit,
+  ...FloatingToolbarKit,
+];
+
 export const EditorKit: (options: EditorKitOptions) => AnyPluginConfig[] = (
-  options: EditorKitOptions
+  options: EditorKitOptions,
 ) => {
   const { yjs, bottomStatus } = options;
 
   const kits = [
-    // Elements
-    ...BasicBlocksKit,
-    ...CodeBlockKit,
-    ...TableKit,
-    ...ToggleKit,
-    ...TocKit,
-    ...MediaKit,
-    ...CalloutKit,
-    ...ColumnKit,
-    ...MathKit,
-    ...DateKit,
-    ...LinkKit,
-
-    // Marks
-    ...BasicMarksKit,
-    ...FontKit,
-
-    // Block Style
-    ...ListKit,
-    ...AlignKit,
-    ...LineHeightKit,
-
-    // Editing
-    ...SlashKit,
-    ...AutoformatKit,
-    ...BlockSelectionKit,
-    ...CursorOverlayKit,
-    ...DndKit,
-    ...BlockMenuKit,
-    ...EmojiKit,
-    ...ExitBreakKit,
-    TrailingBlockPlugin,
-
-    // Parsers
-    ...DocxKit,
-    ...MarkdownKit,
-
-    // UI
-    ...BlockPlaceholderKit,
-    ...FixedToolbarKit,
-    ...FloatingToolbarKit,
+    ...BasicEditorKit,
     BottomStatusPlugin.configure({
       options: bottomStatus,
     }),
