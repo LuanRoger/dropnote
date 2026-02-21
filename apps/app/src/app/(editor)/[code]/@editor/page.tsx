@@ -1,7 +1,6 @@
 import type { ColaborationOptions } from "@repo/editor/types/editor";
 import { createMetadata } from "@repo/seo/metadata";
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
 import { checkNoteMultiplayerAccess } from "@/app/actions/multiplayer-server";
 import RichEditorShell from "@/components/rich-editor-shell";
 import { MAX_LENGHT_ADVANCED_NOTE, MAX_LENGHT_BASIC_NOTE } from "@/constants";
@@ -10,7 +9,6 @@ import { NoteRoomFullError } from "@/types/errors";
 import { mapNotePropertiesToBadges } from "@/utils/badge";
 import { generateRandomHexColor } from "@/utils/color";
 import { generateRandomName } from "@/utils/name";
-import { validateSlug } from "@/utils/slug";
 import { env } from "~/env";
 
 type PageProps = {
@@ -32,11 +30,6 @@ export const generateMetadata = async ({
 
 export default async function Page({ params }: PageProps) {
   const { code } = await params;
-
-  const isValidCode = validateSlug(code);
-  if (!isValidCode) {
-    notFound();
-  }
 
   const multiplayerAccessResult = await checkNoteMultiplayerAccess(code);
   if (multiplayerAccessResult.status === "error") {
