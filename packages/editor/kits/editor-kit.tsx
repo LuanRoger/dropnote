@@ -33,6 +33,24 @@ import { TocKit } from "../plugins/toc-kit";
 import { ToggleKit } from "../plugins/toggle-kit";
 import { YjsKit } from "../plugins/yjs-kit";
 import { DocxExportKit } from "../plugins/docx-export-kit";
+
+import { BaseBasicBlocksKit } from "../plugins/basic-blocks-base-kit";
+import { BaseBasicMarksKit } from "../plugins/basic-marks-base-kit";
+import { BaseCalloutKit } from "../plugins/callout-base-kit";
+import { BaseCodeBlockKit } from "../plugins/code-block-base-kit";
+import { BaseColumnKit } from "../plugins/column-base-kit";
+import { BaseDateKit } from "../plugins/date-base-kit";
+import { BaseFontKit } from "../plugins/font-base-kit";
+import { BaseLineHeightKit } from "../plugins/line-height-base-kit";
+import { BaseLinkKit } from "../plugins/link-base-kit";
+import { BaseListKit } from "../plugins/list-base-kit";
+import { BaseMathKit } from "../plugins/math-base-kit";
+import { BaseMediaKit } from "../plugins/media-base-kit";
+import { BaseTableKit } from "../plugins/table-base-kit";
+import { BaseTocKit } from "../plugins/toc-base-kit";
+import { BaseToggleKit } from "../plugins/toggle-base-kit";
+import { BaseAlignKit } from "../plugins/align-base-kit";
+
 import type { Badge } from "../types/badge";
 import type { EditorOptions } from "../types/editor";
 import type { NoteBody } from "../types/notes";
@@ -51,6 +69,30 @@ type EditorKitOptions = {
     badges: Badge[];
   };
 };
+
+export const StaticEditorKit: AnyPluginConfig[] = [
+  // Elements
+  ...BaseBasicBlocksKit,
+  ...BaseCodeBlockKit,
+  ...BaseTableKit,
+  ...BaseToggleKit,
+  ...BaseTocKit,
+  ...BaseMediaKit,
+  ...BaseCalloutKit,
+  ...BaseColumnKit,
+  ...BaseMathKit,
+  ...BaseDateKit,
+  ...BaseLinkKit,
+
+  // Marks
+  ...BaseBasicMarksKit,
+  ...BaseFontKit,
+
+  // Block style
+  ...BaseListKit,
+  ...BaseAlignKit,
+  ...BaseLineHeightKit,
+];
 
 export const BasicEditorKit: AnyPluginConfig[] = [
   // Elements

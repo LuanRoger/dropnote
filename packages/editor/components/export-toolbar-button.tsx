@@ -17,7 +17,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@repo/design-system/components/ui/dropdown-menu";
-import { BasicEditorKit } from "../kits/editor-kit";
+import { StaticEditorKit } from "../kits/editor-kit";
 
 import { EditorStatic } from "./editor-static";
 import { ToolbarButton } from "./toolbar";
@@ -39,6 +39,11 @@ export function ExportToolbarButton(
 
     const canvas = await html2canvas(editor.api.toDOMNode(editor)!, {
       onclone: (document: Document) => {
+        document.documentElement.style.cssText +=
+          "; color-scheme: light !important; background: white !important; color: black !important;";
+        document.body.style.cssText +=
+          "; background: white !important; color: black !important;";
+
         const editorElement = document.querySelector(
           '[contenteditable="true"]',
         );
@@ -47,9 +52,14 @@ export function ExportToolbarButton(
             const existingStyle = element.getAttribute("style") || "";
             element.setAttribute(
               "style",
-              `${existingStyle}; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important`,
+              `${existingStyle}; font-family: 'Geist', ui-sans-serif, system-ui, sans-serif !important; color: black !important;`,
             );
           });
+          const existingStyle = editorElement.getAttribute("style") || "";
+          editorElement.setAttribute(
+            "style",
+            `${existingStyle}; color: black !important; background: white !important;`,
+          );
         }
       },
     });
@@ -101,7 +111,7 @@ export function ExportToolbarButton(
 
   const exportToHtml = async () => {
     const editorStatic = createSlateEditor({
-      plugins: BasicEditorKit,
+      plugins: StaticEditorKit,
       value: editor.children,
     });
 
@@ -118,19 +128,32 @@ export function ExportToolbarButton(
       <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta name="color-scheme" content="light dark" />
+        <meta name="color-scheme" content="light" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=JetBrains+Mono:wght@400..700&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Geist+Mono:wght@100..900&display=swap"
           rel="stylesheet"
         />
         ${tailwindCss}
         ${katexCss}
         <style>
           :root {
-            --font-sans: 'Inter', 'Inter Fallback';
-            --font-mono: 'JetBrains Mono', 'JetBrains Mono Fallback';
+            --font-sans: 'Geist', 'Geist Fallback', ui-sans-serif, system-ui, sans-serif;
+            --font-mono: 'Geist Mono', 'Geist Mono Fallback', ui-monospace, monospace;
+          }
+          body {
+            font-family: var(--font-sans);
+          }
+          html, body {
+            color: black !important;
+            background: white !important;
+          }
+          * {
+            color: black !important;
+          }
+          a {
+            color: #0070f3 !important;
           }
         </style>
       </head>
@@ -152,7 +175,7 @@ export function ExportToolbarButton(
 
   const exportToWord = async () => {
     const blob = await exportToDocx(editor.children, {
-      editorPlugins: [...BasicEditorKit, ...DocxExportKit] as SlatePlugin[],
+      editorPlugins: [...StaticEditorKit, ...DocxExportKit] as SlatePlugin[],
     });
 
     const url = URL.createObjectURL(blob);
