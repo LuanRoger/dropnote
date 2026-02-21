@@ -1,10 +1,10 @@
 "use server";
 
+import { setPasswordForNote } from "@repo/database/queries/notes";
 import {
   createSecurityCode,
   findSecurityCode,
 } from "@repo/database/queries/security-code";
-import { setPasswordForNote } from "@repo/database/queries/notes";
 import { hashPassword } from "@repo/security/hash";
 import { generateRandomNumber } from "@/utils/random";
 

@@ -21,10 +21,6 @@ export default async function Layout({
 
   const access = await resolveNoteAccess(code);
 
-  if (access === "not_found") {
-    notFound();
-  }
-
   if (access === "needs_password") {
     return password;
   }

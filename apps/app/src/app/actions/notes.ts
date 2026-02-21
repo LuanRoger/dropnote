@@ -16,17 +16,68 @@ import {
   NOTE_LAST_NOTE_PASSWORD_EXPIRE_TIME_MS,
 } from "@/constants";
 import {
+  checkPasswordCookieAccess,
   mountPasswordCookieValue,
-  parsePasswordCookieValue,
 } from "@/utils/cookies";
 
-export async function isNoteProtected(code: string): Promise<boolean> {
+export type NoteAccessStatus = "not_found" | "needs_password" | "granted";
+
+export async function resolveNoteAccess(
+  code: string,
+): Promise<NoteAccessStatus> {
+  const note = await findNoteByCode(code);
+  if (!note) {
+    return "not_found";
+  }
+
+  const { hasPassword, password: noteHashedPassword } = note;
+  if (!hasPassword || noteHashedPassword === null) {
+    return "granted";
+  }
+
+  const hasValidCookie = await checkPasswordCookieAccess(
+    code,
+    noteHashedPassword,
+  );
+  return hasValidCookie ? "granted" : "needs_password";
+}
+
+export async function tryPasswordAccess(
+  code: string,
+  password: string,
+): Promise<boolean> {
   const note = await findNoteByCode(code);
   if (!note) {
     return false;
   }
 
-  return note.hasPassword;
+  const { hasPassword, password: noteHashedPassword } = note;
+  if (!(hasPassword && noteHashedPassword)) {
+    return true;
+  }
+
+  const isPasswordValid = comparePassword(password, noteHashedPassword);
+  if (!isPasswordValid) {
+    return false;
+  }
+
+  const cookieStore = await cookies();
+  const notePasswordCookieValue = mountPasswordCookieValue(
+    code,
+    noteHashedPassword,
+  );
+  cookieStore.set(
+    COOKIE_KEYS.NOTE_LAST_NOTE_PASSWORD,
+    notePasswordCookieValue,
+    {
+      secure: true,
+      priority: "high",
+      sameSite: "strict",
+      maxAge: NOTE_LAST_NOTE_PASSWORD_EXPIRE_TIME_MS,
+    },
+  );
+
+  return true;
 }
 
 export async function ensureCreated(code: string) {
@@ -54,70 +105,4 @@ export async function updateNoteBodyByCode(code: string, body: NoteBody) {
   }
 
   await updateNote(code, body);
-}
-
-export async function tryPasswordAccess(code: string, password: string) {
-  const note = await findNoteByCode(code);
-  if (!note) {
-    return false;
-  }
-  const { hasPassword, password: noteHashedPassword } = note;
-  if (!(hasPassword && noteHashedPassword)) {
-    return true;
-  }
-
-  const isPasswordValid = comparePassword(password, noteHashedPassword);
-  if (!isPasswordValid) {
-    return false;
-  }
-
-  const cookieStore = await cookies();
-  const notePasswordCookieValue = mountPasswordCookieValue(
-    code,
-    noteHashedPassword,
-  );
-  cookieStore.set(
-    COOKIE_KEYS.NOTE_LAST_NOTE_PASSWORD,
-    notePasswordCookieValue,
-    {
-      secure: true,
-      priority: "high",
-      sameSite: "strict",
-      maxAge: NOTE_LAST_NOTE_PASSWORD_EXPIRE_TIME_MS,
-    },
-  );
-}
-
-export async function checkUserNoteAccess(code: string) {
-  const note = await findNoteByCode(code);
-  if (!note) {
-    return false;
-  }
-
-  const { hasPassword, password: noteHashedPassword } = note;
-  if (!(hasPassword && noteHashedPassword)) {
-    return true;
-  }
-
-  const cookieStore = await cookies();
-  const lastUserNotePassword = cookieStore.get(
-    COOKIE_KEYS.NOTE_LAST_NOTE_PASSWORD,
-  );
-  if (!lastUserNotePassword) {
-    return false;
-  }
-
-  const { noteCode: cookieNoteCode, password } = parsePasswordCookieValue(
-    lastUserNotePassword.value,
-  );
-  if (cookieNoteCode !== code) {
-    return false;
-  }
-
-  const isPasswordValid = comparePassword(password, noteHashedPassword);
-  if (!isPasswordValid) {
-    return false;
-  }
-
-  return true;
 }
