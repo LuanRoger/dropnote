@@ -23,7 +23,7 @@ export function useEditorMechanisms({
   const toSaveValue = useDebounce(noteBody, debounceTimeMs);
   const saveNote = useCallback(
     () => source.save(toSaveValue),
-    [toSaveValue, source],
+    [toSaveValue, source]
   );
   const [isSaving, performSave] = useTransition();
 
