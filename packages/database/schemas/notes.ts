@@ -24,6 +24,7 @@ export const notesSchema = new mongoose.Schema(
   {
     code: { type: String, unique: true, required: true, index: true },
     body: Object,
+    ownerEmail: { type: String, default: null },
     isPermanent: { type: Boolean, default: false },
     hasPassword: { type: Boolean, default: false },
     hasExtendedLimit: { type: Boolean, default: false },
@@ -42,7 +43,7 @@ export const notesSchema = new mongoose.Schema(
     },
     expireAt: { type: Date, expires: 0 },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 export const Notes =
