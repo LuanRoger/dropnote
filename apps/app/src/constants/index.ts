@@ -2,7 +2,7 @@ import type { Badge } from "@repo/editor/types/badge";
 
 export const TEST_NOTE_EXPIRE_TIME_MS = new Date(Date.now() + 20 * 1000); // 20 seconds
 export const DEFAULT_NOTE_EXPIRE_TIME_MS = new Date(
-  Date.now() + 48 * 60 * 60 * 1000
+  Date.now() + 48 * 60 * 60 * 1000,
 ); // 48 hours
 
 export const MAX_LENGHT_BASIC_NOTE = 1000;
@@ -59,4 +59,10 @@ export const BADGES_DATA: Record<string, Badge> = {
     color: "#B91C1C",
     description: "This note can be edited by multiple users in real-time.",
   },
+};
+
+export const NOTE_LAST_NOTE_PASSWORD_EXPIRE_TIME_MS = 7 * 24 * 60 * 60; // 7 days in seconds
+
+export const COOKIE_KEYS = {
+  NOTE_LAST_NOTE_PASSWORD: "dropnote.last_note.password",
 };

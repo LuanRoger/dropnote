@@ -17,6 +17,7 @@
     "@repo/editor": "workspace:*",
     "@repo/next-config": "workspace:*",
     "@repo/product": "workspace:*",
+    "@repo/security": "workspace:*",
     "@repo/seo": "workspace:*",
     "@t3-oss/env-nextjs": "^0.13.10",
     "class-variance-authority": "^0.7.1",
