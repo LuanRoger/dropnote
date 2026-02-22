@@ -5,14 +5,23 @@ import {
   CardTitle,
 } from "@repo/design-system/components/ui/card";
 import { LockIcon } from "lucide-react";
+import Image from "next/image";
+import passwordBackground from "@/assets/images/password-background.png";
 import PasswordCardBody from "./components/password-card-body";
 
 export default async function PasswordPage({ params }: PageProps<"/[code]">) {
   const { code } = await params;
 
   return (
-    <div className="flex size-full items-center justify-center">
-      <Card className="min-w-96">
+    <div className="relative size-full">
+      <Image
+        alt="Password Background"
+        className="absolute -z-10 size-full object-cover opacity-35 blur-md"
+        height={500}
+        src={passwordBackground}
+        width={500}
+      />
+      <Card className="absolute inset-0 top-1/2 mx-auto h-fit w-96 -translate-y-1/2">
         <CardHeader>
           <CardTitle className="inline-flex items-center gap-1">
             <LockIcon size={14} /> Protected Note
