@@ -6,6 +6,7 @@ import {
   findSecurityCode,
 } from "@repo/database/queries/security-code";
 import { hashPassword } from "@repo/security/hash";
+import { SECURITY_CODE_LENGTH } from "@/constants";
 import { generateRandomNumber } from "@/utils/random";
 
 export async function createSecurityCodeForNote(
@@ -17,7 +18,7 @@ export async function createSecurityCodeForNote(
     throw new Error("Note already has a security code");
   }
 
-  const securityCode = generateRandomNumber(6);
+  const securityCode = generateRandomNumber(SECURITY_CODE_LENGTH);
   await createSecurityCode(noteCode, securityCode, sendToEmail);
   //TODO: Send email to user with security code
 }

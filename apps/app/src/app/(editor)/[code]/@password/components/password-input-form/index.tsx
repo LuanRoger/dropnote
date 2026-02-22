@@ -1,5 +1,6 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Field,
   FieldError,
@@ -8,13 +9,20 @@ import {
 import { Input } from "@repo/design-system/components/ui/input";
 import { Controller, useForm } from "react-hook-form";
 import { type NotePasswordInput, notePasswordInputFormSchema } from "./schema";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { tryPasswordAccess } from "@/app/actions/notes";
+import { handleError } from "@repo/design-system/lib/utils";
 
 type PasswordInputFormProps = {
-  id?: string;
+  formId?: string;
+  startAction: React.TransitionStartFunction;
+  code: string;
 };
 
-export default function PasswordInputForm({ id }: PasswordInputFormProps) {
+export default function PasswordInputForm({
+  formId,
+  startAction,
+  code,
+}: PasswordInputFormProps) {
   const form = useForm({
     resolver: zodResolver(notePasswordInputFormSchema),
     defaultValues: {
@@ -23,11 +31,18 @@ export default function PasswordInputForm({ id }: PasswordInputFormProps) {
   });
 
   function handleSubmit(data: NotePasswordInput) {
-    console.log("submit password", data);
+    const { password } = data;
+    startAction(async () => {
+      try {
+        await tryPasswordAccess(code, password);
+      } catch (error) {
+        handleError(error);
+      }
+    });
   }
 
   return (
-    <form id={id} onSubmit={form.handleSubmit(handleSubmit)}>
+    <form id={formId} onSubmit={form.handleSubmit(handleSubmit)}>
       <Controller
         control={form.control}
         name="password"

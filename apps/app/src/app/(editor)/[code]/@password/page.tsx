@@ -1,17 +1,14 @@
-import { Button } from "@repo/design-system/components/ui/button";
 import {
   Card,
-  CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@repo/design-system/components/ui/card";
 import { LockIcon } from "lucide-react";
-import PasswordInputForm from "./components/password-input-form";
+import PasswordCardBody from "./components/password-card-body";
 
-export default function PasswordPage() {
-  const formId = "password-form";
+export default async function PasswordPage({ params }: PageProps<"/[code]">) {
+  const { code } = await params;
 
   return (
     <div className="flex size-full items-center justify-center">
@@ -25,14 +22,7 @@ export default function PasswordPage() {
             access the note content.
           </CardDescription>
         </CardHeader>
-        <CardContent>
-          <PasswordInputForm id={formId} />
-        </CardContent>
-        <CardFooter>
-          <Button form={formId} type="submit">
-            Unlock Note
-          </Button>
-        </CardFooter>
+        <PasswordCardBody code={code} />
       </Card>
     </div>
   );
