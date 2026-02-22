@@ -15,6 +15,7 @@
     "@repo/database": "workspace:*",
     "@repo/design-system": "workspace:*",
     "@repo/editor": "workspace:*",
+    "@repo/email": "workspace:*",
     "@repo/next-config": "workspace:*",
     "@repo/product": "workspace:*",
     "@repo/security": "workspace:*",
