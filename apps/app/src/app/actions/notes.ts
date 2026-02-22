@@ -56,7 +56,8 @@ export async function tryPasswordAccess(code: string, password: string) {
     throw new Error("This note does not have a password");
   }
 
-  const isPasswordValid = comparePassword(password, noteHashedPassword);
+  const isPasswordValid = await comparePassword(password, noteHashedPassword);
+  console.log("isPasswordValid", isPasswordValid);
   if (!isPasswordValid) {
     throw new Error("Invalid password");
   }

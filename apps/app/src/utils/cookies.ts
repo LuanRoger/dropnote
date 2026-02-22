@@ -21,7 +21,7 @@ export async function checkPasswordCookieAccess(
     return false;
   }
 
-  return comparePassword(cookiesPassword, noteHashedPassword);
+  return await comparePassword(cookiesPassword, noteHashedPassword);
 }
 
 export function mountPasswordCookieValue(noteCode: string, password: string) {
