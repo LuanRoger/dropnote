@@ -5,7 +5,7 @@ import { checkNoteMultiplayerAccess } from "@/app/actions/multiplayer-server";
 import RichEditorShell from "@/components/rich-editor-shell";
 import { MAX_LENGHT_ADVANCED_NOTE, MAX_LENGHT_BASIC_NOTE } from "@/constants";
 import { NotesDatabaseLoadSource } from "@/lib/sources/notes";
-import { NoteRoomFullError } from "@/types/errors";
+import { NoteRoomFullError } from "@/types/errors/notes";
 import { mapNotePropertiesToBadges } from "@/utils/badge";
 import { generateRandomHexColor } from "@/utils/color";
 import { generateRandomName } from "@/utils/name";
@@ -32,12 +32,7 @@ export default async function Page({ params }: PageProps) {
   const { code } = await params;
 
   const multiplayerAccessResult = await checkNoteMultiplayerAccess(code);
-  if (multiplayerAccessResult.status === "error") {
-    throw multiplayerAccessResult.error;
-  }
-
-  const multiplayerAccessData = multiplayerAccessResult.data;
-  if (multiplayerAccessData.isFull) {
+  if (multiplayerAccessResult.isFull) {
     throw new NoteRoomFullError(code);
   }
 
