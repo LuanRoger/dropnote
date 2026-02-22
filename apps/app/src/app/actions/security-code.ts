@@ -2,15 +2,20 @@
 
 import { setPasswordForNote } from "@repo/database/queries/notes";
 import {
+  consumeSecurityCode,
   createSecurityCode,
   findSecurityByNoteCode,
 } from "@repo/database/queries/security-code";
 import { sendSecurityCodeToEmail } from "@repo/email/security-code";
 import { hashPassword } from "@repo/security/hash";
+import { redirect } from "next/navigation";
 import { SECURITY_CODE_LENGTH } from "@/constants";
-import { NoteAlreadyHasSecurityCodeError } from "@/types/errors/security-code";
+import {
+  NoteAlreadyHasSecurityCodeError,
+  NoteDoesNotHaveSecurityCodeError,
+  SecurityCodeIsInvalidError,
+} from "@/types/errors/security-code";
 import { generateRandomNumber } from "@/utils/random";
-import { mountNotePasswordRoute } from "@/utils/route";
 
 export async function findSecurityCodeByNoteCode(noteCode: string) {
   const securityCode = await findSecurityByNoteCode(noteCode);
@@ -27,30 +32,35 @@ export async function createSecurityCodeForNote(
   }
 
   const securityCode = generateRandomNumber(SECURITY_CODE_LENGTH);
-  await createSecurityCode(noteCode, securityCode, sendToEmail);
-  sendSecurityCodeToEmail(sendToEmail, {
-    passwordVerb: "create",
-    securityCode,
-    noteCode,
-    passwordUpdateUrl: mountNotePasswordRoute(noteCode),
-  });
+  await Promise.all([
+    createSecurityCode(noteCode, securityCode, sendToEmail),
+    sendSecurityCodeToEmail(sendToEmail, {
+      passwordVerb: "create",
+      securityCode,
+      noteCode,
+      passwordUpdateUrl: `${process.env.NEXT_PUBLIC_APP_URL}/${noteCode}`,
+    }),
+  ]);
 }
 
 export async function consumeSecurityCodeAndSetPasswordForNote(
   noteCode: string,
   securityCode: string,
   newPassword: string,
-): Promise<boolean> {
+) {
   const securityCodeRecord = await findSecurityByNoteCode(noteCode);
   if (!securityCodeRecord) {
-    return false;
+    throw new NoteDoesNotHaveSecurityCodeError(noteCode);
   }
   if (securityCodeRecord.securityCode !== securityCode) {
-    return false;
+    throw new SecurityCodeIsInvalidError();
   }
 
   const hashedPassword = await hashPassword(newPassword);
-  await setPasswordForNote(noteCode, hashedPassword);
+  await Promise.all([
+    setPasswordForNote(noteCode, hashedPassword),
+    consumeSecurityCode(noteCode),
+  ]);
 
-  return true;
+  redirect(`/${noteCode}`);
 }
