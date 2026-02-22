@@ -8,6 +8,7 @@ import {
 import { hashPassword } from "@repo/security/hash";
 import { SECURITY_CODE_LENGTH } from "@/constants";
 import { generateRandomNumber } from "@/utils/random";
+import { NoteAlreadyHasSecurityCodeError } from "@/types/errors/security-code";
 
 export async function createSecurityCodeForNote(
   noteCode: string,
@@ -15,7 +16,7 @@ export async function createSecurityCodeForNote(
 ) {
   const doesNoteHaveSecurityCode = await findSecurityCode(noteCode);
   if (!doesNoteHaveSecurityCode) {
-    throw new Error("Note already has a security code");
+    throw new NoteAlreadyHasSecurityCodeError(noteCode);
   }
 
   const securityCode = generateRandomNumber(SECURITY_CODE_LENGTH);

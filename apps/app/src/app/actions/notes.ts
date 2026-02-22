@@ -10,6 +10,7 @@ import type { NoteBody } from "@repo/editor/types/notes";
 import { countBodyLength } from "@repo/editor/utils/nodes";
 import { comparePassword } from "@repo/security/hash";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import {
   COOKIE_KEYS,
   MAX_LENGHT_ADVANCED_NOTE,
@@ -17,10 +18,14 @@ import {
   NOTE_LAST_NOTE_PASSWORD_EXPIRE_TIME_MS,
 } from "@/constants";
 import {
+  CharacterLimitExceededError,
+  InvalidNotePasswordError,
+  NoteDoesNotHavePasswordError,
+} from "@/types/errors/notes";
+import {
   checkPasswordCookieAccess,
   mountPasswordCookieValue,
 } from "@/utils/cookies";
-import { redirect } from "next/navigation";
 
 export type NoteAccessStatus = "not_found" | "needs_password" | "granted";
 
@@ -39,27 +44,25 @@ export async function resolveNoteAccess(
 
   const noteHashedPassword = await getNotePasswordByCode(code);
   if (!noteHashedPassword) {
-    throw new Error("This note does not have a password");
+    throw new NoteDoesNotHavePasswordError(code);
   }
 
   const hasValidCookie = await checkPasswordCookieAccess(
     code,
     noteHashedPassword,
   );
-  console.log("hasValidCookie", hasValidCookie);
   return hasValidCookie ? "granted" : "needs_password";
 }
 
 export async function tryPasswordAccess(code: string, password: string) {
   const noteHashedPassword = await getNotePasswordByCode(code);
   if (!noteHashedPassword) {
-    throw new Error("This note does not have a password");
+    throw new NoteDoesNotHavePasswordError(code);
   }
 
   const isPasswordValid = await comparePassword(password, noteHashedPassword);
-  console.log("isPasswordValid", isPasswordValid);
   if (!isPasswordValid) {
-    throw new Error("Invalid password");
+    throw new InvalidNotePasswordError();
   }
 
   const cookieStore = await cookies();
@@ -99,7 +102,9 @@ export async function updateNoteBodyByCode(code: string, body: NoteBody) {
     (!hasExtendedLimit && currentBodyLenght > MAX_LENGHT_BASIC_NOTE) ||
     (hasExtendedLimit && currentBodyLenght > MAX_LENGHT_ADVANCED_NOTE)
   ) {
-    throw new Error("Note body exceeds the character limit");
+    throw new CharacterLimitExceededError(
+      hasExtendedLimit ? MAX_LENGHT_ADVANCED_NOTE : MAX_LENGHT_BASIC_NOTE,
+    );
   }
 
   await updateNote(code, body);
