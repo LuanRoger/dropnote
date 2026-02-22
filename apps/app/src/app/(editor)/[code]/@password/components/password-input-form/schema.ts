@@ -1,9 +1,8 @@
 import z from "zod";
+import { passwordSchema } from "@/utils/schemas/password";
 
 export const notePasswordInputFormSchema = z.object({
-  password: z.string().min(1, "Password is required"),
+  password: passwordSchema,
 });
 
-export type NotePasswordInput = z.infer<
-  typeof notePasswordInputFormSchema
->;
+export type NotePasswordInput = z.infer<typeof notePasswordInputFormSchema>;

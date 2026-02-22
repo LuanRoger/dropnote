@@ -15,14 +15,13 @@ export async function checkPasswordCookieAccess(
     return false;
   }
 
-  const { noteCode: cookieNoteCode, password } = parsePasswordCookieValue(
-    lastUserNotePassword.value,
-  );
+  const { noteCode: cookieNoteCode, password: cookiesPassword } =
+    parsePasswordCookieValue(lastUserNotePassword.value);
   if (cookieNoteCode !== code) {
     return false;
   }
 
-  return comparePassword(password, noteHashedPassword);
+  return comparePassword(cookiesPassword, noteHashedPassword);
 }
 
 export function mountPasswordCookieValue(noteCode: string, password: string) {
