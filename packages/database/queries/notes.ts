@@ -10,6 +10,16 @@ export async function findNoteByCode(code: string): Promise<NoteModel | null> {
   return note;
 }
 
+export async function getNotePasswordByCode(
+  code: string,
+): Promise<string | null> {
+  await ensureConnected();
+
+  const note = await Notes.findOne({ code }).select("password").lean();
+
+  return note?.password || null;
+}
+
 export async function createNote(
   code: string,
   body: any,

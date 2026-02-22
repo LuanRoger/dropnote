@@ -3,6 +3,7 @@
 import {
   createNote,
   findNoteByCode,
+  getNotePasswordByCode,
   updateNote,
 } from "@repo/database/queries/notes";
 import type { NoteBody } from "@repo/editor/types/notes";
@@ -19,6 +20,7 @@ import {
   checkPasswordCookieAccess,
   mountPasswordCookieValue,
 } from "@/utils/cookies";
+import { redirect } from "next/navigation";
 
 export type NoteAccessStatus = "not_found" | "needs_password" | "granted";
 
@@ -30,42 +32,37 @@ export async function resolveNoteAccess(
     return "not_found";
   }
 
-  const { hasPassword, password: noteHashedPassword } = note;
-  if (!hasPassword || noteHashedPassword === null) {
+  const { hasPassword } = note;
+  if (!hasPassword) {
     return "granted";
+  }
+
+  const noteHashedPassword = await getNotePasswordByCode(code);
+  if (!noteHashedPassword) {
+    throw new Error("This note does not have a password");
   }
 
   const hasValidCookie = await checkPasswordCookieAccess(
     code,
     noteHashedPassword,
   );
+  console.log("hasValidCookie", hasValidCookie);
   return hasValidCookie ? "granted" : "needs_password";
 }
 
-export async function tryPasswordAccess(
-  code: string,
-  password: string,
-): Promise<boolean> {
-  const note = await findNoteByCode(code);
-  if (!note) {
-    return false;
-  }
-
-  const { hasPassword, password: noteHashedPassword } = note;
-  if (!(hasPassword && noteHashedPassword)) {
-    return true;
+export async function tryPasswordAccess(code: string, password: string) {
+  const noteHashedPassword = await getNotePasswordByCode(code);
+  if (!noteHashedPassword) {
+    throw new Error("This note does not have a password");
   }
 
   const isPasswordValid = comparePassword(password, noteHashedPassword);
   if (!isPasswordValid) {
-    return false;
+    throw new Error("Invalid password");
   }
 
   const cookieStore = await cookies();
-  const notePasswordCookieValue = mountPasswordCookieValue(
-    code,
-    noteHashedPassword,
-  );
+  const notePasswordCookieValue = mountPasswordCookieValue(code, password);
   cookieStore.set(
     COOKIE_KEYS.NOTE_LAST_NOTE_PASSWORD,
     notePasswordCookieValue,
@@ -77,7 +74,7 @@ export async function tryPasswordAccess(
     },
   );
 
-  return true;
+  redirect(`/${code}`);
 }
 
 export async function ensureCreated(code: string) {
