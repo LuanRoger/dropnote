@@ -4,9 +4,9 @@ import {
   SecurityCodes,
 } from "../schemas/security-code";
 
-export async function findSecurityCode(
+export async function findSecurityByNoteCode(
   noteCode: string,
-): Promise<SecurityCodeModel | undefined> {
+): Promise<SecurityCodeModel | null> {
   await ensureConnected();
 
   return await SecurityCodes.findOne({ noteCode }).lean();
