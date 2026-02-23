@@ -5,4 +5,5 @@ export type SendSecurityCodeToEmailParams = {
   noteCode: string;
   securityCode: string;
   passwordUpdateUrl: string;
+  securityCodeExpirationTimeMinutes?: number;
 };

@@ -9,7 +9,11 @@ import {
 import { sendSecurityCodeToEmail } from "@repo/email/security-code";
 import { hashPassword } from "@repo/security/hash";
 import { redirect } from "next/navigation";
-import { SECURITY_CODE_LENGTH } from "@/constants";
+import {
+  SECURITY_CODE_EXPIRE_TIME_MS,
+  SECURITY_CODE_EXPIRE_TIME_MINUTES,
+  SECURITY_CODE_LENGTH,
+} from "@/constants";
 import {
   NoteAlreadyHasSecurityCodeError,
   NoteDoesNotHaveSecurityCodeError,
@@ -34,11 +38,17 @@ export async function createSecurityCodeForNote(
 
   const securityCode = generateRandomNumber(SECURITY_CODE_LENGTH);
   await Promise.all([
-    createSecurityCode(noteCode, securityCode, sendToEmail),
+    createSecurityCode(
+      noteCode,
+      securityCode,
+      sendToEmail,
+      SECURITY_CODE_EXPIRE_TIME_MS,
+    ),
     sendSecurityCodeToEmail(sendToEmail, {
       passwordVerb,
       securityCode,
       noteCode,
+      securityCodeExpirationTimeMinutes: SECURITY_CODE_EXPIRE_TIME_MINUTES,
       passwordUpdateUrl: `${process.env.NEXT_PUBLIC_APP_URL}/${noteCode}/password`,
     }),
   ]);
