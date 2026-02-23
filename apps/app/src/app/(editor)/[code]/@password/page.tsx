@@ -8,9 +8,17 @@ import { LockIcon } from "lucide-react";
 import Image from "next/image";
 import passwordBackground from "@/assets/images/password-background.png";
 import PasswordCardBody from "./components/password-card-body";
+import { getSecurityCodeByNoteCode } from "@/app/actions/security-code";
+import { getNoteByCode } from "@/app/actions/notes";
 
 export default async function PasswordPage({ params }: PageProps<"/[code]">) {
   const { code } = await params;
+
+  const securityCode = await getSecurityCodeByNoteCode(code);
+  const note = await getNoteByCode(code);
+
+  const recoveryEmail = note?.ownerEmail ?? undefined;
+  const canSendRecoveryPasswordEmail = !securityCode && recoveryEmail;
 
   return (
     <div className="relative size-full">
@@ -31,7 +39,12 @@ export default async function PasswordPage({ params }: PageProps<"/[code]">) {
             access the note content.
           </CardDescription>
         </CardHeader>
-        <PasswordCardBody code={code} />
+        <PasswordCardBody
+          code={code}
+          recoveryEmail={
+            canSendRecoveryPasswordEmail ? recoveryEmail : undefined
+          }
+        />
       </Card>
     </div>
   );
