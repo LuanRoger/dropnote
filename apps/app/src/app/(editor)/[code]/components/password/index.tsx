@@ -11,9 +11,11 @@ import PasswordCardBody from "./components/password-card-body";
 import { getSecurityCodeByNoteCode } from "@/app/actions/security-code";
 import { getNoteByCode } from "@/app/actions/notes";
 
-export default async function PasswordPage({ params }: PageProps<"/[code]">) {
-  const { code } = await params;
+type PasswordPageProps = {
+  code: string;
+};
 
+export default async function PasswordPage({ code }: PasswordPageProps) {
   const securityCode = await getSecurityCodeByNoteCode(code);
   const note = await getNoteByCode(code);
 

@@ -1,8 +1,8 @@
-import UpdatePasswordCard from "../../components/update-password";
+import UpdatePasswordCard from "../components/update-password";
 
 export default async function NotePasswordPage({
   params,
-}: PageProps<"/[code]">) {
+}: PageProps<"/[code]/password">) {
   const { code } = await params;
 
   return (
