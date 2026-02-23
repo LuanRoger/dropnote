@@ -38,7 +38,7 @@ export async function createSecurityCodeForNote(
       passwordVerb: "create",
       securityCode,
       noteCode,
-      passwordUpdateUrl: `${process.env.NEXT_PUBLIC_APP_URL}/${noteCode}`,
+      passwordUpdateUrl: `${process.env.NEXT_PUBLIC_APP_URL}/${noteCode}/password`,
     }),
   ]);
 }
