@@ -2,7 +2,7 @@
 import { ensureConnected } from "../client";
 import { type NoteModel, Notes } from "../schemas/notes";
 
-export async function findNoteByCode(code: string): Promise<NoteModel | null> {
+export async function getNoteByCode(code: string): Promise<NoteModel | null> {
   await ensureConnected();
 
   const note = await Notes.findOne({ code }).lean();

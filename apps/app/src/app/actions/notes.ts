@@ -2,7 +2,7 @@
 
 import {
   createNote,
-  findNoteByCode,
+  getNoteByCode as getNoteByCodeQuery,
   getNotePasswordByCode,
   updateNote,
 } from "@repo/database/queries/notes";
@@ -27,12 +27,16 @@ import {
   mountPasswordCookieValue,
 } from "@/utils/cookies";
 
+export async function getNoteByCode(code: string) {
+  return await getNoteByCodeQuery(code);
+}
+
 export type NoteAccessStatus = "not_found" | "needs_password" | "granted";
 
 export async function resolveNoteAccess(
   code: string,
 ): Promise<NoteAccessStatus> {
-  const note = await findNoteByCode(code);
+  const note = await getNoteByCodeQuery(code);
   if (!note) {
     return "not_found";
   }
@@ -82,7 +86,7 @@ export async function tryPasswordAccess(code: string, password: string) {
 }
 
 export async function ensureCreated(code: string) {
-  const note = await findNoteByCode(code);
+  const note = await getNoteByCodeQuery(code);
   if (note) {
     return note;
   }
@@ -91,7 +95,7 @@ export async function ensureCreated(code: string) {
 }
 
 export async function updateNoteBodyByCode(code: string, body: NoteBody) {
-  const note = await findNoteByCode(code);
+  const note = await getNoteByCodeQuery(code);
   if (!note) {
     return;
   }

@@ -16,7 +16,7 @@ export async function POST(
   }
 
   try {
-    await createSecurityCodeForNote(code, email);
+    await createSecurityCodeForNote(code, email, "create");
     return NextResponse.json(
       { message: "Security code created and sent to email successfully." },
       { status: 201 },

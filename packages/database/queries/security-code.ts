@@ -4,7 +4,7 @@ import {
   SecurityCodes,
 } from "../schemas/security-code";
 
-export async function findSecurityByNoteCode(
+export async function getSecurityByNoteCode(
   noteCode: string,
 ): Promise<SecurityCodeModel | null> {
   await ensureConnected();

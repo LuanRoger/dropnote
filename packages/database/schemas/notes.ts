@@ -4,6 +4,7 @@ export type NoteModel = {
   code: string;
   // biome-ignore lint/suspicious/noExplicitAny: The body of the note can be any, since we don't know the structure of the note
   body: any;
+  ownerEmail: string | null;
   isPermanent: boolean;
   hasPassword: boolean;
   password: string | null;

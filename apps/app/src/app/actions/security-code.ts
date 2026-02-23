@@ -4,7 +4,7 @@ import { setPasswordForNote } from "@repo/database/queries/notes";
 import {
   consumeSecurityCode,
   createSecurityCode,
-  findSecurityByNoteCode,
+  getSecurityByNoteCode,
 } from "@repo/database/queries/security-code";
 import { sendSecurityCodeToEmail } from "@repo/email/security-code";
 import { hashPassword } from "@repo/security/hash";
@@ -17,16 +17,17 @@ import {
 } from "@/types/errors/security-code";
 import { generateRandomNumber } from "@/utils/random";
 
-export async function findSecurityCodeByNoteCode(noteCode: string) {
-  const securityCode = await findSecurityByNoteCode(noteCode);
+export async function getSecurityCodeByNoteCode(noteCode: string) {
+  const securityCode = await getSecurityByNoteCode(noteCode);
   return securityCode;
 }
 
 export async function createSecurityCodeForNote(
   noteCode: string,
   sendToEmail: string,
+  passwordVerb: "create" | "update",
 ) {
-  const doesNoteHaveSecurityCode = await findSecurityByNoteCode(noteCode);
+  const doesNoteHaveSecurityCode = await getSecurityByNoteCode(noteCode);
   if (doesNoteHaveSecurityCode) {
     throw new NoteAlreadyHasSecurityCodeError(noteCode);
   }
@@ -35,7 +36,7 @@ export async function createSecurityCodeForNote(
   await Promise.all([
     createSecurityCode(noteCode, securityCode, sendToEmail),
     sendSecurityCodeToEmail(sendToEmail, {
-      passwordVerb: "create",
+      passwordVerb,
       securityCode,
       noteCode,
       passwordUpdateUrl: `${process.env.NEXT_PUBLIC_APP_URL}/${noteCode}/password`,
@@ -48,7 +49,7 @@ export async function consumeSecurityCodeAndSetPasswordForNote(
   securityCode: string,
   newPassword: string,
 ) {
-  const securityCodeRecord = await findSecurityByNoteCode(noteCode);
+  const securityCodeRecord = await getSecurityByNoteCode(noteCode);
   if (!securityCodeRecord) {
     throw new NoteDoesNotHaveSecurityCodeError(noteCode);
   }
