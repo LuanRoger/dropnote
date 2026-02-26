@@ -1,6 +1,6 @@
+import { type NextRequest, NextResponse } from "next/server";
 import { createSecurityCodeForNote } from "@/app/actions/security-code";
 import { NoteAlreadyHasSecurityCodeError } from "@/types/errors/security-code";
-import { type NextRequest, NextResponse } from "next/server";
 
 export async function POST(
   request: NextRequest,
@@ -16,7 +16,7 @@ export async function POST(
   }
 
   try {
-    await createSecurityCodeForNote(code, email, "create");
+    await createSecurityCodeForNote(code, email, "create", false);
     return NextResponse.json(
       { message: "Security code created and sent to email successfully." },
       { status: 201 },

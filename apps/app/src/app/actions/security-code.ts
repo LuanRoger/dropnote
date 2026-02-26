@@ -10,16 +10,19 @@ import { sendSecurityCodeToEmail } from "@repo/email/security-code";
 import { hashPassword } from "@repo/security/hash";
 import { redirect } from "next/navigation";
 import {
-  SECURITY_CODE_EXPIRE_TIME_MS,
   SECURITY_CODE_EXPIRE_TIME_MINUTES,
+  SECURITY_CODE_EXPIRE_TIME_MS,
   SECURITY_CODE_LENGTH,
 } from "@/constants";
 import {
   NoteAlreadyHasSecurityCodeError,
   NoteDoesNotHaveSecurityCodeError,
+  OwnerEmailNotProvidedError,
   SecurityCodeIsInvalidError,
 } from "@/types/errors/security-code";
 import { generateRandomNumber } from "@/utils/random";
+import { setOwnerForNote, getNoteByCode } from "./notes";
+import { NoteNotFoundError } from "@/types/errors/notes";
 
 export async function getSecurityCodeByNoteCode(noteCode: string) {
   const securityCode = await getSecurityByNoteCode(noteCode);
@@ -28,12 +31,25 @@ export async function getSecurityCodeByNoteCode(noteCode: string) {
 
 export async function createSecurityCodeForNote(
   noteCode: string,
-  sendToEmail: string,
   passwordVerb: "create" | "update",
+  sendToEmail?: string,
+  haveExpirationTime?: boolean,
 ) {
   const doesNoteHaveSecurityCode = await getSecurityByNoteCode(noteCode);
   if (doesNoteHaveSecurityCode) {
     throw new NoteAlreadyHasSecurityCodeError(noteCode);
+  }
+  const note = await getNoteByCode(noteCode);
+  if (!note) {
+    throw new NoteNotFoundError(noteCode);
+  }
+
+  const emailToSend = sendToEmail || note.ownerEmail;
+
+  if (emailToSend) {
+    await setOwnerForNote(noteCode, emailToSend);
+  } else {
+    throw new OwnerEmailNotProvidedError();
   }
 
   const securityCode = generateRandomNumber(SECURITY_CODE_LENGTH);
@@ -41,10 +57,10 @@ export async function createSecurityCodeForNote(
     createSecurityCode(
       noteCode,
       securityCode,
-      sendToEmail,
-      SECURITY_CODE_EXPIRE_TIME_MS,
+      emailToSend,
+      haveExpirationTime ? SECURITY_CODE_EXPIRE_TIME_MS : undefined,
     ),
-    sendSecurityCodeToEmail(sendToEmail, {
+    sendSecurityCodeToEmail(emailToSend, {
       passwordVerb,
       securityCode,
       noteCode,
