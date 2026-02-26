@@ -2,10 +2,10 @@ import type { Badge } from "@repo/editor/types/badge";
 
 export const TEST_NOTE_EXPIRE_TIME_MS = new Date(Date.now() + 20 * 1000); // 20 seconds
 export const DEFAULT_NOTE_EXPIRE_TIME_MS = new Date(
-  Date.now() + 48 * 60 * 60 * 1000,
+  Date.now() + 48 * 60 * 60 * 1000
 ); // 48 hours
 export const SECURITY_CODE_EXPIRE_TIME_MS = new Date(
-  Date.now() + 15 * 60 * 1000,
+  Date.now() + 15 * 60 * 1000
 ); // 15 minutes
 export const SECURITY_CODE_EXPIRE_TIME_MINUTES = 15;
 

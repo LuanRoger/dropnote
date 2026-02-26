@@ -44,7 +44,7 @@ export const notesSchema = new mongoose.Schema(
     },
     expireAt: { type: Date, expires: 0 },
   },
-  { timestamps: true },
+  { timestamps: true }
 );
 
 export const Notes =

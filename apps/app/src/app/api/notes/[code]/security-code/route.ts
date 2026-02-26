@@ -4,7 +4,7 @@ import { NoteAlreadyHasSecurityCodeError } from "@/types/errors/security-code";
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: Promise<{ code: string }> },
+  { params }: { params: Promise<{ code: string }> }
 ) {
   const { code } = await params;
 
@@ -19,7 +19,7 @@ export async function POST(
     await createSecurityCodeForNote(code, email, "create", false);
     return NextResponse.json(
       { message: "Security code created and sent to email successfully." },
-      { status: 201 },
+      { status: 201 }
     );
   } catch (error) {
     if (error instanceof NoteAlreadyHasSecurityCodeError) {
@@ -28,7 +28,7 @@ export async function POST(
 
     return NextResponse.json(
       { error: "An unexpected error occurred." },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }

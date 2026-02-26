@@ -6,10 +6,10 @@ import {
 } from "@repo/design-system/components/ui/card";
 import { LockIcon } from "lucide-react";
 import Image from "next/image";
+import { getNoteByCode } from "@/app/actions/notes";
+import { getSecurityCodeByNoteCode } from "@/app/actions/security-code";
 import passwordBackground from "@/assets/images/password-background.png";
 import PasswordCardBody from "./components/password-card-body";
-import { getSecurityCodeByNoteCode } from "@/app/actions/security-code";
-import { getNoteByCode } from "@/app/actions/notes";
 
 type PasswordPageProps = {
   code: string;

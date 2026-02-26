@@ -1,16 +1,5 @@
 "use client";
 
-import { Button } from "@repo/design-system/components/ui/button";
-import {
-  CardContent,
-  CardFooter,
-} from "@repo/design-system/components/ui/card";
-import { handleError } from "@repo/design-system/lib/utils";
-import { useState, useTransition } from "react";
-import { toast } from "sonner";
-import { createSecurityCodeForNote } from "@/app/actions/security-code";
-import { obfuscateEmail } from "@/utils/email";
-import PasswordInputForm from "./password-input-form";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -22,7 +11,18 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@repo/design-system/components/ui/alert-dialog";
+import { Button } from "@repo/design-system/components/ui/button";
+import {
+  CardContent,
+  CardFooter,
+} from "@repo/design-system/components/ui/card";
+import { handleError } from "@repo/design-system/lib/utils";
+import { useState, useTransition } from "react";
+import { toast } from "sonner";
+import { createSecurityCodeForNote } from "@/app/actions/security-code";
 import { SECURITY_CODE_EXPIRE_TIME_MINUTES } from "@/constants";
+import { obfuscateEmail } from "@/utils/email";
+import PasswordInputForm from "./password-input-form";
 
 type PasswordCardBodyProps = {
   code: string;
@@ -90,9 +90,7 @@ export default function PasswordCardBody({
                     <strong>{obfuscateEmail(obsfuscatedEmail)}</strong>?
                     <br />
                     The code will be valid for{" "}
-                    <strong>
-                      {SECURITY_CODE_EXPIRE_TIME_MINUTES} minutes
-                    </strong>{" "}
+                    <strong>{SECURITY_CODE_EXPIRE_TIME_MINUTES} minutes</strong>{" "}
                     and you will not be able to send another code until the
                     current one expires.
                   </p>

@@ -5,7 +5,7 @@ import type { SendSecurityCodeToEmailParams } from "./types/security-code";
 
 export async function sendSecurityCodeToEmail(
   toEmail: string,
-  params: SendSecurityCodeToEmailParams,
+  params: SendSecurityCodeToEmailParams
 ) {
   const fromEmail = env().FROM_EMAIL_FIELD;
   const templateId = env().NOTE_PASSWORD_SECURITY_CODE_TEMPLATE_ID;

@@ -5,7 +5,7 @@ import {
 } from "../schemas/security-code";
 
 export async function getSecurityByNoteCode(
-  noteCode: string,
+  noteCode: string
 ): Promise<SecurityCodeModel | null> {
   await ensureConnected();
 
@@ -16,7 +16,7 @@ export async function createSecurityCode(
   noteCode: string,
   securityCode: string,
   sendToEmail: string,
-  expireAt?: Date,
+  expireAt?: Date
 ) {
   await ensureConnected();
 

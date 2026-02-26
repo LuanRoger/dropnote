@@ -16,7 +16,7 @@ export const securityCodeSchema = new mongoose.Schema(
     isUsed: { type: Boolean, default: false },
     expireAt: { type: Date, expires: 0 },
   },
-  { timestamps: true },
+  { timestamps: true }
 );
 
 export const SecurityCodes =

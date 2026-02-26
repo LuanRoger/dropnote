@@ -14,6 +14,7 @@ import {
   SECURITY_CODE_EXPIRE_TIME_MS,
   SECURITY_CODE_LENGTH,
 } from "@/constants";
+import { NoteNotFoundError } from "@/types/errors/notes";
 import {
   NoteAlreadyHasSecurityCodeError,
   NoteDoesNotHaveSecurityCodeError,
@@ -21,8 +22,7 @@ import {
   SecurityCodeIsInvalidError,
 } from "@/types/errors/security-code";
 import { generateRandomNumber } from "@/utils/random";
-import { setOwnerForNote, getNoteByCode } from "./notes";
-import { NoteNotFoundError } from "@/types/errors/notes";
+import { getNoteByCode, setOwnerForNote } from "./notes";
 
 export async function getSecurityCodeByNoteCode(noteCode: string) {
   const securityCode = await getSecurityByNoteCode(noteCode);
@@ -33,7 +33,7 @@ export async function createSecurityCodeForNote(
   noteCode: string,
   passwordVerb: "create" | "update",
   sendToEmail?: string,
-  haveExpirationTime?: boolean,
+  haveExpirationTime?: boolean
 ) {
   const doesNoteHaveSecurityCode = await getSecurityByNoteCode(noteCode);
   if (doesNoteHaveSecurityCode) {
@@ -58,7 +58,7 @@ export async function createSecurityCodeForNote(
       noteCode,
       securityCode,
       emailToSend,
-      haveExpirationTime ? SECURITY_CODE_EXPIRE_TIME_MS : undefined,
+      haveExpirationTime ? SECURITY_CODE_EXPIRE_TIME_MS : undefined
     ),
     sendSecurityCodeToEmail(emailToSend, {
       passwordVerb,
@@ -73,7 +73,7 @@ export async function createSecurityCodeForNote(
 export async function consumeSecurityCodeAndSetPasswordForNote(
   noteCode: string,
   securityCode: string,
-  newPassword: string,
+  newPassword: string
 ) {
   const securityCodeRecord = await getSecurityByNoteCode(noteCode);
   if (!securityCodeRecord) {

@@ -15,15 +15,15 @@ import {
   InputOTPSlot,
   REGEXP_ONLY_DIGITS,
 } from "@repo/design-system/components/ui/input-otp";
+import { handleError } from "@repo/design-system/lib/utils";
+import type { TransitionStartFunction } from "react";
 import { Controller, useForm } from "react-hook-form";
+import { consumeSecurityCodeAndSetPasswordForNote } from "@/app/actions/security-code";
 import { SECURITY_CODE_LENGTH } from "@/constants";
 import {
   type PasswordUpdateFormData,
   passwordUpdateFormSchema,
 } from "./schema";
-import type { TransitionStartFunction } from "react";
-import { consumeSecurityCodeAndSetPasswordForNote } from "@/app/actions/security-code";
-import { handleError } from "@repo/design-system/lib/utils";
 
 type PasswordUpdateFormParams = {
   code: string;
@@ -52,7 +52,7 @@ export default function PasswordUpdateForm({
         await consumeSecurityCodeAndSetPasswordForNote(
           code,
           securityCode,
-          newPassword,
+          newPassword
         );
       } catch (error) {
         handleError(error);

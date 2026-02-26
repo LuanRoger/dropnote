@@ -7,10 +7,10 @@ import {
   FieldLabel,
 } from "@repo/design-system/components/ui/field";
 import { Input } from "@repo/design-system/components/ui/input";
-import { Controller, useForm } from "react-hook-form";
-import { type NotePasswordInput, notePasswordInputFormSchema } from "./schema";
-import { tryPasswordAccess } from "@/app/actions/notes";
 import { handleError } from "@repo/design-system/lib/utils";
+import { Controller, useForm } from "react-hook-form";
+import { tryPasswordAccess } from "@/app/actions/notes";
+import { type NotePasswordInput, notePasswordInputFormSchema } from "./schema";
 
 type PasswordInputFormProps = {
   formId?: string;

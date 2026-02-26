@@ -5,11 +5,11 @@ import "server-only";
 
 export async function checkPasswordCookieAccess(
   code: string,
-  noteHashedPassword: string,
+  noteHashedPassword: string
 ): Promise<boolean> {
   const cookieStore = await cookies();
   const lastUserNotePassword = cookieStore.get(
-    COOKIE_KEYS.NOTE_LAST_NOTE_PASSWORD,
+    COOKIE_KEYS.NOTE_LAST_NOTE_PASSWORD
   );
   if (!lastUserNotePassword) {
     return false;
