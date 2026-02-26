@@ -11,6 +11,18 @@ import { toast } from "sonner";
 import { createSecurityCodeForNote } from "@/app/actions/security-code";
 import { obfuscateEmail } from "@/utils/email";
 import PasswordInputForm from "./password-input-form";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@repo/design-system/components/ui/alert-dialog";
+import { SECURITY_CODE_EXPIRE_TIME_MINUTES } from "@/constants";
 
 type PasswordCardBodyProps = {
   code: string;
@@ -22,6 +34,8 @@ export default function PasswordCardBody({
   recoveryEmail,
 }: PasswordCardBodyProps) {
   const formId = "password-form";
+  const obsfuscatedEmail = recoveryEmail ? obfuscateEmail(recoveryEmail) : null;
+
   const [isPending, startAction] = useTransition();
   const [sended, setIsSended] = useState(false);
 
@@ -33,7 +47,7 @@ export default function PasswordCardBody({
     const obfuscatedEmail = obfuscateEmail(recoveryEmail);
     startAction(async () => {
       try {
-        await createSecurityCodeForNote(code, recoveryEmail, "update");
+        await createSecurityCodeForNote(code, "update", recoveryEmail, true);
         setIsSended(true);
         toast.success(`Security code sent to email ${obfuscatedEmail}`);
       } catch (error) {
@@ -55,16 +69,43 @@ export default function PasswordCardBody({
         <Button disabled={isPending} form={formId} type="submit">
           Unlock note
         </Button>
-        {recoveryEmail && !sended && (
-          <Button
-            disabled={isPending}
-            form={formId}
-            onClick={sendSecurityCode}
-            type="button"
-            variant="link"
-          >
-            Forget password?
-          </Button>
+        {obsfuscatedEmail && !sended && (
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button disabled={isPending} type="button" variant="link">
+                Forget password?
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>
+                  Send security code to email?
+                </AlertDialogTitle>
+                <AlertDialogDescription>
+                  <p>
+                    You will receive a security code that will allow you to
+                    create a new password for the note.
+                    <br />
+                    Do you want to send the security code to the email{" "}
+                    <strong>{obfuscateEmail(obsfuscatedEmail)}</strong>?
+                    <br />
+                    The code will be valid for{" "}
+                    <strong>
+                      {SECURITY_CODE_EXPIRE_TIME_MINUTES} minutes
+                    </strong>{" "}
+                    and you will not be able to send another code until the
+                    current one expires.
+                  </p>
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogAction onClick={sendSecurityCode}>
+                  Send
+                </AlertDialogAction>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         )}
       </CardFooter>
     </>
