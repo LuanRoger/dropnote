@@ -5,6 +5,7 @@ import {
   getNoteByCode as getNoteByCodeQuery,
   getNotePasswordByCode,
   updateNote,
+  updateOwnerForNote,
 } from "@repo/database/queries/notes";
 import type { NoteBody } from "@repo/editor/types/notes";
 import { countBodyLength } from "@repo/editor/utils/nodes";
@@ -20,12 +21,16 @@ import {
 import {
   CharacterLimitExceededError,
   InvalidNotePasswordError,
+  NoteHasDiferentOwnerEmailError,
   NoteDoesNotHavePasswordError,
+  NoteNotFoundError,
+  OwnerEmailValidationError,
 } from "@/types/errors/notes";
 import {
   checkPasswordCookieAccess,
   mountPasswordCookieValue,
 } from "@/utils/cookies";
+import { emailSchema } from "@/utils/schemas/email";
 
 export async function getNoteByCode(code: string) {
   return await getNoteByCodeQuery(code);
@@ -112,4 +117,22 @@ export async function updateNoteBodyByCode(code: string, body: NoteBody) {
   }
 
   await updateNote(code, body);
+}
+
+export async function setOwnerForNote(code: string, ownerEmail: string) {
+  const validEmail = emailSchema.safeParse(ownerEmail);
+  if (!validEmail.success) {
+    throw new OwnerEmailValidationError();
+  }
+
+  const note = await getNoteByCodeQuery(code);
+  if (!note) {
+    throw new NoteNotFoundError(code);
+  }
+
+  if (note.ownerEmail && note.ownerEmail !== ownerEmail) {
+    throw new NoteHasDiferentOwnerEmailError();
+  }
+
+  await updateOwnerForNote(code, ownerEmail);
 }
