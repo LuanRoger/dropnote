@@ -21,3 +21,11 @@ export class SecurityCodeIsInvalidError extends Error {
     );
   }
 }
+
+export class OwnerEmailNotProvidedError extends Error {
+  constructor() {
+    super(
+      "The note does not have an owner email and no email was provided to send the security code. Please provide an email to send the security code.",
+    );
+  }
+}
