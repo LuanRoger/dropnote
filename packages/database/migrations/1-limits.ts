@@ -5,7 +5,7 @@ export default async function migrate(db: mongo.Db): Promise<void> {
 
   console.log("🔍 Finding documents missing limit fields...");
 
-  const result = await collection.updateMany(
+  const limitsResult = await collection.updateMany(
     { isPermanent: { $exists: false } },
     {
       $set: {
@@ -19,5 +19,5 @@ export default async function migrate(db: mongo.Db): Promise<void> {
     }
   );
 
-  console.log(`✅ ${result.modifiedCount} document(s) updated.`);
+  console.log(`✅ ${limitsResult.modifiedCount} document(s) updated.`);
 }

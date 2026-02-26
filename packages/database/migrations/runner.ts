@@ -1,13 +1,17 @@
 import mongoose from "mongoose";
 import { keys } from "../keys";
 import limits from "./1-limits";
+import ownerEmail from "./2-owner-email";
 
 type Migration = {
   name: string;
   fn: (db: mongoose.mongo.Db) => Promise<void>;
 };
 
-const migrations: Migration[] = [{ name: "1-limits", fn: limits }];
+const migrations: Migration[] = [
+  { name: "1-limits", fn: limits },
+  { name: "2-owner-email", fn: ownerEmail },
+];
 
 async function runner() {
   const env = keys();
