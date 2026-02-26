@@ -22,8 +22,9 @@ import { StaticEditorKit } from "../kits/static-editor-kit";
 import { EditorStatic } from "./editor-static";
 import { ToolbarButton } from "./toolbar";
 import { DocxExportKit } from "../plugins/docx-export-kit";
+import { keys as env } from "../keys";
 
-const siteUrl = "https://platejs.org";
+const fileName = "dropnote";
 
 export function ExportToolbarButton(
   props: React.ComponentProps<typeof DropdownMenu>,
@@ -101,12 +102,12 @@ export function ExportToolbarButton(
     });
     const pdfBase64 = await pdfDoc.saveAsBase64({ dataUri: true });
 
-    await downloadFile(pdfBase64, "plate.pdf");
+    await downloadFile(pdfBase64, `${fileName}.pdf`);
   };
 
   const exportToImage = async () => {
     const canvas = await getCanvas();
-    await downloadFile(canvas.toDataURL("image/png"), "plate.png");
+    await downloadFile(canvas.toDataURL("image/png"), `${fileName}.png`);
   };
 
   const exportToHtml = async () => {
@@ -120,6 +121,7 @@ export function ExportToolbarButton(
       props: { style: { padding: "0 calc(50% - 350px)", paddingBottom: "" } },
     });
 
+    const siteUrl = env().NEXT_PUBLIC_APP_URL;
     const tailwindCss = `<link rel="stylesheet" href="${siteUrl}/tailwind.css">`;
     const katexCss = `<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.18/dist/katex.css" integrity="sha384-9PvLvaiSKCPkFKB1ZsEoTjgnJn+O3KvEwtsz37/XrkYft3DTk2gHdYvd9oWgW3tV" crossorigin="anonymous">`;
 
@@ -164,13 +166,13 @@ export function ExportToolbarButton(
 
     const url = `data:text/html;charset=utf-8,${encodeURIComponent(html)}`;
 
-    await downloadFile(url, "plate.html");
+    await downloadFile(url, `${fileName}.html`);
   };
 
   const exportToMarkdown = async () => {
     const md = editor.getApi(MarkdownPlugin).markdown.serialize();
     const url = `data:text/markdown;charset=utf-8,${encodeURIComponent(md)}`;
-    await downloadFile(url, "plate.md");
+    await downloadFile(url, `${fileName}.md`);
   };
 
   const exportToWord = async () => {
@@ -181,7 +183,7 @@ export function ExportToolbarButton(
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = "plate.docx";
+    link.download = `${fileName}.docx`;
     document.body.append(link);
     link.click();
     link.remove();

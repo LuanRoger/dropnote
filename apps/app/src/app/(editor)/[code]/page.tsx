@@ -3,15 +3,19 @@ import { createMetadata } from "@repo/seo/metadata";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { checkNoteMultiplayerAccess } from "@/app/actions/multiplayer-server";
+import { resolveNoteAccess } from "@/app/actions/notes";
+import { getSecurityCodeByNoteCode } from "@/app/actions/security-code";
 import RichEditorShell from "@/components/rich-editor-shell";
 import { MAX_LENGHT_ADVANCED_NOTE, MAX_LENGHT_BASIC_NOTE } from "@/constants";
 import { NotesDatabaseLoadSource } from "@/lib/sources/notes";
-import { NoteRoomFullError } from "@/types/errors";
+import { NoteRoomFullError } from "@/types/errors/notes";
 import { mapNotePropertiesToBadges } from "@/utils/badge";
 import { generateRandomHexColor } from "@/utils/color";
 import { generateRandomName } from "@/utils/name";
 import { validateSlug } from "@/utils/slug";
 import { env } from "~/env";
+import PasswordPage from "./components/password";
+import UpdatePasswordCard from "./components/update-password";
 
 type PageProps = {
   params: Promise<{
@@ -38,13 +42,25 @@ export default async function Page({ params }: PageProps) {
     notFound();
   }
 
-  const multiplayerAccessResult = await checkNoteMultiplayerAccess(code);
-  if (multiplayerAccessResult.status === "error") {
-    throw multiplayerAccessResult.error;
+  const access = await resolveNoteAccess(code);
+
+  if (access === "needs_password") {
+    const securityCode = await getSecurityCodeByNoteCode(code);
+
+    if (!securityCode) {
+      return <PasswordPage code={code} />;
+    }
+
+    return (
+      <UpdatePasswordCard
+        className="absolute inset-0 top-1/2 mx-auto h-fit w-96 -translate-y-1/2"
+        code={code}
+      />
+    );
   }
 
-  const multiplayerAccessData = multiplayerAccessResult.data;
-  if (multiplayerAccessData.isFull) {
+  const multiplayerAccessResult = await checkNoteMultiplayerAccess(code);
+  if (multiplayerAccessResult.isFull) {
     throw new NoteRoomFullError(code);
   }
 

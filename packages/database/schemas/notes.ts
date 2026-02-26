@@ -4,6 +4,7 @@ export type NoteModel = {
   code: string;
   // biome-ignore lint/suspicious/noExplicitAny: The body of the note can be any, since we don't know the structure of the note
   body: any;
+  ownerEmail: string | null;
   isPermanent: boolean;
   hasPassword: boolean;
   password: string | null;
@@ -24,6 +25,7 @@ export const notesSchema = new mongoose.Schema(
   {
     code: { type: String, unique: true, required: true, index: true },
     body: Object,
+    ownerEmail: { type: String, default: null },
     isPermanent: { type: Boolean, default: false },
     hasPassword: { type: Boolean, default: false },
     hasExtendedLimit: { type: Boolean, default: false },
