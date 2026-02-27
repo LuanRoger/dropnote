@@ -70,7 +70,7 @@ export const BADGES_DATA: Record<string, Badge> = {
 export const SPECIAL_BADGES_DATA: Record<string, Badge> = {
   BETA: {
     label: "Beta",
-    color: "#2563EB",
+    color: "#9E9E9E",
     description: "This note was created during the beta testing phase.",
     isSpecial: true,
   },
