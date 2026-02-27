@@ -5,6 +5,7 @@
   "types": "./index.ts",
   "scripts": {
     "migrate:run": "tsx migrations/runner.ts",
+    "scripts:run": "tsx scripts/runner.ts",
     "push": "drizzle-kit push",
     "migrate": "drizzle-kit migrate",
     "generate": "drizzle-kit generate",
