@@ -1,15 +1,16 @@
 import merge from "lodash.merge";
 import type { Metadata } from "next";
-import { applicationName, productionUrl, publisher } from "./constants";
+import {
+  applicationName,
+  productionUrl,
+  publisher,
+  keywords,
+  author,
+} from "./constants";
 
 type MetadataGenerator = Omit<Metadata, "description" | "title"> & {
   title?: string;
   description: string;
-};
-
-const author: Metadata["authors"] = {
-  name: "Luan Roger",
-  url: "https://www.luanroger.dev/",
 };
 
 export const createMetadata = ({
@@ -23,15 +24,17 @@ export const createMetadata = ({
     title: parsedTitle,
     description,
     applicationName,
-    metadataBase: productionUrl,
+    metadataBase: new URL(productionUrl),
+    keywords,
     authors: [author],
     creator: author.name,
+    publisher,
     formatDetection: {
       telephone: false,
     },
     appleWebApp: {
       capable: true,
-      statusBarStyle: "default",
+      statusBarStyle: "black-translucent",
       title: parsedTitle,
     },
     openGraph: {
@@ -40,11 +43,13 @@ export const createMetadata = ({
       type: "website",
       siteName: applicationName,
       locale: "en_US",
+      url: productionUrl,
     },
     twitter: {
       card: "summary_large_image",
+      title: parsedTitle,
+      description,
     },
-    publisher,
   };
 
   const metadata: Metadata = merge(defaultMetadata, properties);

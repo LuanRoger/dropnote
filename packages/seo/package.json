@@ -7,8 +7,8 @@
     "typecheck": "tsc --noEmit --emitDeclarationOnly false"
   },
   "dependencies": {
-    "@takumi-rs/image-response": "^0.68.15",
-    "@takumi-rs/wasm": "^0.68.15",
+    "@takumi-rs/image-response": "^0.69.2",
+    "@takumi-rs/wasm": "^0.69.2",
     "lodash.merge": "^4.6.2",
     "react": "19.2.4",
     "schema-dts": "^1.1.5"
@@ -16,7 +16,7 @@
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
     "@types/lodash.merge": "^4.6.9",
-    "@types/node": "25.3.0",
+    "@types/node": "25.3.2",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
     "next": "16.1.6"

@@ -9,7 +9,7 @@
     "dev": "bun run --watch index.ts"
   },
   "devDependencies": {
-    "@types/bun": "latest",
+    "@types/bun": "1.3.9",
     "typescript": "^5.9.3"
   },
   "dependencies": {
