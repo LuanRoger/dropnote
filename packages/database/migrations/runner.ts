@@ -1,3 +1,4 @@
+import "dotenv/config";
 import mongoose from "mongoose";
 import { keys } from "../keys";
 import limits from "./1-limits";

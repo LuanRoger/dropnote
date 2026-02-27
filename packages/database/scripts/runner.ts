@@ -1,3 +1,4 @@
+import "dotenv/config";
 import mongoose from "mongoose";
 import { keys } from "../keys";
 import betaNotes from "./1-beta-notes";
