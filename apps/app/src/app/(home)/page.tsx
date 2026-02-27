@@ -6,7 +6,8 @@ import SpecialRoutesSection from "./components/special-routes-section";
 
 export const generateMetadata = async (): Promise<Metadata> =>
   createMetadata({
-    description: "Create, edit and share text instantly. No sign-up required.",
+    description:
+      "The fastest way to take notes and share text online. No login required, AI-powered, and open-source.",
   });
 
 export default function Home() {
