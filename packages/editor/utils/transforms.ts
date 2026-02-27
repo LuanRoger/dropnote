@@ -79,7 +79,9 @@ export const insertBlock = (editor: PlateEditor, type: string) => {
   editor.tf.withoutNormalizing(() => {
     const block = editor.api.block();
 
-    if (!block) return;
+    if (!block) {
+      return;
+    }
     if (type in insertBlockMap) {
       insertBlockMap[type](editor, type);
     } else {
@@ -155,7 +157,9 @@ export const setBlockType = (
 
     const entries = editor.api.blocks({ mode: "lowest" });
 
-    entries.forEach((entry) => setEntry(entry));
+    for (const entry of entries) {
+      setEntry(entry);
+    }
   });
 };
 

@@ -3,10 +3,10 @@
 import { Spinner } from "@repo/design-system/components/ui/spinner";
 import { AnimatePresence, motion } from "motion/react";
 
-interface LoadingSpinnerProps {
+type LoadingSpinnerProps = {
   className?: string;
   show?: boolean;
-}
+};
 
 export default function LoadingSpinner({
   className,

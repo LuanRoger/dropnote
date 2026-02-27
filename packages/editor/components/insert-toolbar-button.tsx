@@ -169,11 +169,6 @@ const groups: Group[] = [
         label: "Equation",
         value: KEYS.equation,
       },
-      {
-        icon: <Code2 />,
-        label: "Code Drawing",
-        value: "codeDrawing",
-      },
     ].map((item) => ({
       ...item,
       onSelect: (editor, value) => {

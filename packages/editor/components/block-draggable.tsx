@@ -19,7 +19,7 @@ import {
 import { useSelected } from "platejs/react";
 
 import { Button } from "@repo/design-system/components/ui/button";
-import { cn } from "../utils/tailwind";
+import { cn } from "@repo/design-system/lib/utils";
 
 const UNDRAGGABLE_KEYS = [KEYS.column, KEYS.tr, KEYS.td];
 
@@ -28,6 +28,7 @@ export const BlockDraggable: RenderNodeWrapper = (props) => {
 
   const enabled = React.useMemo(() => {
     if (editor.dom.readOnly) return false;
+    if (!path) return false;
 
     if (path.length === 1 && !isType(editor, element, UNDRAGGABLE_KEYS)) {
       return true;

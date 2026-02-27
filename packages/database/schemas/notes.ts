@@ -1,9 +1,10 @@
 import mongoose from "mongoose";
 
-export interface NoteModel {
+export type NoteModel = {
   code: string;
   // biome-ignore lint/suspicious/noExplicitAny: The body of the note can be any, since we don't know the structure of the note
   body: any;
+  ownerEmail: string | null;
   isPermanent: boolean;
   hasPassword: boolean;
   password: string | null;
@@ -14,16 +15,17 @@ export interface NoteModel {
     color: string;
     description: string;
     isSpecial: boolean;
-  };
+  }[];
   expireAt: Date;
   createdAt?: Date;
   updatedAt?: Date;
-}
+};
 
 export const notesSchema = new mongoose.Schema(
   {
     code: { type: String, unique: true, required: true, index: true },
     body: Object,
+    ownerEmail: { type: String, default: null },
     isPermanent: { type: Boolean, default: false },
     hasPassword: { type: Boolean, default: false },
     hasExtendedLimit: { type: Boolean, default: false },
@@ -42,7 +44,7 @@ export const notesSchema = new mongoose.Schema(
     },
     expireAt: { type: Date, expires: 0 },
   },
-  { timestamps: true },
+  { timestamps: true }
 );
 
 export const Notes =

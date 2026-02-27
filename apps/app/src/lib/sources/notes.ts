@@ -1,4 +1,5 @@
 import type { NoteModel } from "@repo/database/schemas/notes";
+import { handleError } from "@repo/design-system/lib/utils";
 import type { NoteBody } from "@repo/editor/types/notes";
 import { NotesSaveSource } from "@repo/editor/types/notes";
 import { ensureCreated, updateNoteBodyByCode } from "@/app/actions/notes";
@@ -52,7 +53,7 @@ export class NotesLocalLoadSource extends NotesLoadSource {
     try {
       return Promise.resolve(JSON.parse(item) as NoteBody);
     } catch (error) {
-      console.error("Failed to parse note from localStorage", error);
+      handleError(error);
       return Promise.resolve(undefined);
     }
   }
@@ -60,7 +61,7 @@ export class NotesLocalLoadSource extends NotesLoadSource {
 
 export function createNoteSource(
   code: string,
-  type: NoteSource,
+  type: NoteSource
 ): NotesSaveSource {
   switch (type) {
     case "database":

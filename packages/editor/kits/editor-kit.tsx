@@ -1,41 +1,13 @@
-import { type AnyPluginConfig, TrailingBlockPlugin } from "platejs";
+import type { AnyPluginConfig } from "@platejs/core";
 import { createPlateEditor } from "platejs/react";
-
-import { AlignKit } from "../plugins/align-kit";
-import { AutoformatKit } from "../plugins/autoformat-kit";
-import { BasicBlocksKit } from "../plugins/basic-blocks-kit";
-import { BasicMarksKit } from "../plugins/basic-marks-kit";
-import { BlockMenuKit } from "../plugins/block-menu-kit";
-import { BlockPlaceholderKit } from "../plugins/block-placeholder-kit";
 import { BottomStatusPlugin } from "../plugins/bottom-status-plugin";
-import { CalloutKit } from "../plugins/callout-kit";
-import { CodeBlockKit } from "../plugins/code-block-kit";
-import { ColumnKit } from "../plugins/column-kit";
-import { CursorOverlayKit } from "../plugins/cursor-overlay-kit";
-import { DateKit } from "../plugins/date-kit";
-import { DocxKit } from "../plugins/docx-kit";
-import { EmojiKit } from "../plugins/emoji-kit";
-import { ExitBreakKit } from "../plugins/exit-break-kit";
-import { FixedToolbarKit } from "../plugins/fixed-toolbar-kit";
-import { FloatingToolbarKit } from "../plugins/floating-toolbar-kit";
-import { FontKit } from "../plugins/font-kit";
-import { LineHeightKit } from "../plugins/line-height-kit";
-import { LinkKit } from "../plugins/link-kit";
-import { ListKit } from "../plugins/list-kit";
-import { MarkdownKit } from "../plugins/markdown-kit";
-import { MathKit } from "../plugins/math-kit";
-import { MediaKit } from "../plugins/media-kit";
-import { SlashKit } from "../plugins/slash-kit";
-import { TableKit } from "../plugins/table-kit";
-import { TocKit } from "../plugins/toc-kit";
-import { ToggleKit } from "../plugins/toggle-kit";
 import { YjsKit } from "../plugins/yjs-kit";
-import { BlockSelectionKit } from "../plugins/block-selection-kit";
-import { DndKit } from "../plugins/dnd-kit";
 import type { Badge } from "../types/badge";
+import type { EditorOptions } from "../types/editor";
 import type { NoteBody } from "../types/notes";
+import { BasicEditorKit } from "./basic-editor-kit";
 
-interface EditorKitOptions {
+type EditorKitOptions = {
   yjs?: {
     name: string;
     color: string;
@@ -48,55 +20,15 @@ interface EditorKitOptions {
     expireAt?: Date;
     badges: Badge[];
   };
-}
+};
 
 export const EditorKit: (options: EditorKitOptions) => AnyPluginConfig[] = (
-  options: EditorKitOptions,
+  options: EditorKitOptions
 ) => {
   const { yjs, bottomStatus } = options;
 
   const kits = [
-    // Elements
-    ...BasicBlocksKit,
-    ...CodeBlockKit,
-    ...TableKit,
-    ...ToggleKit,
-    ...TocKit,
-    ...MediaKit,
-    ...CalloutKit,
-    ...ColumnKit,
-    ...MathKit,
-    ...DateKit,
-    ...LinkKit,
-
-    // Marks
-    ...BasicMarksKit,
-    ...FontKit,
-
-    // Block Style
-    ...ListKit,
-    ...AlignKit,
-    ...LineHeightKit,
-
-    // Editing
-    ...SlashKit,
-    ...AutoformatKit,
-    ...BlockSelectionKit,
-    ...CursorOverlayKit,
-    ...DndKit,
-    ...BlockMenuKit,
-    ...EmojiKit,
-    ...ExitBreakKit,
-    TrailingBlockPlugin,
-
-    // Parsers
-    ...DocxKit,
-    ...MarkdownKit,
-
-    // UI
-    ...BlockPlaceholderKit,
-    ...FixedToolbarKit,
-    ...FloatingToolbarKit,
+    ...BasicEditorKit,
     BottomStatusPlugin.configure({
       options: bottomStatus,
     }),
@@ -109,13 +41,19 @@ export const EditorKit: (options: EditorKitOptions) => AnyPluginConfig[] = (
   return kits;
 };
 
-export function createEditor(
-  options: EditorKitOptions,
-  initialValue: NoteBody,
-) {
+export function createEditor(options: EditorOptions, initialValue: NoteBody) {
+  const { maxLength, badges = [], colabration, expireAt } = options;
+
   return createPlateEditor({
-    plugins: EditorKit(options),
+    plugins: EditorKit({
+      yjs: colabration,
+      bottomStatus: {
+        maxLength,
+        expireAt,
+        badges,
+      },
+    }),
     value: initialValue,
-    maxLength: options.bottomStatus?.maxLength,
+    maxLength,
   });
 }

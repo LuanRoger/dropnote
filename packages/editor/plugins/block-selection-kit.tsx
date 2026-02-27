@@ -12,7 +12,7 @@ export const BlockSelectionKit = [
       enableContextMenu: true,
       isSelectable: (element) =>
         !getPluginTypes(editor, [KEYS.column, KEYS.codeLine, KEYS.td]).includes(
-          element.type,
+          element.type
         ),
       onKeyDownSelecting: (editor, e) => {
         if (isHotkey("mod+j")(e)) {
@@ -26,6 +26,7 @@ export const BlockSelectionKit = [
           return null;
         }
 
+        // biome-ignore lint/suspicious/noExplicitAny: The type of props is complex and depends on the editor's state, so we use any here for simplicity.
         return <BlockSelection {...(props as any)} />;
       },
     },

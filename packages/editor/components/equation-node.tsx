@@ -1,17 +1,16 @@
 "use client";
 
-import { useEquationElement, useEquationInput } from "@platejs/math/react";
-import { BlockSelectionPlugin } from "@platejs/selection/react";
-import { Button } from "@repo/design-system/components/ui/button";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@repo/design-system/components/ui/popover";
-import { cn } from "@repo/design-system/lib/utils";
-import { CornerDownLeftIcon, RadicalIcon } from "lucide-react";
+import * as React from "react";
+import TextareaAutosize, {
+  type TextareaAutosizeProps,
+} from "react-textarea-autosize";
+
 import type { TEquationElement } from "platejs";
 import type { PlateElementProps } from "platejs/react";
+
+import { useEquationElement, useEquationInput } from "@platejs/math/react";
+import { BlockSelectionPlugin } from "@platejs/selection/react";
+import { CornerDownLeftIcon, RadicalIcon } from "lucide-react";
 import {
   createPrimitiveComponent,
   PlateElement,
@@ -19,17 +18,21 @@ import {
   useEditorSelector,
   useElement,
   useReadOnly,
-  useSelected,
+  useSelected,  
 } from "platejs/react";
-import { useEffect, useRef, useState } from "react";
-import TextareaAutosize, {
-  type TextareaAutosizeProps,
-} from "react-textarea-autosize";
+
+import { Button } from "@repo/design-system/components/ui/button";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@repo/design-system/components/ui/popover";
+import { cn } from "@repo/design-system/lib/utils";
 
 export function EquationElement(props: PlateElementProps<TEquationElement>) {
   const selected = useSelected();
-  const [open, setOpen] = useState(selected);
-  const katexRef = useRef<HTMLDivElement | null>(null);
+  const [open, setOpen] = React.useState(selected);
+  const katexRef = React.useRef<HTMLDivElement | null>(null);
 
   useEquationElement({
     element: props.element,
@@ -49,17 +52,17 @@ export function EquationElement(props: PlateElementProps<TEquationElement>) {
 
   return (
     <PlateElement className="my-1" {...props}>
-      <Popover modal={false} onOpenChange={setOpen} open={open}>
+      <Popover open={open} onOpenChange={setOpen} modal={false}>
         <PopoverTrigger asChild>
           <div
             className={cn(
               "group flex cursor-pointer select-none items-center justify-center rounded-sm hover:bg-primary/10 data-[selected=true]:bg-primary/10",
               props.element.texExpression.length === 0
                 ? "bg-muted p-3 pr-9"
-                : "px-2 py-1"
+                : "px-2 py-1",
             )}
-            contentEditable={false}
             data-selected={selected}
+            contentEditable={false}
             role="button"
           >
             {props.element.texExpression.length > 0 ? (
@@ -74,11 +77,11 @@ export function EquationElement(props: PlateElementProps<TEquationElement>) {
         </PopoverTrigger>
 
         <EquationPopoverContent
-          isInline={false}
           open={open}
           placeholder={
             "f(x) = \\begin{cases}\n  x^2, &\\quad x > 0 \\\\\n  0, &\\quad x = 0 \\\\\n  -x^2, &\\quad x < 0\n\\end{cases}"
           }
+          isInline={false}
           setOpen={setOpen}
         />
       </Popover>
@@ -89,18 +92,18 @@ export function EquationElement(props: PlateElementProps<TEquationElement>) {
 }
 
 export function InlineEquationElement(
-  props: PlateElementProps<TEquationElement>
+  props: PlateElementProps<TEquationElement>,
 ) {
   const element = props.element;
-  const katexRef = useRef<HTMLDivElement | null>(null);
+  const katexRef = React.useRef<HTMLDivElement | null>(null);
   const selected = useSelected();
   const isCollapsed = useEditorSelector(
     (editor) => editor.api.isCollapsed(),
-    []
+    [],
   );
-  const [open, setOpen] = useState(selected && isCollapsed);
+  const [open, setOpen] = React.useState(selected && isCollapsed);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (selected && isCollapsed) {
       setOpen(true);
     }
@@ -126,28 +129,28 @@ export function InlineEquationElement(
     <PlateElement
       {...props}
       className={cn(
-        "mx-1 inline-block select-none rounded-sm [&_.katex-display]:my-0!"
+        "mx-1 inline-block select-none rounded-sm [&_.katex-display]:my-0!",
       )}
     >
-      <Popover modal={false} onOpenChange={setOpen} open={open}>
+      <Popover open={open} onOpenChange={setOpen} modal={false}>
         <PopoverTrigger asChild>
           <div
             className={cn(
-              'after:absolute after:inset-0 after:-top-0.5 after:-left-1 after:z-1 after:h-[calc(100%)+4px] after:w-[calc(100%+8px)] after:rounded-sm after:content-[""]',
+              'after:-top-0.5 after:-left-1 after:absolute after:inset-0 after:z-1 after:h-[calc(100%)+4px] after:w-[calc(100%+8px)] after:rounded-sm after:content-[""]',
               "h-6",
               ((element.texExpression.length > 0 && open) || selected) &&
-                "after:bg-primary/15",
+                "after:bg-brand/15",
               element.texExpression.length === 0 &&
-                "text-muted-foreground after:bg-neutral-500/10"
+                "text-muted-foreground after:bg-neutral-500/10",
             )}
             contentEditable={false}
           >
             <span
+              ref={katexRef}
               className={cn(
                 element.texExpression.length === 0 && "hidden",
-                "font-mono leading-none"
+                "font-mono leading-none",
               )}
-              ref={katexRef}
             />
             {element.texExpression.length === 0 && (
               <span>
@@ -160,10 +163,10 @@ export function InlineEquationElement(
 
         <EquationPopoverContent
           className="my-auto"
-          isInline
           open={open}
           placeholder="E = mc^2"
           setOpen={setOpen}
+          isInline
         />
       </Popover>
 
@@ -191,15 +194,13 @@ const EquationPopoverContent = ({
   const readOnly = useReadOnly();
   const element = useElement<TEquationElement>();
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (isInline && open) {
       setOpen(true);
     }
   }, [isInline, open, setOpen]);
 
-  if (readOnly) {
-    return null;
-  }
+  if (readOnly) return null;
 
   const onClose = () => {
     setOpen(false);
@@ -216,19 +217,19 @@ const EquationPopoverContent = ({
   return (
     <PopoverContent
       className="flex gap-2"
-      contentEditable={false}
       onEscapeKeyDown={(e) => {
         e.preventDefault();
       }}
+      contentEditable={false}
     >
       <EquationInput
-        autoFocus
         className={cn("max-h-[50vh] grow resize-none p-2 text-sm", className)}
         state={{ isInline, open, onClose }}
+        autoFocus
         {...props}
       />
 
-      <Button className="px-3" onClick={onClose} variant="secondary">
+      <Button variant="secondary" className="px-3" onClick={onClose}>
         Done <CornerDownLeftIcon className="size-3.5" />
       </Button>
     </PopoverContent>

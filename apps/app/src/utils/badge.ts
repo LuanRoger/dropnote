@@ -3,7 +3,12 @@ import type { Badge } from "@repo/editor/types/badge";
 import { BADGES_DATA } from "@/constants";
 
 export function mapNotePropertiesToBadges(note: NoteModel): Badge[] {
-  const badges: Badge[] = [];
+  const badges: Badge[] = note.badges.map((badge) => ({
+    label: badge.label,
+    color: badge.color,
+    description: badge.description,
+    isSpecial: badge.isSpecial,
+  }));
 
   if (note.isPermanent) {
     badges.push(BADGES_DATA.PERMANENT);

@@ -1,7 +1,13 @@
+import type { Badge } from "@repo/editor/types/badge";
+
 export const TEST_NOTE_EXPIRE_TIME_MS = new Date(Date.now() + 20 * 1000); // 20 seconds
 export const DEFAULT_NOTE_EXPIRE_TIME_MS = new Date(
   Date.now() + 48 * 60 * 60 * 1000,
 ); // 48 hours
+export const SECURITY_CODE_EXPIRE_TIME_MS = new Date(
+  Date.now() + 15 * 60 * 1000,
+); // 15 minutes
+export const SECURITY_CODE_EXPIRE_TIME_MINUTES = 15;
 
 export const MAX_LENGHT_BASIC_NOTE = 1000;
 export const MAX_LENGHT_ADVANCED_NOTE = 10_000;
@@ -9,6 +15,8 @@ export const MAX_LENGHT_ADVANCED_NOTE = 10_000;
 export const EDITOR_DEBOUNCE_TIME_MS = 600;
 
 export const LOCAL_NOTE_PREFIX = "dropnote.";
+
+export const SECURITY_CODE_LENGTH = 5;
 
 /**
  * Regex for validating slugs:
@@ -20,7 +28,18 @@ export const LOCAL_NOTE_PREFIX = "dropnote.";
  */
 export const SLUG_REGEX = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
-export const BADGES_DATA = {
+export const BADGES_DATA: Record<string, Badge> = {
+  LOCAL: {
+    label: "Local",
+    color: "#6B7280",
+    description: "This note is stored locally on your device.",
+  },
+  NO_SAVE: {
+    label: "No Save",
+    color: "#DC2626",
+    description: "This note will not be saved and will be lost when you leave.",
+  },
+
   SECURE: {
     label: "Secure",
     color: "#0F5A3B",
@@ -46,4 +65,25 @@ export const BADGES_DATA = {
     color: "#B91C1C",
     description: "This note can be edited by multiple users in real-time.",
   },
+};
+
+export const SPECIAL_BADGES_DATA: Record<string, Badge> = {
+  BETA: {
+    label: "Beta",
+    color: "#9E9E9E",
+    description: "This note was created during the beta testing phase.",
+    isSpecial: true,
+  },
+};
+
+//TODO: Remove this when the beta phase is over
+export const PARTIAL_NOTE_BETA_NOTE_DATA = {
+  badges: [SPECIAL_BADGES_DATA.BETA],
+  isPermanent: true,
+};
+
+export const NOTE_LAST_NOTE_PASSWORD_EXPIRE_TIME_MS = 7 * 24 * 60 * 60; // 7 days in seconds
+
+export const COOKIE_KEYS = {
+  NOTE_LAST_NOTE_PASSWORD: "dropnote.last_note.password",
 };

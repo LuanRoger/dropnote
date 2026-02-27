@@ -9,7 +9,19 @@
       "!packages/design-system/lib",
       "!packages/design-system/hooks",
       "!packages/editor/components"
-    ],
+    ]
+  },
+  "linter": {
+    "rules": {
+      "style": {
+        "useConsistentTypeDefinitions": {
+          "level": "error",
+          "options": {
+            "style": "type"
+          }
+        }
+      }
+    }
   },
   "javascript": {
     "globals": ["Bun"]

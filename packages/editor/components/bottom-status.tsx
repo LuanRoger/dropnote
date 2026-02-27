@@ -18,10 +18,11 @@ import { BottomStatusPlugin } from "../plugins/bottom-status-plugin";
 import { countBodyLength } from "../utils/nodes";
 import { Badge } from "@repo/design-system/components/ui/badge";
 import { Separator } from "@repo/design-system/components/ui/separator";
+import type { Badge as BadgeType } from "../types/badge";
 
 export default function BottomStatus() {
   return (
-    <div className="flex justify-between w-full flex-none rounded-md border border-border p-1 md:p-2 text-xs font-mono uppercase text-muted-foreground">
+    <div className="flex justify-between w-full flex-none rounded-md border border-border p-1 md:p-2 text-xs text-muted-foreground">
       <div className="flex items-center gap-3">
         <CharactersBlockCount />
         <NoteIndicators />
@@ -43,7 +44,7 @@ function CharactersBlockCount() {
     : false;
 
   return (
-    <p className="flex items-center gap-2">
+    <div className="flex items-center gap-2 font-mono upercase">
       <HoverCard>
         <HoverCardTrigger>
           <AnimatePresence initial={false} mode="popLayout">
@@ -93,7 +94,7 @@ function CharactersBlockCount() {
           </TooltipContent>
         </Tooltip>
       )}
-    </p>
+    </div>
   );
 }
 
@@ -130,20 +131,20 @@ function NoteExpireAt({ expireAt }: NoteExpireAtProps) {
   );
 }
 
-function NoteBadges() {
-  const { plugin } = useEditorPlugin(BottomStatusPlugin);
-  const badges = plugin.options.badges;
-
-  if (badges.length === 0) {
-    return null;
-  }
-
+function BadgesStack({
+  badges,
+  isSpecial,
+}: {
+  badges: BadgeType[];
+  isSpecial?: boolean;
+}) {
   return (
     <div className="flex items-center">
       {badges.map(({ label, color, description }, index) => {
         const badge = (
           <Badge
-            className="text-white ring-2 ring-background hover:z-10 transition-transform hover:scale-105"
+            variant={isSpecial ? "special" : "default"}
+            className={`text-white font-mono uppercase ring-2 ring-background hover:z-10 transition-transform hover:scale-105`}
             style={{
               backgroundColor: color,
               zIndex: badges.length - index,
@@ -164,6 +165,36 @@ function NoteBadges() {
           </HoverCard>
         );
       })}
+    </div>
+  );
+}
+
+function NoteBadges() {
+  const { plugin } = useEditorPlugin(BottomStatusPlugin);
+  const badges = plugin.options.badges;
+
+  if (badges.length === 0) {
+    return null;
+  }
+
+  const normalBadges: BadgeType[] = [];
+  const specialBadges: BadgeType[] = [];
+  for (const badge of badges) {
+    if (badge.isSpecial) {
+      specialBadges.push(badge);
+      continue;
+    }
+
+    normalBadges.push(badge);
+  }
+
+  return (
+    <div className="flex items-center gap-2">
+      <BadgesStack badges={specialBadges} isSpecial />
+      {specialBadges.length > 0 && normalBadges.length > 0 && (
+        <Separator orientation="vertical" />
+      )}
+      <BadgesStack badges={normalBadges} />
     </div>
   );
 }

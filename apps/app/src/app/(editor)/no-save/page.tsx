@@ -1,7 +1,7 @@
 import { createMetadata } from "@repo/seo/metadata";
 import type { Metadata } from "next";
 import RichEditorShell from "@/components/rich-editor-shell";
-import { MAX_LENGHT_BASIC_NOTE } from "@/constants";
+import { BADGES_DATA, MAX_LENGHT_BASIC_NOTE } from "@/constants";
 
 const code = "no-save";
 export const metadata: Metadata = createMetadata({
@@ -10,5 +10,13 @@ export const metadata: Metadata = createMetadata({
 });
 
 export default function NoSavePage() {
-  return <RichEditorShell code={code} maxLength={MAX_LENGHT_BASIC_NOTE} />;
+  return (
+    <RichEditorShell
+      code={code}
+      options={{
+        maxLength: MAX_LENGHT_BASIC_NOTE,
+        badges: [BADGES_DATA.NO_SAVE],
+      }}
+    />
+  );
 }

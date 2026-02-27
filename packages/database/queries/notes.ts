@@ -2,22 +2,44 @@
 import { ensureConnected } from "../client";
 import { type NoteModel, Notes } from "../schemas/notes";
 
-export async function findNoteByCode(code: string): Promise<NoteModel | null> {
+export async function getNoteByCode(code: string): Promise<NoteModel | null> {
   await ensureConnected();
 
-  const note = await Notes.findOne({ code });
+  const note = await Notes.findOne({ code }).lean();
 
   return note;
 }
 
-export async function createNote(
+export async function getNotePasswordByCode(
   code: string,
-  body: any,
-  expireAt?: Date,
-): Promise<NoteModel> {
+): Promise<string | null> {
   await ensureConnected();
 
-  return await Notes.create({ code, body, expireAt });
+  const note = await Notes.findOne({ code }).select("password").lean();
+
+  return note?.password || null;
+}
+
+export async function createNote(data: {
+  code: string;
+  body: any;
+  badges?: {
+    label: string;
+    color: string;
+    description: string;
+    isSpecial?: boolean;
+  }[];
+  isPermanent?: boolean;
+  hasExtendedLimit?: boolean;
+  expireAt?: Date;
+}): Promise<NoteModel> {
+  await ensureConnected();
+
+  const created = await Notes.create(data);
+
+  const obj = created.toObject<NoteModel>();
+
+  return obj;
 }
 
 export async function updateNote(code: string, body: any) {
@@ -26,13 +48,25 @@ export async function updateNote(code: string, body: any) {
   await Notes.updateOne({ code }, { body });
 }
 
-export async function createOrUpdateNote(code: string, body: any) {
+export async function createOrUpdateNoteBody(code: string, body: any) {
   await ensureConnected();
 
-  const note = await Notes.findOne({ code });
+  const note = await Notes.findOne({ code }).lean();
   if (note) {
     await Notes.updateOne({ code }, { body });
   } else {
     await Notes.create({ code, body });
   }
+}
+
+export async function setPasswordForNote(code: string, password: string) {
+  await ensureConnected();
+
+  await Notes.updateOne({ code }, { password, hasPassword: true });
+}
+
+export async function updateOwnerForNote(code: string, owner: string) {
+  await ensureConnected();
+
+  await Notes.updateOne({ code }, { owner });
 }

@@ -125,6 +125,7 @@
   --radius-xl: calc(var(--radius) + 4px);
   --animate-accordion-down: accordion-down 0.2s ease-out;
   --animate-accordion-up: accordion-up 0.2s ease-out;
+  --animate-shimmer: shimmer 2s infinite;
 
   @keyframes accordion-down {
     from {
@@ -141,6 +142,12 @@
     }
     to {
       height: 0;
+    }
+  }
+
+  @keyframes shimmer {
+    100% {
+      transform: translateX(200%) skewX(-20deg);
     }
   }
 }

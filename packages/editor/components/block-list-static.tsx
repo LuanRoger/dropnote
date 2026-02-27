@@ -3,7 +3,7 @@ import { CheckIcon } from "lucide-react";
 import type { RenderStaticNodeWrapper, TListElement } from "platejs";
 import type { SlateRenderElementProps } from "platejs/static";
 
-import { cn } from "../utils/tailwind";
+import { cn } from "@repo/design-system/lib/utils";
 
 const config: Record<
   string,

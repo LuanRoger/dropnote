@@ -25,22 +25,22 @@
     "clean": "git clean -xdf node_modules"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.3.15",
+    "@biomejs/biome": "^2.4.4",
     "@repo/typescript-config": "workspace:*",
-    "@turbo/gen": "^2.8.7",
-    "@types/node": "^25.2.3",
+    "@turbo/gen": "^2.8.11",
+    "@types/node": "^25.3.2",
     "tsup": "^8.5.1",
-    "turbo": "^2.8.7",
+    "turbo": "^2.8.11",
     "typescript": "^5.9.3",
-    "ultracite": "^7.1.5",
-    "vercel-seo-audit": "^0.2.0"
+    "ultracite": "^7.2.4",
+    "vercel-seo-audit": "^2.4.0"
   },
   "engines": {
     "node": ">=24"
   },
   "packageManager": "pnpm@10.26.2",
   "dependencies": {
-    "@clack/prompts": "^1.0.0",
+    "@clack/prompts": "^1.0.1",
     "commander": "^14.0.3"
   },
   "type": "module"

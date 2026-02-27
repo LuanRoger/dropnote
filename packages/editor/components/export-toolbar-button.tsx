@@ -1,6 +1,15 @@
 "use client";
 
+import * as React from "react";
+
+import { exportToDocx } from "@platejs/docx-io";
 import { MarkdownPlugin } from "@platejs/markdown";
+import { ArrowDownToLineIcon } from "lucide-react";
+import type { SlatePlugin } from "platejs";
+import { createSlateEditor } from "platejs";
+import { useEditorRef } from "platejs/react";
+import { serializeHtml } from "platejs/static";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,16 +17,57 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@repo/design-system/components/ui/dropdown-menu";
-import { ArrowDownToLineIcon } from "lucide-react";
-import { useEditorRef } from "platejs/react";
-import { type ComponentPropsWithoutRef, useState } from "react";
+import { StaticEditorKit } from "../kits/static-editor-kit";
+
+import { EditorStatic } from "./editor-static";
 import { ToolbarButton } from "./toolbar";
+import { DocxExportKit } from "../plugins/docx-export-kit";
+import { keys as env } from "../keys";
+
+const fileName = "dropnote";
 
 export function ExportToolbarButton(
-  props: ComponentPropsWithoutRef<typeof DropdownMenu>
+  props: React.ComponentProps<typeof DropdownMenu>,
 ) {
   const editor = useEditorRef();
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = React.useState(false);
+
+  const getCanvas = async () => {
+    const { default: html2canvas } = await import("html2canvas-pro");
+
+    const style = document.createElement("style");
+    document.head.append(style);
+
+    const canvas = await html2canvas(editor.api.toDOMNode(editor)!, {
+      onclone: (document: Document) => {
+        document.documentElement.style.cssText +=
+          "; color-scheme: light !important; background: white !important; color: black !important;";
+        document.body.style.cssText +=
+          "; background: white !important; color: black !important;";
+
+        const editorElement = document.querySelector(
+          '[contenteditable="true"]',
+        );
+        if (editorElement) {
+          Array.from(editorElement.querySelectorAll("*")).forEach((element) => {
+            const existingStyle = element.getAttribute("style") || "";
+            element.setAttribute(
+              "style",
+              `${existingStyle}; font-family: 'Geist', ui-sans-serif, system-ui, sans-serif !important; color: black !important;`,
+            );
+          });
+          const existingStyle = editorElement.getAttribute("style") || "";
+          editorElement.setAttribute(
+            "style",
+            `${existingStyle}; color: black !important; background: white !important;`,
+          );
+        }
+      },
+    });
+    style.remove();
+
+    return canvas;
+  };
 
   const downloadFile = async (url: string, filename: string) => {
     const response = await fetch(url);
@@ -32,27 +82,138 @@ export function ExportToolbarButton(
     link.click();
     link.remove();
 
+    // Clean up the blob URL
     window.URL.revokeObjectURL(blobUrl);
+  };
+
+  const exportToPdf = async () => {
+    const canvas = await getCanvas();
+
+    const PDFLib = await import("pdf-lib");
+    const pdfDoc = await PDFLib.PDFDocument.create();
+    const page = pdfDoc.addPage([canvas.width, canvas.height]);
+    const imageEmbed = await pdfDoc.embedPng(canvas.toDataURL("PNG"));
+    const { height, width } = imageEmbed.scale(1);
+    page.drawImage(imageEmbed, {
+      height,
+      width,
+      x: 0,
+      y: 0,
+    });
+    const pdfBase64 = await pdfDoc.saveAsBase64({ dataUri: true });
+
+    await downloadFile(pdfBase64, `${fileName}.pdf`);
+  };
+
+  const exportToImage = async () => {
+    const canvas = await getCanvas();
+    await downloadFile(canvas.toDataURL("image/png"), `${fileName}.png`);
+  };
+
+  const exportToHtml = async () => {
+    const editorStatic = createSlateEditor({
+      plugins: StaticEditorKit,
+      value: editor.children,
+    });
+
+    const editorHtml = await serializeHtml(editorStatic, {
+      editorComponent: EditorStatic,
+      props: { style: { padding: "0 calc(50% - 350px)", paddingBottom: "" } },
+    });
+
+    const siteUrl = env().NEXT_PUBLIC_APP_URL;
+    const tailwindCss = `<link rel="stylesheet" href="${siteUrl}/tailwind.css">`;
+    const katexCss = `<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.18/dist/katex.css" integrity="sha384-9PvLvaiSKCPkFKB1ZsEoTjgnJn+O3KvEwtsz37/XrkYft3DTk2gHdYvd9oWgW3tV" crossorigin="anonymous">`;
+
+    const html = `<!DOCTYPE html>
+    <html lang="en">
+      <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="color-scheme" content="light" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Geist+Mono:wght@100..900&display=swap"
+          rel="stylesheet"
+        />
+        ${tailwindCss}
+        ${katexCss}
+        <style>
+          :root {
+            --font-sans: 'Geist', 'Geist Fallback', ui-sans-serif, system-ui, sans-serif;
+            --font-mono: 'Geist Mono', 'Geist Mono Fallback', ui-monospace, monospace;
+          }
+          body {
+            font-family: var(--font-sans);
+          }
+          html, body {
+            color: black !important;
+            background: white !important;
+          }
+          * {
+            color: black !important;
+          }
+          a {
+            color: #0070f3 !important;
+          }
+        </style>
+      </head>
+      <body>
+        ${editorHtml}
+      </body>
+    </html>`;
+
+    const url = `data:text/html;charset=utf-8,${encodeURIComponent(html)}`;
+
+    await downloadFile(url, `${fileName}.html`);
   };
 
   const exportToMarkdown = async () => {
     const md = editor.getApi(MarkdownPlugin).markdown.serialize();
     const url = `data:text/markdown;charset=utf-8,${encodeURIComponent(md)}`;
-    await downloadFile(url, "plate.md");
+    await downloadFile(url, `${fileName}.md`);
+  };
+
+  const exportToWord = async () => {
+    const blob = await exportToDocx(editor.children, {
+      editorPlugins: [...StaticEditorKit, ...DocxExportKit] as SlatePlugin[],
+    });
+
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `${fileName}.docx`;
+    document.body.append(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
   };
 
   return (
-    <DropdownMenu modal={false} onOpenChange={setOpen} open={open} {...props}>
+    <DropdownMenu open={open} onOpenChange={setOpen} modal={false} {...props}>
       <DropdownMenuTrigger asChild>
-        <ToolbarButton isDropdown pressed={open} tooltip="Export">
+        <ToolbarButton pressed={open} tooltip="Export" isDropdown>
           <ArrowDownToLineIcon className="size-4" />
         </ToolbarButton>
       </DropdownMenuTrigger>
 
       <DropdownMenuContent align="start">
         <DropdownMenuGroup>
+          <DropdownMenuItem onSelect={exportToHtml}>
+            Export as HTML
+          </DropdownMenuItem>
+          <DropdownMenuItem onSelect={exportToPdf}>
+            Export as PDF
+          </DropdownMenuItem>
+          <DropdownMenuItem onSelect={exportToImage}>
+            Export as Image
+          </DropdownMenuItem>
           <DropdownMenuItem onSelect={exportToMarkdown}>
             Export as Markdown
+          </DropdownMenuItem>
+          <DropdownMenuItem onSelect={exportToWord}>
+            Export as Word
           </DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>

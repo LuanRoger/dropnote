@@ -4,8 +4,8 @@ import { Throttle } from "@hocuspocus/extension-throttle";
 import { Server } from "@hocuspocus/server";
 import { env } from "./env";
 import { DropnoteMultiplayerServerExtension } from "./extension";
-import { getRoomUserCount } from "./utils/documents";
 import { isAuthValid } from "./utils/auth";
+import { getRoomUserCount } from "./utils/documents";
 
 const serverName = "dropnote-multiplayer-server";
 const address = env.ADDRESS;
@@ -19,17 +19,17 @@ const maxUsersPerRoom = env.MAX_USERS_PER_ROOM;
 
 if (!timeout || Number.isNaN(timeout)) {
   throw new Error(
-    "TIMEOUT environment variable is not set or is not a number.",
+    "TIMEOUT environment variable is not set or is not a number."
   );
 }
 if (!debounce || Number.isNaN(debounce)) {
   throw new Error(
-    "DEBOUNCE environment variable is not set or is not a number.",
+    "DEBOUNCE environment variable is not set or is not a number."
   );
 }
 if (!maxDebounce || Number.isNaN(maxDebounce)) {
   throw new Error(
-    "MAX_DEBOUNCE environment variable is not set or is not a number.",
+    "MAX_DEBOUNCE environment variable is not set or is not a number."
   );
 }
 
@@ -50,7 +50,7 @@ const server = new Server({
       serverName,
       address,
       apiKey,
-      maxUsersPerRoom,
+      maxUsersPerRoom
     ),
   ],
 });
