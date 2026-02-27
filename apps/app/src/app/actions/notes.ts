@@ -17,6 +17,7 @@ import {
   MAX_LENGHT_ADVANCED_NOTE,
   MAX_LENGHT_BASIC_NOTE,
   NOTE_LAST_NOTE_PASSWORD_EXPIRE_TIME_MS,
+  PARTIAL_NOTE_BETA_NOTE_DATA,
 } from "@/constants";
 import {
   CharacterLimitExceededError,
@@ -39,7 +40,7 @@ export async function getNoteByCode(code: string) {
 export type NoteAccessStatus = "not_found" | "needs_password" | "granted";
 
 export async function resolveNoteAccess(
-  code: string
+  code: string,
 ): Promise<NoteAccessStatus> {
   const note = await getNoteByCodeQuery(code);
   if (!note) {
@@ -58,7 +59,7 @@ export async function resolveNoteAccess(
 
   const hasValidCookie = await checkPasswordCookieAccess(
     code,
-    noteHashedPassword
+    noteHashedPassword,
   );
   return hasValidCookie ? "granted" : "needs_password";
 }
@@ -84,7 +85,7 @@ export async function tryPasswordAccess(code: string, password: string) {
       priority: "high",
       sameSite: "strict",
       maxAge: NOTE_LAST_NOTE_PASSWORD_EXPIRE_TIME_MS,
-    }
+    },
   );
 
   redirect(`/${code}`);
@@ -96,7 +97,12 @@ export async function ensureCreated(code: string) {
     return note;
   }
 
-  return await createNote(code, []);
+  return await createNote({
+    code,
+    body: [],
+    //TODO: Remove this when the beta phase is over and add expirationDate
+    ...PARTIAL_NOTE_BETA_NOTE_DATA,
+  });
 }
 
 export async function updateNoteBodyByCode(code: string, body: NoteBody) {
@@ -112,7 +118,7 @@ export async function updateNoteBodyByCode(code: string, body: NoteBody) {
     (hasExtendedLimit && currentBodyLenght > MAX_LENGHT_ADVANCED_NOTE)
   ) {
     throw new CharacterLimitExceededError(
-      hasExtendedLimit ? MAX_LENGHT_ADVANCED_NOTE : MAX_LENGHT_BASIC_NOTE
+      hasExtendedLimit ? MAX_LENGHT_ADVANCED_NOTE : MAX_LENGHT_BASIC_NOTE,
     );
   }
 

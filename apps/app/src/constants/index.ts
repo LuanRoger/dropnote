@@ -2,10 +2,10 @@ import type { Badge } from "@repo/editor/types/badge";
 
 export const TEST_NOTE_EXPIRE_TIME_MS = new Date(Date.now() + 20 * 1000); // 20 seconds
 export const DEFAULT_NOTE_EXPIRE_TIME_MS = new Date(
-  Date.now() + 48 * 60 * 60 * 1000
+  Date.now() + 48 * 60 * 60 * 1000,
 ); // 48 hours
 export const SECURITY_CODE_EXPIRE_TIME_MS = new Date(
-  Date.now() + 15 * 60 * 1000
+  Date.now() + 15 * 60 * 1000,
 ); // 15 minutes
 export const SECURITY_CODE_EXPIRE_TIME_MINUTES = 15;
 
@@ -65,6 +65,21 @@ export const BADGES_DATA: Record<string, Badge> = {
     color: "#B91C1C",
     description: "This note can be edited by multiple users in real-time.",
   },
+};
+
+export const SPECIAL_BADGES_DATA: Record<string, Badge> = {
+  BETA: {
+    label: "Beta",
+    color: "#2563EB",
+    description: "This note was created during the beta testing phase.",
+    isSpecial: true,
+  },
+};
+
+//TODO: Remove this when the beta phase is over
+export const PARTIAL_NOTE_BETA_NOTE_DATA = {
+  badges: [SPECIAL_BADGES_DATA.BETA],
+  isPermanent: true,
 };
 
 export const NOTE_LAST_NOTE_PASSWORD_EXPIRE_TIME_MS = 7 * 24 * 60 * 60; // 7 days in seconds
