@@ -57,7 +57,7 @@ export const BADGES_DATA: Record<string, Badge> = {
   },
   PERMANENT: {
     label: "Permanent",
-    color: "#047857",
+    color: "#C97318",
     description: "This note will not be auto-deleted.",
   },
   COLLAB: {
