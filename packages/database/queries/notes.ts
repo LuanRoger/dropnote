@@ -11,7 +11,7 @@ export async function getNoteByCode(code: string): Promise<NoteModel | null> {
 }
 
 export async function getNotePasswordByCode(
-  code: string
+  code: string,
 ): Promise<string | null> {
   await ensureConnected();
 
@@ -20,14 +20,26 @@ export async function getNotePasswordByCode(
   return note?.password || null;
 }
 
-export async function createNote(
-  code: string,
-  body: any,
-  expireAt?: Date
-): Promise<NoteModel> {
+export async function createNote(data: {
+  code: string;
+  body: any;
+  badges?: {
+    label: string;
+    color: string;
+    description: string;
+    isSpecial?: boolean;
+  }[];
+  isPermanent?: boolean;
+  hasExtendedLimit?: boolean;
+  expireAt?: Date;
+}): Promise<NoteModel> {
   await ensureConnected();
 
-  return await Notes.create({ code, body, expireAt });
+  const created = await Notes.create(data);
+
+  const obj = created.toObject<NoteModel>();
+
+  return obj;
 }
 
 export async function updateNote(code: string, body: any) {
