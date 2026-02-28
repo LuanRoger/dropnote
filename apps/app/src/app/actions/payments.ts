@@ -40,7 +40,6 @@ export async function createPaymentIntent(
   const paymentIntent = await stripe.paymentIntents.create({
     amount: totalAmount,
     currency,
-    automatic_payment_methods: { enabled: true },
     metadata: {
       noteCode,
       priceIds: priceIds.join(","),

@@ -52,75 +52,27 @@ export default async function Page({ params }: PageProps<"/[code]/upgrade">) {
   const serializedProducts = products.map(serializeProduct);
 
   return (
-    <div className="relative min-h-full w-full overflow-hidden">
-      {/* Background ambient blobs */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -top-32 -left-32 size-125 rounded-full opacity-20 blur-3xl dark:opacity-10"
-        style={{
-          background:
-            "radial-gradient(circle, oklch(0.65 0.22 290), transparent 70%)",
-        }}
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -right-32 -bottom-32 size-100 rounded-full opacity-15 blur-3xl dark:opacity-10"
-        style={{
-          background:
-            "radial-gradient(circle, oklch(0.6 0.2 240), transparent 70%)",
-        }}
-      />
-
-      {/* Subtle grid pattern */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-[0.03] dark:opacity-[0.05]"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(120,80,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(120,80,255,0.5) 1px, transparent 1px)",
-          backgroundSize: "40px 40px",
-        }}
-      />
-
-      <div className="relative flex flex-col gap-8 py-2">
-        {/* Header */}
-        <div className="flex flex-col gap-2">
-          <div className="flex flex-col gap-1.5">
-            <h1 className="font-bold text-2xl">Upgrade your note</h1>
-            <p className="max-w-sm text-muted-foreground text-sm leading-relaxed">
-              Enhance your note with powerful add-ons. Pick what you need and
-              pay once — no subscriptions, no surprises.
-            </p>
-          </div>
+    <div className="flex flex-col gap-8 py-2">
+      <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-1.5">
+          <h1 className="font-bold text-2xl">Upgrade your note</h1>
+          <p className="max-w-sm text-muted-foreground text-sm leading-relaxed">
+            Enhance your note with powerful add-ons. Pick what you need and pay
+            once — no subscriptions, no surprises.
+          </p>
         </div>
-
-        {/* Client orchestrator: selection + checkout */}
-        {serializedProducts.length > 0 ? (
-          <UpgradePageClient noteCode={code} products={serializedProducts} />
-        ) : (
-          <div className="flex flex-col items-center justify-center gap-3 py-16 text-center">
-            <div className="flex size-12 items-center justify-center rounded-full bg-muted">
-              <SparklesIcon className="size-5 text-muted-foreground" />
-            </div>
-            <div>
-              <p className="font-medium text-sm">No upgrades available</p>
-              <p className="mt-0.5 text-muted-foreground text-xs">
-                Check back later for new features.
-              </p>
-            </div>
-          </div>
-        )}
-
-        {/* Bottom note */}
-        <p className="text-center text-muted-foreground/70 text-xs">
-          Payments are processed securely by Stripe. All purchases are one-time
-          and tied to note{" "}
-          <span className="font-medium font-mono text-muted-foreground">
-            {code}
-          </span>
-          .
-        </p>
       </div>
+
+      <UpgradePageClient noteCode={code} products={serializedProducts} />
+
+      <p className="text-center text-muted-foreground/70 text-xs">
+        Payments are processed securely by Stripe. All purchases are one-time
+        and tied to note{" "}
+        <span className="font-medium font-mono text-muted-foreground">
+          {code}
+        </span>
+        .
+      </p>
     </div>
   );
 }
