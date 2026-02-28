@@ -10,7 +10,8 @@ import {
 import { cn } from "@repo/design-system/lib/utils";
 import { CheckIcon } from "lucide-react";
 import { useId } from "react";
-import { formatCurrency } from "@/utils/currency";
+import CurrencyText from "@/components/currency-text";
+import IconContainer from "@/components/icon-container";
 
 type UpgradeCardInteractiveProps = {
   name: string;
@@ -19,7 +20,6 @@ type UpgradeCardInteractiveProps = {
   currency: string;
   accent: string;
   icon?: React.ReactNode;
-  recurring?: string;
   className?: string;
   selected: boolean;
   onToggleAction: () => void;
@@ -32,7 +32,6 @@ export function UpgradeCardInteractive({
   currency,
   accent,
   icon,
-  recurring,
   className,
   selected,
   onToggleAction,
@@ -103,8 +102,8 @@ export function UpgradeCardInteractive({
           <CardHeader>
             <CardTitle className="inline-flex items-center gap-2 font-semibold text-base">
               {icon && (
-                <span
-                  className="flex size-7 items-center justify-center rounded-lg"
+                <IconContainer
+                  className="size-7"
                   style={{
                     background:
                       "color-mix(in srgb, var(--accent) 15%, transparent)",
@@ -114,7 +113,7 @@ export function UpgradeCardInteractive({
                   }}
                 >
                   {icon}
-                </span>
+                </IconContainer>
               )}
               <span>{name}</span>
             </CardTitle>
@@ -127,22 +126,15 @@ export function UpgradeCardInteractive({
           </CardHeader>
 
           <CardContent>
-            <div className="flex items-end gap-1.5">
-              <p
-                className="bg-clip-text font-bold font-mono text-2xl text-transparent"
-                style={{
-                  backgroundImage:
-                    "linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 70%, #000))",
-                }}
-              >
-                {formatCurrency(amount, currency.toUpperCase())}
-              </p>
-              {recurring && (
-                <span className="mb-1 text-muted-foreground text-xs">
-                  /{recurring}
-                </span>
-              )}
-            </div>
+            <CurrencyText
+              amount={amount}
+              className="bg-clip-text font-bold text-2xl text-transparent"
+              currency={currency}
+              style={{
+                backgroundImage:
+                  "linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 70%, #000))",
+              }}
+            />
           </CardContent>
         </Card>
       </label>
