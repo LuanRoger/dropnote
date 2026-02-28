@@ -65,6 +65,12 @@ export async function setPasswordForNote(code: string, password: string) {
   await Notes.updateOne({ code }, { password, hasPassword: true });
 }
 
+export async function setNoteAsPermanent(code: string) {
+  await ensureConnected();
+
+  await Notes.updateOne({ code }, { isPermanent: true, expireAt: null });
+}
+
 export async function updateOwnerForNote(code: string, owner: string) {
   await ensureConnected();
 

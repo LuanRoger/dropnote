@@ -10,3 +10,4 @@ export class SessionHasNoFeaturesError extends Error {
     super(`Session ${sessionId} has no features in line items.`);
     this.name = "SessionHasNoFeaturesError";
   }
+}
