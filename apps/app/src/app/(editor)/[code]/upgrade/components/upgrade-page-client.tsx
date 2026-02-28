@@ -10,7 +10,7 @@ import {
 } from "@repo/design-system/components/ui/empty";
 import { ArrowRightIcon, ShoppingCartIcon, XIcon } from "lucide-react";
 import { useState, useTransition } from "react";
-import { createPaymentIntent } from "@/app/actions/payments";
+import { createCheckoutSession } from "@/app/actions/payments";
 import CurrencyText from "@/components/currency-text";
 import LoadingSpinner from "@/components/loading-spinner";
 import { CheckoutPanel } from "./checkout-panel";
@@ -73,7 +73,7 @@ export function UpgradePageClient({
     }
 
     startTransition(async () => {
-      const secret = await createPaymentIntent(noteCode, priceIds);
+      const secret = await createCheckoutSession(noteCode, priceIds);
       if (secret) {
         setClientSecret(secret);
       }

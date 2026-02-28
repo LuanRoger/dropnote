@@ -22,29 +22,25 @@ export async function getPriceById(priceId: string) {
   return price;
 }
 
-export async function createPaymentIntent(
+export async function createCheckoutSession(
   noteCode: string,
   priceIds: string[],
 ) {
-  const prices = await Promise.all(
-    priceIds.map((id) => stripe.prices.retrieve(id)),
-  );
-
-  const totalAmount = prices.reduce(
-    (sum, price) => sum + (price.unit_amount ?? 0),
-    0,
-  );
-
-  const currency = prices[0]?.currency ?? "usd";
-
-  const paymentIntent = await stripe.paymentIntents.create({
-    amount: totalAmount,
-    currency,
+  const session = await stripe.checkout.sessions.create({
+    mode: "payment",
+    ui_mode: "custom",
+    line_items: priceIds.map((priceId) => ({
+      price: priceId,
+      quantity: 1,
+    })),
+    return_url: `${process.env.NEXT_PUBLIC_APP_URL}/${noteCode}?session_id={CHECKOUT_SESSION_ID}`,
+    adaptive_pricing: {
+      enabled: true,
+    },
     metadata: {
       noteCode,
-      priceIds: priceIds.join(","),
     },
   });
 
-  return paymentIntent.client_secret;
+  return session.client_secret;
 }
