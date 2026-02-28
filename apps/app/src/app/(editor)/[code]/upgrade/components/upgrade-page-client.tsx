@@ -2,11 +2,25 @@
 
 import { Button } from "@repo/design-system/components/ui/button";
 import { cn } from "@repo/design-system/lib/utils";
-import { ArrowRightIcon, Loader2Icon, XIcon } from "lucide-react";
+import {
+  ArrowRightIcon,
+  Loader2Icon,
+  ShoppingCartIcon,
+  XIcon,
+} from "lucide-react";
 import { useState, useTransition } from "react";
 import { createPaymentIntent } from "@/app/actions/payments";
+import CurrencyText from "@/components/currency-text";
 import { CheckoutPanel } from "./checkout-panel";
-import { UpgradeCardInteractive } from "./upgrade-card-interactive";
+import UpgradeProductsList from "./upgrade-products-list";
+import {
+  Empty,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@repo/design-system/components/ui/empty";
+import LoadingSpinner from "@/components/loading-spinner";
 
 export type SerializedProduct = {
   id: string;
@@ -35,6 +49,13 @@ export function UpgradePageClient({
 
   const hasSelection = selectedIds.size > 0;
   const isCheckoutOpen = clientSecret !== null;
+  const totalPrice = products.reduce((total, product) => {
+    if (selectedIds.has(product.id)) {
+      return total + product.amount;
+    }
+    return total;
+  }, 0);
+  const currency = products.length > 0 ? products[0].currency : "usd";
 
   function toggleProduct(productId: string) {
     setSelectedIds((prev) => {
@@ -71,32 +92,23 @@ export function UpgradePageClient({
 
   return (
     <div className="flex flex-1 flex-col gap-10 lg:flex-row">
-      {/* Left — Product selection */}
-      <div
-        className={cn(
-          "flex flex-col gap-6 transition-all duration-300",
-          isCheckoutOpen ? "lg:w-1/2" : "w-full",
-        )}
-      >
-        <div className="flex flex-col gap-4">
-          {products.map((product) => (
-            <UpgradeCardInteractive
-              accent={product.accent}
-              amount={product.amount}
-              className={cn(isCheckoutOpen && "pointer-events-none opacity-60")}
-              currency={product.currency}
-              description={product.description}
-              icon={product.icon}
-              key={product.id}
-              name={product.name}
-              onToggleAction={() => toggleProduct(product.id)}
-              recurring={product.recurring}
-              selected={selectedIds.has(product.id)}
-            />
-          ))}
-        </div>
+      <div className="flex flex-1 flex-col gap-6 transition-all duration-300">
+        <UpgradeProductsList
+          isCheckoutOpen={isCheckoutOpen}
+          products={products}
+          selectedIds={selectedIds}
+          toggleProduct={toggleProduct}
+        />
 
-        {/* Confirm / Cancel button */}
+        <p className="flex items-end justify-between">
+          <span className="font-semibold text-xl">Total</span>
+          <CurrencyText
+            amount={totalPrice}
+            className="font-bold text-2xl"
+            currency={currency}
+          />
+        </p>
+
         {isCheckoutOpen ? (
           <Button
             className="w-full gap-2"
@@ -116,7 +128,7 @@ export function UpgradePageClient({
           >
             {isPending ? (
               <>
-                <Loader2Icon className="size-4 animate-spin" />
+                <LoadingSpinner />
                 Creating checkout…
               </>
             ) : (
@@ -129,16 +141,30 @@ export function UpgradePageClient({
         )}
       </div>
 
-      <div
-        className={cn(
-          "overflow-hidden transition-all duration-500 ease-out",
-          isCheckoutOpen
-            ? "max-h-500 opacity-100 lg:w-1/2"
-            : "max-h-0 opacity-0 lg:w-0",
+      <div className="flex-1">
+        {clientSecret ? (
+          <CheckoutPanel clientSecret={clientSecret} />
+        ) : (
+          <EmptyCheckout />
         )}
-      >
-        {clientSecret && <CheckoutPanel clientSecret={clientSecret} />}
       </div>
     </div>
+  );
+}
+
+function EmptyCheckout() {
+  return (
+    <Empty>
+      <EmptyHeader>
+        <EmptyMedia variant="icon">
+          <ShoppingCartIcon />
+        </EmptyMedia>
+        <EmptyTitle>No products selected</EmptyTitle>
+        <EmptyDescription>
+          Please select at least one product and confirm your selection to
+          proceed to checkout.
+        </EmptyDescription>
+      </EmptyHeader>
+    </Empty>
   );
 }
