@@ -9,7 +9,7 @@ import {
 } from "@repo/design-system/components/ui/card";
 import { cn } from "@repo/design-system/lib/utils";
 import { CheckIcon } from "lucide-react";
-import { useId, useState } from "react";
+import { useId } from "react";
 import { formatCurrency } from "@/utils/currency";
 
 type UpgradeCardInteractiveProps = {
@@ -21,6 +21,8 @@ type UpgradeCardInteractiveProps = {
   icon?: React.ReactNode;
   recurring?: string;
   className?: string;
+  selected: boolean;
+  onToggleAction: () => void;
 };
 
 export function UpgradeCardInteractive({
@@ -32,9 +34,10 @@ export function UpgradeCardInteractive({
   icon,
   recurring,
   className,
+  selected,
+  onToggleAction,
 }: UpgradeCardInteractiveProps) {
   const id = useId();
-  const [selected, setSelected] = useState(false);
 
   return (
     <div
@@ -45,7 +48,7 @@ export function UpgradeCardInteractive({
         checked={selected}
         className="sr-only"
         id={id}
-        onChange={(e) => setSelected(e.target.checked)}
+        onChange={onToggleAction}
         type="checkbox"
       />
 
@@ -93,7 +96,7 @@ export function UpgradeCardInteractive({
           />
           <div
             aria-hidden
-            className="left- pointer-events-none absolute -bottom-6 h-10 w-40 rounded-full opacity-30 blur-2xl transition-opacity duration-500 group-hover:opacity-60"
+            className="pointer-events-none absolute -bottom-6 left-0 h-10 w-40 rounded-full opacity-30 blur-2xl transition-opacity duration-500 group-hover:opacity-60"
             style={{ background: "var(--accent)" }}
           />
 

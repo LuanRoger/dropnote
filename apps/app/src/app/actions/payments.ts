@@ -21,3 +21,31 @@ export async function getPriceById(priceId: string) {
   const price = await stripe.prices.retrieve(priceId);
   return price;
 }
+
+export async function createPaymentIntent(
+  noteCode: string,
+  priceIds: string[],
+) {
+  const prices = await Promise.all(
+    priceIds.map((id) => stripe.prices.retrieve(id)),
+  );
+
+  const totalAmount = prices.reduce(
+    (sum, price) => sum + (price.unit_amount ?? 0),
+    0,
+  );
+
+  const currency = prices[0]?.currency ?? "usd";
+
+  const paymentIntent = await stripe.paymentIntents.create({
+    amount: totalAmount,
+    currency,
+    automatic_payment_methods: { enabled: true },
+    metadata: {
+      noteCode,
+      priceIds: priceIds.join(","),
+    },
+  });
+
+  return paymentIntent.client_secret;
+}
