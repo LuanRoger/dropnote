@@ -15,21 +15,10 @@ import CurrencyText from "@/components/currency-text";
 import LoadingSpinner from "@/components/loading-spinner";
 import { CheckoutPanel } from "./checkout-panel";
 import UpgradeProductsList from "./upgrade-products-list";
-
-export type SerializedProduct = {
-  id: string;
-  name: string;
-  description: string | null;
-  amount: number;
-  currency: string;
-  accent: string;
-  priceId: string | null;
-  recurring?: string;
-  icon?: React.ReactNode;
-};
+import type { UpgradeProduct } from "@/types/payments";
 
 type UpgradePageClientProps = {
-  products: SerializedProduct[];
+  products: UpgradeProduct[];
   noteCode: string;
 };
 

@@ -1,27 +1,11 @@
 import type { Stripe } from "@repo/payments/stripe";
-import { InfinityIcon, SparklesIcon, ZapIcon } from "lucide-react";
 import { getProducts } from "@/app/actions/payments";
-import type { SerializedProduct } from "./components/upgrade-page-client";
+import type { UpgradeProduct } from "@/types/payments";
+import { getIconForProduct } from "@/utils/icons";
 import { UpgradePageClient } from "./components/upgrade-page-client";
 
-const PRODUCT_ICONS: Record<string, React.ReactNode> = {
-  default: <SparklesIcon className="size-4" />,
-  forever: <InfinityIcon className="size-4" />,
-  zap: <ZapIcon className="size-4" />,
-};
-
-function getIconForProduct(name: string): React.ReactNode {
-  const lower = name.toLowerCase();
-  if (lower.includes("forever") || lower.includes("permanent")) {
-    return PRODUCT_ICONS.forever;
-  }
-  if (lower.includes("zap") || lower.includes("boost")) {
-    return PRODUCT_ICONS.zap;
-  }
-  return PRODUCT_ICONS.default;
-}
-
-function serializeProduct(product: Stripe.Product): SerializedProduct {
+function serializeProduct(product: Stripe.Product): UpgradeProduct {
+  const internalName = product.metadata?.name as string | undefined;
   const price = product.default_price as Stripe.Price | null;
   const amount = price?.unit_amount ?? 0;
   const currency = price?.currency ?? "usd";
@@ -32,16 +16,23 @@ function serializeProduct(product: Stripe.Product): SerializedProduct {
       ? product.default_price
       : (product.default_price?.id ?? null);
 
+  if (!internalName) {
+    throw new Error(
+      `Product ${product.id} is missing internal name in metadata`,
+    );
+  }
+
   return {
     id: product.id,
     name: product.name,
     description: product.description ?? null,
+    internalName,
     amount,
     currency,
     accent,
     priceId,
     recurring,
-    icon: getIconForProduct(product.name),
+    icon: getIconForProduct(internalName),
   };
 }
 
