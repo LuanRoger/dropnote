@@ -1,4 +1,3 @@
-import LoadingSpinner from "@/components/loading-spinner";
 import { Button } from "@repo/design-system/components/ui/button";
 import { cn } from "@repo/design-system/lib/utils";
 import {
@@ -9,7 +8,8 @@ import {
 } from "@stripe/react-stripe-js";
 import type { StripeError } from "@stripe/stripe-js";
 import { LockIcon } from "lucide-react";
-import { useState } from "react";
+import { type SubmitEvent, useState } from "react";
+import LoadingSpinner from "@/components/loading-spinner";
 
 export default function CheckoutForm() {
   const stripe = useStripe();
@@ -17,7 +17,7 @@ export default function CheckoutForm() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  async function handleSubmit(e: SubmitEventHandler<HTMLFormElement>) {
+  async function handleSubmit(e: SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
 
     if (!(stripe && elements)) {

@@ -1,18 +1,6 @@
 "use client";
 
 import { Button } from "@repo/design-system/components/ui/button";
-import { cn } from "@repo/design-system/lib/utils";
-import {
-  ArrowRightIcon,
-  Loader2Icon,
-  ShoppingCartIcon,
-  XIcon,
-} from "lucide-react";
-import { useState, useTransition } from "react";
-import { createPaymentIntent } from "@/app/actions/payments";
-import CurrencyText from "@/components/currency-text";
-import { CheckoutPanel } from "./checkout-panel";
-import UpgradeProductsList from "./upgrade-products-list";
 import {
   Empty,
   EmptyDescription,
@@ -20,7 +8,13 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@repo/design-system/components/ui/empty";
+import { ArrowRightIcon, ShoppingCartIcon, XIcon } from "lucide-react";
+import { useState, useTransition } from "react";
+import { createPaymentIntent } from "@/app/actions/payments";
+import CurrencyText from "@/components/currency-text";
 import LoadingSpinner from "@/components/loading-spinner";
+import { CheckoutPanel } from "./checkout-panel";
+import UpgradeProductsList from "./upgrade-products-list";
 
 export type SerializedProduct = {
   id: string;
