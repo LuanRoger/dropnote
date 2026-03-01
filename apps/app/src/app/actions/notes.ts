@@ -4,6 +4,7 @@ import {
   createNote,
   getNoteByCode as getNoteByCodeQuery,
   getNotePasswordByCode,
+  setNoteAsPermanent,
   updateNote,
   updateOwnerForNote,
 } from "@repo/database/queries/notes";
@@ -32,6 +33,8 @@ import {
   mountPasswordCookieValue,
 } from "@/utils/cookies";
 import { emailSchema } from "@/utils/schemas/email";
+import type { UpgradeFeature } from "@/types/notes";
+import { createSecurityCodeForNote } from "./security-code";
 
 export async function getNoteByCode(code: string) {
   return await getNoteByCodeQuery(code);
@@ -123,6 +126,27 @@ export async function updateNoteBodyByCode(code: string, body: NoteBody) {
   }
 
   await updateNote(code, body);
+}
+
+export async function applyFeaturesToNote(
+  code: string,
+  ownerEmail: string,
+  features: UpgradeFeature[],
+) {
+  await setOwnerForNote(code, ownerEmail);
+
+  for (const feature of features) {
+    switch (feature) {
+      case "secure":
+        await createSecurityCodeForNote(code, "create", ownerEmail, true);
+        break;
+      case "permanent":
+        await setNoteAsPermanent(code);
+        break;
+      default:
+        break;
+    }
+  }
 }
 
 export async function setOwnerForNote(code: string, ownerEmail: string) {
