@@ -2,6 +2,7 @@
 
 import {
   createFulfilledOrder,
+  getFulfilledOrderBySessionId,
   isFulfilledOrder,
 } from "@repo/database/queries/fulfilled-orders";
 import { stripe } from "@repo/payments/stripe";
@@ -22,6 +23,11 @@ function isUpgradeFeature(value: string): value is UpgradeFeature {
 export async function fulfillCheckout(
   sessionId: string,
 ): Promise<FulfillmentResult> {
+  const order = await getFulfilledOrderBySessionId(sessionId);
+  if (!order) {
+    return "not_found";
+  }
+
   const alreadyFulfilled = await isFulfilledOrder(sessionId);
   if (alreadyFulfilled) {
     return "already_fulfilled";

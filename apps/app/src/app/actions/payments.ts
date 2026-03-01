@@ -33,7 +33,7 @@ export async function createCheckoutSession(
       price: priceId,
       quantity: 1,
     })),
-    return_url: `${process.env.NEXT_PUBLIC_APP_URL}/${noteCode}?session_id={CHECKOUT_SESSION_ID}`,
+    return_url: `${process.env.NEXT_PUBLIC_APP_URL}/${noteCode}/upgrade/success?session_id={CHECKOUT_SESSION_ID}`,
     adaptive_pricing: {
       enabled: true,
     },
