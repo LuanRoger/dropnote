@@ -71,6 +71,15 @@ export async function setNoteAsPermanent(code: string) {
   await Notes.updateOne({ code }, { isPermanent: true, expireAt: null });
 }
 
+export async function setExtendedLimitForNote(
+  code: string,
+  hasExtendedLimit: boolean,
+) {
+  await ensureConnected();
+
+  await Notes.updateOne({ code }, { hasExtendedLimit });
+}
+
 export async function updateOwnerForNote(code: string, owner: string) {
   await ensureConnected();
 

@@ -1,5 +1,5 @@
-import { UpgradeFeature } from "@/types/notes";
 import type { Badge } from "@repo/editor/types/badge";
+import type { UpgradeFeature } from "@/types/notes";
 
 export const TEST_NOTE_EXPIRE_TIME_MS = new Date(Date.now() + 20 * 1000); // 20 seconds
 export const DEFAULT_NOTE_EXPIRE_TIME_MS = new Date(

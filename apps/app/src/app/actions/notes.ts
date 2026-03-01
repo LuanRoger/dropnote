@@ -4,6 +4,7 @@ import {
   createNote,
   getNoteByCode as getNoteByCodeQuery,
   getNotePasswordByCode,
+  setExtendedLimitForNote,
   setNoteAsPermanent,
   updateNote,
   updateOwnerForNote,
@@ -28,12 +29,12 @@ import {
   NoteNotFoundError,
   OwnerEmailValidationError,
 } from "@/types/errors/notes";
+import type { UpgradeFeature } from "@/types/notes";
 import {
   checkPasswordCookieAccess,
   mountPasswordCookieValue,
 } from "@/utils/cookies";
 import { emailSchema } from "@/utils/schemas/email";
-import type { UpgradeFeature } from "@/types/notes";
 import { createSecurityCodeForNote } from "./security-code";
 
 export async function getNoteByCode(code: string) {
@@ -137,6 +138,9 @@ export async function applyFeaturesToNote(
 
   for (const feature of features) {
     switch (feature) {
+      case "extended":
+        await setExtendedLimitForNote(code, true);
+        break;
       case "secure":
         await createSecurityCodeForNote(code, "create", ownerEmail, true);
         break;
