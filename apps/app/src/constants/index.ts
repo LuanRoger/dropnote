@@ -46,8 +46,8 @@ export const BADGES_DATA: Record<string, Badge> = {
     color: "#0F5A3B",
     description: "This note is protected with a password.",
   },
-  UNLIMITED: {
-    label: "Unlimited",
+  EXTENDED: {
+    label: "Extended",
     color: "#1E40AF",
     description: "This note has extended character limit.",
   },
@@ -61,10 +61,10 @@ export const BADGES_DATA: Record<string, Badge> = {
     color: "#C97318",
     description: "This note will not be auto-deleted.",
   },
-  COLLAB: {
-    label: "Collab",
+  TEAM: {
+    label: "Team",
     color: "#B91C1C",
-    description: "This note can be edited by multiple users in real-time.",
+    description: "This note can be edited by up to 5 users in real-time.",
   },
 };
 
@@ -83,7 +83,12 @@ export const PARTIAL_NOTE_BETA_NOTE_DATA = {
   isPermanent: true,
 };
 
-export const KNOWN_FEATURES: UpgradeFeature[] = ["secure", "permanent"];
+export const KNOWN_FEATURES: UpgradeFeature[] = [
+  "secure",
+  "permanent",
+  "extended",
+  "team",
+];
 
 export const NOTE_LAST_NOTE_PASSWORD_EXPIRE_TIME_MS = 7 * 24 * 60 * 60; // 7 days in seconds
 

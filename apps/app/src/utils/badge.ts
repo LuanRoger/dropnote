@@ -17,7 +17,7 @@ export function mapNotePropertiesToBadges(note: NoteModel): Badge[] {
     badges.push(BADGES_DATA.SECURE);
   }
   if (note.hasExtendedLimit) {
-    badges.push(BADGES_DATA.UNLIMITED);
+    badges.push(BADGES_DATA.EXTENDED);
   }
   if (note.aiCredits > 0) {
     badges.push(BADGES_DATA.SMART);
