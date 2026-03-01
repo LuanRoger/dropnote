@@ -20,11 +20,13 @@ import UpgradeProductsList from "./upgrade-products-list";
 type UpgradePageClientProps = {
   products: UpgradeProduct[];
   noteCode: string;
+  ownerEmail?: string;
 };
 
 export function UpgradePageClient({
   products,
   noteCode,
+  ownerEmail,
 }: UpgradePageClientProps) {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [clientSecret, setClientSecret] = useState<string | null>(null);
@@ -126,7 +128,7 @@ export function UpgradePageClient({
 
       <div className="flex-1">
         {clientSecret ? (
-          <CheckoutPanel clientSecret={clientSecret} />
+          <CheckoutPanel clientSecret={clientSecret} ownerEmail={ownerEmail} />
         ) : (
           <EmptyCheckout />
         )}

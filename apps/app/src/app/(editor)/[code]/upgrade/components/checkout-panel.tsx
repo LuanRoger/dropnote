@@ -8,6 +8,7 @@ import CheckoutForm from "./checkout-form";
 
 type CheckoutPanelProps = {
   clientSecret: string;
+  ownerEmail?: string;
 };
 
 const dark = {
@@ -128,7 +129,10 @@ function makeAppearance() {
   };
 }
 
-export function CheckoutPanel({ clientSecret }: CheckoutPanelProps) {
+export function CheckoutPanel({
+  clientSecret,
+  ownerEmail,
+}: CheckoutPanelProps) {
   const appearance = makeAppearance();
 
   return (
@@ -155,7 +159,7 @@ export function CheckoutPanel({ clientSecret }: CheckoutPanelProps) {
           }}
           stripe={stripePromise}
         >
-          <CheckoutForm />
+          <CheckoutForm ownerEmail={ownerEmail} />
         </CheckoutProvider>
       </div>
 

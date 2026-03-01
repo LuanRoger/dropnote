@@ -3,6 +3,7 @@ import { getNoteByCode } from "@/app/actions/notes";
 import { getProducts } from "@/app/actions/payments";
 import { getNoteOwnedFeatures } from "@/utils/notes";
 import { serializeProduct } from "@/utils/payments";
+import { obfuscateEmail } from "@/utils/email";
 import EmptyProducts from "./components/empty-products";
 import { UpgradePageClient } from "./components/upgrade-page-client";
 
@@ -27,6 +28,8 @@ export default async function Page({ params }: PageProps<"/[code]/upgrade">) {
   );
   const hasProductsToOffer = productsToOffer.length > 0;
 
+  const ownerEmail = note.ownerEmail ?? undefined;
+
   return (
     <div className="flex flex-col gap-8 py-2">
       <div className="flex flex-col gap-2">
@@ -37,10 +40,24 @@ export default async function Page({ params }: PageProps<"/[code]/upgrade">) {
             once — no subscriptions, no surprises.
           </p>
         </div>
+
+        {ownerEmail && (
+          <p className="max-w-sm text-muted-foreground text-sm leading-relaxed">
+            Purchases for this note are restricted to its owner.{" "}
+            <span className="font-medium font-mono text-foreground">
+              {obfuscateEmail(ownerEmail)}
+            </span>{" "}
+            must be the email you enter at checkout.
+          </p>
+        )}
       </div>
 
       {hasProductsToOffer ? (
-        <UpgradePageClient noteCode={code} products={productsToOffer} />
+        <UpgradePageClient
+          noteCode={code}
+          ownerEmail={ownerEmail}
+          products={productsToOffer}
+        />
       ) : (
         <EmptyProducts href={`/${code}`} />
       )}

@@ -3,25 +3,42 @@
 import { Button } from "@repo/design-system/components/ui/button";
 import {
   Field,
+  FieldDescription,
   FieldError,
   FieldLabel,
 } from "@repo/design-system/components/ui/field";
 import { Input } from "@repo/design-system/components/ui/input";
-
 import { PaymentElement, useCheckout } from "@stripe/react-stripe-js/checkout";
-import { LockIcon } from "lucide-react";
+import { InfoIcon, LockIcon } from "lucide-react";
 import { type ChangeEvent, type SubmitEvent, useState } from "react";
 import LoadingSpinner from "@/components/loading-spinner";
+import { obfuscateEmail } from "@/utils/email";
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+} from "@repo/design-system/components/ui/alert";
 
-export default function CheckoutForm() {
+type CheckoutFormProps = {
+  ownerEmail?: string;
+};
+
+export default function CheckoutForm({ ownerEmail }: CheckoutFormProps) {
   const checkoutState = useCheckout();
   const [email, setEmail] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
+  const emailMismatch = Boolean(
+    ownerEmail &&
+    email.length > 0 &&
+    email.toLowerCase() !== ownerEmail.toLowerCase(),
+  );
+
   async function handleEmailChange(e: ChangeEvent<HTMLInputElement>) {
     const value = e.target.value;
     setEmail(value);
+    setErrorMessage(null);
 
     if (checkoutState.type !== "success") {
       return;
@@ -34,6 +51,13 @@ export default function CheckoutForm() {
     e.preventDefault();
 
     if (checkoutState.type !== "success") {
+      return;
+    }
+
+    if (ownerEmail && email.toLowerCase() !== ownerEmail.toLowerCase()) {
+      setErrorMessage(
+        "This email doesn't match the note owner. Only the owner can purchase upgrades for this note.",
+      );
       return;
     }
 
@@ -55,9 +79,10 @@ export default function CheckoutForm() {
   return (
     <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
       <div className="flex flex-col gap-4">
-        <Field>
+        <Field data-invalid={emailMismatch || undefined}>
           <FieldLabel htmlFor="checkout-email">Email</FieldLabel>
           <Input
+            aria-invalid={emailMismatch}
             autoComplete="email"
             disabled={isDisabled}
             id="checkout-email"
@@ -67,6 +92,30 @@ export default function CheckoutForm() {
             type="email"
             value={email}
           />
+          {ownerEmail && emailMismatch && (
+            <FieldError>
+              Must match the note owner:{" "}
+              <span className="font-mono">{obfuscateEmail(ownerEmail)}</span>
+            </FieldError>
+          )}
+          {ownerEmail && !emailMismatch && (
+            <FieldDescription>
+              Only{" "}
+              <span className="font-medium font-mono text-foreground">
+                {obfuscateEmail(ownerEmail)}
+              </span>{" "}
+              can purchase upgrades for this note.
+            </FieldDescription>
+          )}
+          <Alert>
+            <InfoIcon className="size-4" />
+            <AlertTitle>Note owner</AlertTitle>
+            <AlertDescription>
+              The email you enter here will be associated with the note and used
+              for the purchase. For subsequent purchases, make sure to use the
+              same email.
+            </AlertDescription>
+          </Alert>
         </Field>
 
         <Field>
@@ -84,7 +133,7 @@ export default function CheckoutForm() {
 
       <Button
         className="w-full gap-2"
-        disabled={isDisabled}
+        disabled={isDisabled || emailMismatch}
         size="lg"
         type="submit"
       >
