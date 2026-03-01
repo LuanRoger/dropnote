@@ -9,4 +9,5 @@ export type UpgradeProduct = {
   priceId: string | null;
   recurring?: string;
   icon?: React.ReactNode;
+  owned: boolean;
 };

@@ -9,7 +9,7 @@ import RichEditorShell from "@/components/rich-editor-shell";
 import { MAX_LENGHT_ADVANCED_NOTE, MAX_LENGHT_BASIC_NOTE } from "@/constants";
 import { NotesDatabaseLoadSource } from "@/lib/sources/notes";
 import { NoteRoomFullError } from "@/types/errors/notes";
-import { mapNotePropertiesToBadges } from "@/utils/badge";
+import { mapNotePropertiesToBadges } from "@/utils/notes";
 import { generateRandomHexColor } from "@/utils/color";
 import { generateRandomName } from "@/utils/name";
 import { validateSlug } from "@/utils/slug";
