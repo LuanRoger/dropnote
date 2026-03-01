@@ -4,13 +4,20 @@ import {
   createFulfilledOrder,
   isFulfilledOrder,
 } from "@repo/database/queries/fulfilled-orders";
-import { applyFeaturesToNote } from "@repo/database/queries/notes";
 import { stripe } from "@repo/payments/stripe";
+import { KNOWN_FEATURES } from "@/constants";
 import {
+  CustomerEmailNotFoundError,
   NoteCodeNotFoundInMetadataError,
   SessionHasNoFeaturesError,
 } from "@/types/errors/fulfillment";
 import type { FulfillmentResult } from "@/types/fulfillment";
+import type { UpgradeFeature } from "@/types/notes";
+import { applyFeaturesToNote } from "./notes";
+
+function isUpgradeFeature(value: string): value is UpgradeFeature {
+  return (KNOWN_FEATURES as string[]).includes(value);
+}
 
 export async function fulfillCheckout(
   sessionId: string,
@@ -33,8 +40,13 @@ export async function fulfillCheckout(
     throw new NoteCodeNotFoundInMetadataError();
   }
 
-  const features: string[] = [];
+  const ownerEmail = checkoutSession.customer_details?.email;
+  if (!ownerEmail) {
+    throw new CustomerEmailNotFoundError(sessionId);
+  }
+
   const lineItems = checkoutSession.line_items?.data ?? [];
+  const features: UpgradeFeature[] = [];
 
   for (const item of lineItems) {
     const price = item.price;
@@ -47,8 +59,11 @@ export async function fulfillCheckout(
       continue;
     }
 
-    if ("metadata" in product && product.metadata?.name) {
-      features.push(product.metadata.name);
+    if ("metadata" in product) {
+      const name = product.metadata?.name;
+      if (name && isUpgradeFeature(name)) {
+        features.push(name);
+      }
     }
   }
 
@@ -56,13 +71,9 @@ export async function fulfillCheckout(
     throw new SessionHasNoFeaturesError(sessionId);
   }
 
-  Promise.all([
-    await applyFeaturesToNote(noteCode, features),
-    await createFulfilledOrder({
-      sessionId,
-      noteCode,
-      features,
-    }),
+  await Promise.all([
+    applyFeaturesToNote(noteCode, ownerEmail, features),
+    createFulfilledOrder({ sessionId, noteCode, features }),
   ]);
 
   return "fulfilled";

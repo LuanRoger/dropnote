@@ -11,3 +11,12 @@ export class SessionHasNoFeaturesError extends Error {
     this.name = "SessionHasNoFeaturesError";
   }
 }
+
+export class CustomerEmailNotFoundError extends Error {
+  constructor(sessionId: string) {
+    super(
+      `No customer email found on session ${sessionId}. The customer must provide an email at checkout.`,
+    );
+    this.name = "CustomerEmailNotFoundError";
+  }
+}

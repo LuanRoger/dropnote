@@ -1,3 +1,4 @@
+import { UpgradeFeature } from "@/types/notes";
 import type { Badge } from "@repo/editor/types/badge";
 
 export const TEST_NOTE_EXPIRE_TIME_MS = new Date(Date.now() + 20 * 1000); // 20 seconds
@@ -81,6 +82,8 @@ export const PARTIAL_NOTE_BETA_NOTE_DATA = {
   badges: [SPECIAL_BADGES_DATA.BETA],
   isPermanent: true,
 };
+
+export const KNOWN_FEATURES: UpgradeFeature[] = ["secure", "permanent"];
 
 export const NOTE_LAST_NOTE_PASSWORD_EXPIRE_TIME_MS = 7 * 24 * 60 * 60; // 7 days in seconds
 

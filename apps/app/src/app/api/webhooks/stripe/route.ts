@@ -4,6 +4,7 @@ import { stripe } from "@repo/payments/stripe";
 import { NextResponse } from "next/server";
 import { fulfillCheckout } from "@/app/actions/fulfillment";
 import {
+  CustomerEmailNotFoundError,
   NoteCodeNotFoundInMetadataError,
   SessionHasNoFeaturesError,
 } from "@/types/errors/fulfillment";
@@ -59,6 +60,10 @@ export async function POST(request: Request) {
       if (error instanceof NoteCodeNotFoundInMetadataError) {
         console.error(
           `[stripe-webhook] Session ${session.id} is missing noteCode in metadata. Skipping fulfilment.`,
+        );
+      } else if (error instanceof CustomerEmailNotFoundError) {
+        console.error(
+          `[stripe-webhook] Session ${session.id} has no customer email. The customer must provide an email at checkout.`,
         );
       } else if (error instanceof SessionHasNoFeaturesError) {
         console.error(
