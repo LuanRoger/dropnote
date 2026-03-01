@@ -13,9 +13,9 @@ import { useState, useTransition } from "react";
 import { createCheckoutSession } from "@/app/actions/payments";
 import CurrencyText from "@/components/currency-text";
 import LoadingSpinner from "@/components/loading-spinner";
+import type { UpgradeProduct } from "@/types/payments";
 import { CheckoutPanel } from "./checkout-panel";
 import UpgradeProductsList from "./upgrade-products-list";
-import type { UpgradeProduct } from "@/types/payments";
 
 type UpgradePageClientProps = {
   products: UpgradeProduct[];
@@ -54,8 +54,8 @@ export function UpgradePageClient({
 
   function handleConfirm() {
     const priceIds = products
-      .filter((p) => selectedIds.has(p.id) && p.priceId)
-      .map((p) => p.priceId as string);
+      .filter((prices) => selectedIds.has(prices.id) && prices.priceId)
+      .map((prices) => prices.priceId as string);
 
     if (priceIds.length === 0) {
       return;

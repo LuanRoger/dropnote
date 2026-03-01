@@ -1,9 +1,9 @@
 import { cn } from "@repo/design-system/lib/utils";
+import type { UpgradeProduct } from "@/types/payments";
 import { UpgradeCardInteractive } from "./upgrade-card-interactive";
-import type { SerializedProduct } from "./upgrade-page-client";
 
 type UpgradeProductsListProps = {
-  products: SerializedProduct[];
+  products: UpgradeProduct[];
   selectedIds: Set<string>;
   isCheckoutOpen: boolean;
   toggleProduct: (productId: string) => void;
