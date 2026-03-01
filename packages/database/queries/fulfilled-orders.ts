@@ -4,16 +4,6 @@ import {
   FulfilledOrders,
 } from "../schemas/fulfilled-orders";
 
-export async function getFulfilledOrderBySessionId(
-  sessionId: string
-): Promise<FulfilledOrderModel | null> {
-  await ensureConnected();
-
-  const order = await FulfilledOrders.findOne({ sessionId }).lean();
-
-  return order;
-}
-
 export async function createFulfilledOrder(data: {
   sessionId: string;
   noteCode: string;

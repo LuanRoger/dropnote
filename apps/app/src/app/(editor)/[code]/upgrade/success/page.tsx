@@ -1,10 +1,3 @@
-import { fulfillCheckout } from "@/app/actions/fulfillment";
-import {
-  FulfillOrderAlreadyFulfilledError,
-  FulfillOrderNotFoundError,
-  FulfillOrderUnpaidError,
-  FulfillSessionIdNotValidError,
-} from "@/types/errors/fulfillment";
 import { Button } from "@repo/design-system/components/ui/button";
 import {
   Empty,
@@ -16,6 +9,11 @@ import {
 } from "@repo/design-system/components/ui/empty";
 import { CheckIcon } from "lucide-react";
 import Link from "next/link";
+import { fulfillCheckout } from "@/app/actions/fulfillment";
+import {
+  FulfillOrderUnpaidError,
+  FulfillSessionIdNotValidError,
+} from "@/types/errors/fulfillment";
 
 export default async function Page({
   params,
@@ -28,11 +26,22 @@ export default async function Page({
   }
 
   const result = await fulfillCheckout(sessionId);
+
+  let description = (
+    <EmptyDescription>
+      Your note has been successfully upgraded! You can now enjoy the new
+      features and improvements. Thank you for your purchase and support!
+    </EmptyDescription>
+  );
   switch (result) {
-    case "not_found":
-      throw new FulfillOrderNotFoundError();
     case "already_fulfilled":
-      throw new FulfillOrderAlreadyFulfilledError();
+      description = (
+        <EmptyDescription>
+          This order has already been fulfilled. If you have any issues with the
+          upgrade, enter in contact.
+        </EmptyDescription>
+      );
+      break;
     case "unpaid":
       throw new FulfillOrderUnpaidError();
     default:
@@ -46,10 +55,7 @@ export default async function Page({
           <CheckIcon />
         </EmptyMedia>
         <EmptyTitle>Success</EmptyTitle>
-        <EmptyDescription>
-          Your note has been successfully upgraded! You can now enjoy the new
-          features and improvements. Thank you for your purchase and support!
-        </EmptyDescription>
+        {description}
       </EmptyHeader>
       <EmptyContent>
         <Link href={`/${code}`}>
