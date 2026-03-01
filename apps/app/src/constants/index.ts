@@ -43,12 +43,12 @@ export const BADGES_DATA: Record<string, Badge> = {
 
   SECURE: {
     label: "Secure",
-    color: "#0F5A3B",
+    color: "#197A56",
     description: "This note is protected with a password.",
   },
   EXTENDED: {
     label: "Extended",
-    color: "#1E40AF",
+    color: "#6AC1FF",
     description: "This note has extended character limit.",
   },
   SMART: {
