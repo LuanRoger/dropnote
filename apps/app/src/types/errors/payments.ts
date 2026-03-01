@@ -4,3 +4,10 @@ export class WebhookSecretVerificationFailed extends Error {
     this.name = "WebhookSecretVerificationFailed";
   }
 }
+
+export class NoMetadataProductError extends Error {
+  constructor(productId: string) {
+    super(`Product ${productId} is missing internal name in metadata.`);
+    this.name = "NoMetadataProductError";
+  }
+}
