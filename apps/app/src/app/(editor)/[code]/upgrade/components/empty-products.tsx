@@ -22,10 +22,10 @@ export default function EmptyProducts({ href, className }: EmptyProductsProps) {
         <EmptyMedia variant="icon">
           <RocketIcon className="size-4" />
         </EmptyMedia>
-        <EmptyTitle>No add-ons available</EmptyTitle>
+        <EmptyTitle>No upgrades available</EmptyTitle>
         <EmptyDescription>
-          It seems that you already own all the available add-ons for your note.
-          If you think this is a mistake, please contact support. If not —
+          It seems that you already own all the available upgrades for your
+          note. If you think this is a mistake, please contact support. If not —
           great! Enjoy your enhanced note experience.
         </EmptyDescription>
       </EmptyHeader>
