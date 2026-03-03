@@ -33,21 +33,18 @@ export default async function Page({ params }: PageProps<"/[code]/upgrade">) {
   return (
     <div className="flex flex-col gap-8 py-2">
       <div className="flex flex-col gap-2">
-        <div className="flex flex-col gap-1.5">
-          <h1 className="font-bold text-2xl">Upgrade your note</h1>
-          <p className="max-w-sm text-muted-foreground text-sm leading-relaxed">
-            Enhance your note with powerful add-ons. Pick what you need and pay
-            once — no subscriptions, no surprises.
-          </p>
-        </div>
-
+        <h1 className="font-bold text-2xl">Upgrade your note</h1>
+        <p className="text-muted-foreground text-sm">
+          Enhance your note with powerful add-ons. Pick what you need and pay
+          once — no subscriptions, no surprises.
+        </p>
         {ownerEmail && (
-          <p className="max-w-sm text-muted-foreground text-sm leading-relaxed">
-            Purchases for this note are restricted to its owner.{" "}
+          <p className="text-muted-foreground text-sm">
+            This note is owned by{" "}
             <span className="font-medium font-mono text-foreground">
               {obfuscateEmail(ownerEmail)}
             </span>{" "}
-            must be the email you enter at checkout.
+            . Only the owner can purchase upgrades for this note.
           </p>
         )}
       </div>

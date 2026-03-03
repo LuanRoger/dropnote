@@ -107,15 +107,17 @@ export default function CheckoutForm({ ownerEmail }: CheckoutFormProps) {
               can purchase upgrades for this note.
             </FieldDescription>
           )}
-          <Alert>
-            <InfoIcon className="size-4" />
-            <AlertTitle>Note owner</AlertTitle>
-            <AlertDescription>
-              The email you enter here will be associated with the note and used
-              for the purchase. For subsequent purchases, make sure to use the
-              same email.
-            </AlertDescription>
-          </Alert>
+          {!ownerEmail && (
+            <Alert>
+              <InfoIcon className="size-4" />
+              <AlertTitle>Note owner</AlertTitle>
+              <AlertDescription>
+                The email you enter here will be associated with the note and
+                used for the purchase. For subsequent purchases, make sure to
+                use the same email.
+              </AlertDescription>
+            </Alert>
+          )}
         </Field>
 
         <Field>
