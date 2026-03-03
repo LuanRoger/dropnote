@@ -80,8 +80,8 @@ export async function setExtendedLimitForNote(
   await Notes.updateOne({ code }, { hasExtendedLimit });
 }
 
-export async function updateOwnerForNote(code: string, owner: string) {
+export async function updateOwnerForNote(code: string, ownerEmail: string) {
   await ensureConnected();
 
-  await Notes.updateOne({ code }, { owner });
+  await Notes.updateOne({ code }, { ownerEmail });
 }

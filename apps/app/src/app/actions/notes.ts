@@ -167,6 +167,6 @@ export async function setOwnerForNote(code: string, ownerEmail: string) {
   if (note.ownerEmail && note.ownerEmail !== ownerEmail) {
     throw new NoteHasDiferentOwnerEmailError();
   }
-
+  
   await updateOwnerForNote(code, ownerEmail);
 }
