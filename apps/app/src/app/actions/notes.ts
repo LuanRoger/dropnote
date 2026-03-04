@@ -4,6 +4,8 @@ import {
   createNote,
   getNoteByCode as getNoteByCodeQuery,
   getNotePasswordByCode,
+  setExtendedLimitForNote,
+  setNoteAsPermanent,
   updateNote,
   updateOwnerForNote,
 } from "@repo/database/queries/notes";
@@ -27,11 +29,13 @@ import {
   NoteNotFoundError,
   OwnerEmailValidationError,
 } from "@/types/errors/notes";
+import type { UpgradeFeature } from "@/types/notes";
 import {
   checkPasswordCookieAccess,
   mountPasswordCookieValue,
 } from "@/utils/cookies";
 import { emailSchema } from "@/utils/schemas/email";
+import { createSecurityCodeForNote } from "./security-code";
 
 export async function getNoteByCode(code: string) {
   return await getNoteByCodeQuery(code);
@@ -125,6 +129,30 @@ export async function updateNoteBodyByCode(code: string, body: NoteBody) {
   await updateNote(code, body);
 }
 
+export async function applyFeaturesToNote(
+  code: string,
+  ownerEmail: string,
+  features: UpgradeFeature[],
+) {
+  await setOwnerForNote(code, ownerEmail);
+
+  for (const feature of features) {
+    switch (feature) {
+      case "extended":
+        await setExtendedLimitForNote(code, true);
+        break;
+      case "secure":
+        await createSecurityCodeForNote(code, "create", ownerEmail, true);
+        break;
+      case "permanent":
+        await setNoteAsPermanent(code);
+        break;
+      default:
+        break;
+    }
+  }
+}
+
 export async function setOwnerForNote(code: string, ownerEmail: string) {
   const validEmail = emailSchema.safeParse(ownerEmail);
   if (!validEmail.success) {
@@ -139,6 +167,6 @@ export async function setOwnerForNote(code: string, ownerEmail: string) {
   if (note.ownerEmail && note.ownerEmail !== ownerEmail) {
     throw new NoteHasDiferentOwnerEmailError();
   }
-
+  
   await updateOwnerForNote(code, ownerEmail);
 }

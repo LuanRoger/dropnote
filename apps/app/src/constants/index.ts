@@ -1,4 +1,5 @@
 import type { Badge } from "@repo/editor/types/badge";
+import type { UpgradeFeature } from "@/types/notes";
 
 export const TEST_NOTE_EXPIRE_TIME_MS = new Date(Date.now() + 20 * 1000); // 20 seconds
 export const DEFAULT_NOTE_EXPIRE_TIME_MS = new Date(
@@ -42,12 +43,12 @@ export const BADGES_DATA: Record<string, Badge> = {
 
   SECURE: {
     label: "Secure",
-    color: "#0F5A3B",
+    color: "#197A56",
     description: "This note is protected with a password.",
   },
-  UNLIMITED: {
-    label: "Unlimited",
-    color: "#1E40AF",
+  EXTENDED: {
+    label: "Extended",
+    color: "#6AC1FF",
     description: "This note has extended character limit.",
   },
   SMART: {
@@ -57,13 +58,13 @@ export const BADGES_DATA: Record<string, Badge> = {
   },
   PERMANENT: {
     label: "Permanent",
-    color: "#047857",
+    color: "#C97318",
     description: "This note will not be auto-deleted.",
   },
-  COLLAB: {
-    label: "Collab",
+  TEAM: {
+    label: "Team",
     color: "#B91C1C",
-    description: "This note can be edited by multiple users in real-time.",
+    description: "This note can be edited by up to 5 users in real-time.",
   },
 };
 
@@ -81,6 +82,13 @@ export const PARTIAL_NOTE_BETA_NOTE_DATA = {
   badges: [SPECIAL_BADGES_DATA.BETA],
   isPermanent: true,
 };
+
+export const KNOWN_FEATURES: UpgradeFeature[] = [
+  "secure",
+  "permanent",
+  "extended",
+  "team",
+];
 
 export const NOTE_LAST_NOTE_PASSWORD_EXPIRE_TIME_MS = 7 * 24 * 60 * 60; // 7 days in seconds
 

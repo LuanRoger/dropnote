@@ -8,7 +8,11 @@ type RichEditorEmptyProps = {
 export default function RichEditorEmpty({ isLoading }: RichEditorEmptyProps) {
   return (
     <div className="relative size-full">
-      <LoadingSpinner className="absolute right-2 bottom-2" show={isLoading} />
+      <LoadingSpinner
+        animated
+        className="absolute right-2 bottom-2"
+        show={isLoading}
+      />
       <RichEditor />
     </div>
   );
