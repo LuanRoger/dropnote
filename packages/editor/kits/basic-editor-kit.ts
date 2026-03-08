@@ -1,5 +1,6 @@
 import type { AnyPluginConfig } from "@platejs/core";
 import { TrailingBlockPlugin } from "platejs";
+import { CommentKit } from "../plugins/comment-kit";
 import { AlignKit } from "../plugins/align-kit";
 import { AutoformatKit } from "../plugins/autoformat-kit";
 import { BasicBlocksKit } from "../plugins/basic-blocks-kit";
@@ -48,6 +49,7 @@ export const BasicEditorKit: AnyPluginConfig[] = [
   // Marks
   ...BasicMarksKit,
   ...FontKit,
+  ...CommentKit,
 
   // Block Style
   ...ListKit,

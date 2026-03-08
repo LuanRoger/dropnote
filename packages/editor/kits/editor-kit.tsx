@@ -1,5 +1,6 @@
 import type { AnyPluginConfig } from "@platejs/core";
 import { createPlateEditor } from "platejs/react";
+import { AIKit } from "../plugins/ai-kit";
 import { BottomStatusPlugin } from "../plugins/bottom-status-plugin";
 import { YjsKit } from "../plugins/yjs-kit";
 import type { Badge } from "../types/badge";
@@ -23,12 +24,13 @@ type EditorKitOptions = {
 };
 
 export const EditorKit: (options: EditorKitOptions) => AnyPluginConfig[] = (
-  options: EditorKitOptions
+  options: EditorKitOptions,
 ) => {
   const { yjs, bottomStatus } = options;
 
   const kits = [
     ...BasicEditorKit,
+    ...AIKit,
     BottomStatusPlugin.configure({
       options: bottomStatus,
     }),
