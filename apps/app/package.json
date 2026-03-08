@@ -11,6 +11,7 @@
     "typecheck": "tsc --noEmit --emitDeclarationOnly false"
   },
   "dependencies": {
+    "@ai-sdk/gateway": "^3.0.66",
     "@hookform/resolvers": "^5.2.2",
     "@repo/database": "workspace:*",
     "@repo/design-system": "workspace:*",
@@ -24,6 +25,7 @@
     "@stripe/react-stripe-js": "^5.6.0",
     "@stripe/stripe-js": "^8.8.0",
     "@t3-oss/env-nextjs": "^0.13.10",
+    "ai": "^6.0.116",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^0.575.0",
