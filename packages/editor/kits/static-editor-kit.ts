@@ -1,4 +1,6 @@
+import { BaseCommentPlugin } from "@platejs/comment";
 import type { AnyPluginConfig } from "@platejs/core";
+import { BaseSuggestionPlugin } from "@platejs/suggestion";
 import { BaseAlignKit } from "../plugins/align-base-kit";
 import { BaseBasicBlocksKit } from "../plugins/basic-blocks-base-kit";
 import { BaseBasicMarksKit } from "../plugins/basic-marks-base-kit";
@@ -15,6 +17,7 @@ import { BaseMediaKit } from "../plugins/media-base-kit";
 import { BaseTableKit } from "../plugins/table-base-kit";
 import { BaseTocKit } from "../plugins/toc-base-kit";
 import { BaseToggleKit } from "../plugins/toggle-base-kit";
+import { MarkdownKit } from "../plugins/markdown-kit";
 
 export const StaticEditorKit: AnyPluginConfig[] = [
   // Elements
@@ -33,9 +36,14 @@ export const StaticEditorKit: AnyPluginConfig[] = [
   // Marks
   ...BaseBasicMarksKit,
   ...BaseFontKit,
+  BaseCommentPlugin,
+  BaseSuggestionPlugin,
 
   // Block style
   ...BaseListKit,
   ...BaseAlignKit,
   ...BaseLineHeightKit,
+
+  // Parsers
+  ...MarkdownKit,
 ];

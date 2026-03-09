@@ -1,22 +1,27 @@
+"use client";
+
 import { withAIBatch } from "@platejs/ai";
 import {
   AIChatPlugin,
+  AIPlugin,
   applyAISuggestions,
   streamInsertChunk,
   useChatChunk,
 } from "@platejs/ai/react";
+import type { AnyPluginConfig } from "@platejs/core";
 import { getPluginType, KEYS, PathApi } from "platejs";
 import { usePluginOption } from "platejs/react";
+import { DEFAULT_MAX_DOCUMENT_CONTEXT_LENGTH } from "../ai/utils";
 import { AILoadingBar, AIMenu } from "../components/ai-menu";
 import { AIAnchorElement, AILeaf } from "../components/ai-node";
 import { useEditorAIChat } from "../hooks/use-chat";
-import { AIPlugin } from "@platejs/ai/react";
 
-const aiChatPlugin = AIChatPlugin.extend({
+export const aiChatPlugin: AnyPluginConfig = AIChatPlugin.extend({
   options: {
     chatOptions: {
-      api: "/api/ai",
+      api: "/api/chat",
       body: {
+        maxDocumentContextLength: DEFAULT_MAX_DOCUMENT_CONTEXT_LENGTH,
         model: "openai/gpt-4o-mini",
       },
     },
@@ -35,6 +40,12 @@ const aiChatPlugin = AIChatPlugin.extend({
     useChatChunk({
       onChunk: ({ chunk, isFirst, nodes, text: content }) => {
         if (isFirst && mode === "insert") {
+          const selection = editor.selection;
+
+          if (!selection) {
+            return;
+          }
+
           editor.tf.withoutSaving(() => {
             editor.tf.insertNodes(
               {
@@ -42,7 +53,7 @@ const aiChatPlugin = AIChatPlugin.extend({
                 type: getPluginType(editor, KEYS.aiChat),
               },
               {
-                at: PathApi.next(editor.selection!.focus.path.slice(0, 1)),
+                at: PathApi.next(selection.focus.path.slice(0, 1)),
               },
             );
           });
@@ -53,7 +64,10 @@ const aiChatPlugin = AIChatPlugin.extend({
           withAIBatch(
             editor,
             () => {
-              if (!getOption("streaming")) return;
+              if (!getOption("streaming")) {
+                return;
+              }
+
               editor.tf.withScrolling(() => {
                 streamInsertChunk(editor, chunk, {
                   textProps: {
@@ -88,4 +102,7 @@ const aiChatPlugin = AIChatPlugin.extend({
   },
 });
 
-export const AIKit = [AIPlugin.withComponent(AILeaf), aiChatPlugin];
+export const AIKit: AnyPluginConfig[] = [
+  AIPlugin.withComponent(AILeaf),
+  aiChatPlugin,
+];

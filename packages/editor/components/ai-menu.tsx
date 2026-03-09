@@ -146,7 +146,8 @@ export function AIMenu() {
       let anchorNode = editor.api.node({
         at: [],
         reverse: true,
-        match: (n) => !!n[KEYS.suggestion] && !!n[getTransientSuggestionKey()],
+        match: (n: Record<string, unknown>) =>
+          !!n[KEYS.suggestion] && !!n[getTransientSuggestionKey()],
       });
 
       if (!anchorNode) {
@@ -632,7 +633,8 @@ export function AILoadingBar() {
     if (type === "accept") {
       editor.tf.unsetNodes([getTransientCommentKey()], {
         at: [],
-        match: (n) => TextApi.isText(n) && !!n[KEYS.comment],
+        match: (n: Record<string, unknown>) =>
+          TextApi.isText(n) && !!n[KEYS.comment],
       });
     }
 

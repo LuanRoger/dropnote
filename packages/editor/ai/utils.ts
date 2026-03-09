@@ -2,8 +2,46 @@ import { getMarkdown } from "@platejs/ai";
 import { serializeMd } from "@platejs/markdown";
 import type { UIMessage } from "ai";
 import dedent from "dedent";
-import { RangeApi, type SlateEditor } from "platejs";
+import { KEYS, RangeApi, type SlateEditor } from "platejs";
 import type { ChatMessage } from "../hooks/use-chat";
+
+/** Default maximum character length for document context sent to the AI. */
+export const DEFAULT_MAX_DOCUMENT_CONTEXT_LENGTH = 1000;
+
+/**
+ * Serialize the entire document to Markdown and truncate to a maximum character
+ * length so that large documents don't exceed the AI model's context window.
+ *
+ * @param editor - The Slate editor instance (must contain the full document).
+ * @param maxLength - Maximum number of characters to keep. Defaults to
+ *   {@link DEFAULT_MAX_DOCUMENT_CONTEXT_LENGTH}. Pass `0` or `Infinity` to
+ *   disable truncation.
+ * @returns The (possibly truncated) Markdown string wrapped in a
+ *   `<documentContext>` tag, or an empty string when the document is empty.
+ */
+export function getDocumentContext(
+  editor: SlateEditor,
+  maxLength: number = DEFAULT_MAX_DOCUMENT_CONTEXT_LENGTH,
+): string {
+  // Serialize the full document (all children) to markdown
+  const fullMarkdown = serializeMd(editor, { value: editor.children });
+
+  if (!fullMarkdown || fullMarkdown.trim().length === 0) {
+    return "";
+  }
+
+  const limit =
+    maxLength <= 0 || !Number.isFinite(maxLength)
+      ? fullMarkdown.length
+      : maxLength;
+
+  const truncated =
+    fullMarkdown.length > limit
+      ? `${fullMarkdown.slice(0, limit)}\n\n[… document truncated at ${limit} characters]`
+      : fullMarkdown;
+
+  return truncated;
+}
 
 /**
  * Tag content split by newlines
@@ -14,7 +52,9 @@ import type { ChatMessage } from "../hooks/use-chat";
  *   </tools>
  */
 export const tag = (tag: string, content?: string | null) => {
-  if (!content) return "";
+  if (!content) {
+    return "";
+  }
 
   return [`<${tag}>`, content, `</${tag}>`].join("\n");
 };
@@ -26,7 +66,9 @@ export const tag = (tag: string, content?: string | null) => {
  *   <tools>{content}</tools>
  */
 export const inlineTag = (tag: string, content?: string | null) => {
-  if (!content) return "";
+  if (!content) {
+    return "";
+  }
 
   return [`<${tag}>`, content, `</${tag}>`].join("");
 };
@@ -45,18 +87,19 @@ export const list = (items: string[] | undefined) =>
     : "";
 
 export type StructuredPromptSections = {
-  backgroundData?: string;
+  context?: string;
+  /** Full document markdown (truncated) so the AI is aware of surrounding content. */
+  documentContext?: string;
   examples?: string[] | string;
   history?: string;
+  instruction?: string;
   outputFormatting?: string;
   prefilledResponse?: string;
-  question?: string;
   rules?: string;
   task?: string;
   taskContext?: string;
   thinking?: string;
   tone?: string;
-  tools?: string;
 };
 
 /**
@@ -87,12 +130,13 @@ export type StructuredPromptSections = {
  *   11. Prefilled response - Optional response starter
  */
 export const buildStructuredPrompt = ({
-  backgroundData,
+  context,
+  documentContext,
   examples,
   history,
+  instruction,
   outputFormatting,
   prefilledResponse,
-  question,
   rules,
   task,
   taskContext,
@@ -100,48 +144,55 @@ export const buildStructuredPrompt = ({
   tone,
 }: StructuredPromptSections) => {
   const formattedExamples = Array.isArray(examples)
-    ? examples.map((example) => tag("example", example)).join("\n")
+    ? examples
+        .map((example) => {
+          // Indent content inside example tag (4 spaces)
+          const indentedContent = example
+            .split("\n")
+            .map((line) => (line ? `    ${line}` : ""))
+            .join("\n");
+
+          return ["  <example>", indentedContent, "  </example>"].join("\n");
+        })
+        .join("\n")
     : examples;
 
-  const context = sections([
+  return sections([
     taskContext,
     tone,
 
-    backgroundData &&
+    task && tag("task", task),
+
+    instruction &&
       dedent`
-        Here is the background data you should reference when answering the user:
-        <backgroundData>
-              ${backgroundData}
-        </backgroundData>
-      `,
-    rules &&
-      dedent`
-        Here are some important rules for the interaction:
-            ${rules}
+        Here is the user's instruction (this is what you need to respond to):
+        ${tag("instruction", instruction)}
       `,
 
-    formattedExamples &&
+    documentContext &&
       dedent`
-        Here are some examples of how to respond in a standard interaction:
-              ${tag("examples", formattedExamples)}
+        Here is the full document for additional context (use it to understand the broader content but focus on the specific context below):
+        ${tag("documentContext", documentContext)}
       `,
+
+    context &&
+      dedent`
+        Here is the context you should reference when answering the user:
+        ${tag("context", context)}
+      `,
+
+    rules && tag("rules", rules),
+
+    formattedExamples &&
+      "Here are some examples of how to respond in a standard interaction:\n" +
+        tag("examples", formattedExamples),
 
     history &&
       dedent`
-        Here is the conversation history (between the user and you) prior to the question:
-              ${tag("history", history)}
+        Here is the conversation history (between the user and you) prior to the current instruction:
+        ${tag("history", history)}
       `,
 
-    question &&
-      dedent`
-        Here is the user's question:
-              ${tag("question", question)}
-      `,
-  ]);
-
-  return sections([
-    tag("context", context),
-    task,
     // or <reasoningSteps>
     thinking && tag("thinking", thinking),
     // Not needed with structured output
@@ -161,12 +212,17 @@ export function getTextFromMessage(message: UIMessage): string {
 
 /**
  * Format conversation history for prompts. Extracts text from messages and
- * formats as ROLE: text.
+ * formats as ROLE: text. Returns empty string if only one message (no history needed).
  */
 export function formatTextFromMessages(
   messages: ChatMessage[],
   options?: { limit?: number },
 ): string {
+  // No history needed if no messages or only one message
+  if (!messages || messages.length <= 1) {
+    return "";
+  }
+
   const historyMessages = options?.limit
     ? messages.slice(-options.limit)
     : messages;
@@ -174,19 +230,46 @@ export function formatTextFromMessages(
   return historyMessages
     .map((message) => {
       const text = getTextFromMessage(message).trim();
-      if (!text) return null;
+
+      if (!text) {
+        return null;
+      }
+
       const role = message.role.toUpperCase();
+
       return `${role}: ${text}`;
     })
     .filter(Boolean)
     .join("\n");
 }
 
+/**
+ * Get the last user message text from messages array.
+ */
+export function getLastUserInstruction(messages: ChatMessage[]): string {
+  if (!messages || messages.length === 0) {
+    return "";
+  }
+
+  const lastUserMessage = [...messages]
+    .reverse()
+    .find((m) => m.role === "user");
+
+  if (!lastUserMessage) {
+    return "";
+  }
+
+  return getTextFromMessage(lastUserMessage).trim();
+}
+
 const SELECTION_START = "<Selection>";
 const SELECTION_END = "</Selection>";
 
 export const addSelection = (editor: SlateEditor) => {
-  if (!editor.selection) return;
+  if (!editor.selection) {
+    return;
+  }
+
   if (editor.api.isExpanded()) {
     const [start, end] = RangeApi.edges(editor.selection);
 
@@ -208,12 +291,15 @@ const removeEscapeSelection = (editor: SlateEditor, text: string) => {
     .replace(`\\${SELECTION_END}`, SELECTION_END);
 
   // If the selection is on a void element, inserting the placeholder will fail, and the string must be replaced manually.
-  if (!newText.includes(SELECTION_END)) {
-    const [_, end] = RangeApi.edges(editor.selection!);
+  if (!newText.includes(SELECTION_END) && editor.selection) {
+    const [, end] = RangeApi.edges(editor.selection);
 
     const node = editor.api.block({ at: end.path });
 
-    if (!node) return newText;
+    if (!node) {
+      return newText;
+    }
+
     if (editor.api.isVoid(node[0])) {
       const voidString = serializeMd(editor, { value: [node[0]] });
 
@@ -234,7 +320,7 @@ const removeEscapeSelection = (editor: SlateEditor, text: string) => {
 
 /** Check if the current selection fully covers all top-level blocks. */
 export const isMultiBlocks = (editor: SlateEditor) => {
-  const blocks = editor.api.blocks({ mode: "highest" });
+  const blocks = editor.api.blocks({ mode: "lowest" });
 
   return blocks.length > 1;
 };
@@ -242,3 +328,34 @@ export const isMultiBlocks = (editor: SlateEditor) => {
 /** Get markdown with selection markers */
 export const getMarkdownWithSelection = (editor: SlateEditor) =>
   removeEscapeSelection(editor, getMarkdown(editor, { type: "block" }));
+
+/** Check if the current selection is inside a table cell */
+export const isSelectionInTable = (editor: SlateEditor): boolean => {
+  if (!editor.selection) {
+    return false;
+  }
+
+  const tableEntry = editor.api.block({
+    at: editor.selection,
+    match: { type: KEYS.table },
+  });
+
+  return !!tableEntry;
+};
+
+/** Check if selection is within a single table cell */
+export const isSingleCellSelection = (editor: SlateEditor): boolean => {
+  if (!editor.selection) {
+    return false;
+  }
+
+  // Get all td blocks in selection
+  const cells = Array.from(
+    editor.api.nodes({
+      at: editor.selection,
+      match: { type: KEYS.td },
+    }),
+  );
+
+  return cells.length === 1;
+};
