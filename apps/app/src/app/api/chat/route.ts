@@ -1,22 +1,17 @@
 import { createGateway } from "@ai-sdk/gateway";
 import { createSlateEditor, nanoid, type SlateEditor } from "@repo/editor";
 import {
-  getChooseToolPrompt,
   getCommentPrompt,
   getEditPrompt,
   getGeneratePrompt,
 } from "@repo/editor/ai/prompts";
-import {
-  DEFAULT_MAX_DOCUMENT_CONTEXT_LENGTH,
-  getDocumentContext,
-} from "@repo/editor/ai/utils";
-import type { ChatMessage, ToolName } from "@repo/editor/hooks/use-chat";
+import type { ChatMessage } from "@repo/editor/hooks/use-chat";
 import { StaticEditorKit } from "@repo/editor/kits/static-editor-kit";
+import { getDocumentContext } from "@repo/editor/utils/ai";
 import { markdownJoinerTransform } from "@repo/editor/utils/markdown-joiner-transform";
 import {
   createUIMessageStream,
   createUIMessageStreamResponse,
-  generateText,
   type LanguageModel,
   Output,
   streamText,
@@ -26,31 +21,14 @@ import {
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { z } from "zod";
+import { DEFAULT_MAX_DOCUMENT_CONTEXT_AI_LENGTH } from "@/constants";
 
 export async function POST(req: NextRequest) {
-  const {
-    apiKey: key,
-    ctx,
-    maxDocumentContextLength,
-    messages: messagesRaw = [],
-    model,
-  } = await req.json();
+  const { apiKey: key, ctx, messages: messagesRaw = [] } = await req.json();
 
-  const { children, selection, toolName: toolNameParam } = ctx;
-
-  const editor = createSlateEditor({
-    plugins: StaticEditorKit,
-    selection,
-    value: children,
-  });
-
-  const docCtxLimit =
-    typeof maxDocumentContextLength === "number"
-      ? maxDocumentContextLength
-      : DEFAULT_MAX_DOCUMENT_CONTEXT_LENGTH;
-  const documentContext = getDocumentContext(editor, docCtxLimit) || undefined;
-
+  const { children, selection, toolName } = ctx;
   const apiKey = key || process.env.AI_GATEWAY_API_KEY;
+  const model = process.env.AI_MODEL;
 
   if (!apiKey) {
     return NextResponse.json(
@@ -58,6 +36,22 @@ export async function POST(req: NextRequest) {
       { status: 401 },
     );
   }
+  if (!model) {
+    return NextResponse.json(
+      { error: "Missing AI model configuration." },
+      { status: 500 },
+    );
+  }
+
+  const editor = createSlateEditor({
+    plugins: StaticEditorKit,
+    selection,
+    value: children,
+  });
+
+  const documentContext =
+    getDocumentContext(editor, DEFAULT_MAX_DOCUMENT_CONTEXT_AI_LENGTH) ||
+    undefined;
 
   const isSelecting = editor.api.isExpanded();
 
@@ -67,44 +61,16 @@ export async function POST(req: NextRequest) {
 
   try {
     const stream = createUIMessageStream<ChatMessage>({
-      execute: async ({ writer }) => {
-        let toolName = toolNameParam;
-
-        if (!toolName) {
-          const prompt = getChooseToolPrompt({
-            documentContext,
-            isSelecting,
-            messages: messagesRaw,
-          });
-
-          const enumOptions = isSelecting
-            ? ["generate", "edit", "comment"]
-            : ["generate", "comment"];
-          const modelId = model || "google/gemini-2.5-flash";
-
-          const { output: AIToolName } = await generateText({
-            model: gatewayProvider(modelId),
-            output: Output.choice({ options: enumOptions }),
-            prompt,
-          });
-
-          writer.write({
-            data: AIToolName as ToolName,
-            type: "data-toolName",
-          });
-
-          toolName = AIToolName;
-        }
-
+      execute: ({ writer }) => {
         const textStream = streamText({
           experimental_transform: markdownJoinerTransform(),
-          model: gatewayProvider(model || "openai/gpt-4o-mini"),
+          model: gatewayProvider(model),
           prompt: "",
           tools: {
             comment: getCommentTool(editor, {
               documentContext,
               messagesRaw,
-              model: gatewayProvider(model || "google/gemini-2.5-flash"),
+              model: gatewayProvider(model),
               writer,
             }),
           },
@@ -128,8 +94,8 @@ export async function POST(req: NextRequest) {
                 activeTools: [],
                 model:
                   editType === "selection"
-                    ? gatewayProvider(model || "google/gemini-2.5-flash")
-                    : gatewayProvider(model || "openai/gpt-4o-mini"),
+                    ? gatewayProvider(model)
+                    : gatewayProvider(model),
                 messages: [
                   {
                     content: editPrompt,
@@ -155,7 +121,7 @@ export async function POST(req: NextRequest) {
                     role: "user" as const,
                   },
                 ],
-                model: gatewayProvider(model || "openai/gpt-4o-mini"),
+                model: gatewayProvider(model),
               };
             }
           },

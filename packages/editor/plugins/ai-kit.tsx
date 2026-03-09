@@ -11,7 +11,6 @@ import {
 import type { AnyPluginConfig } from "@platejs/core";
 import { getPluginType, KEYS, PathApi } from "platejs";
 import { usePluginOption } from "platejs/react";
-import { DEFAULT_MAX_DOCUMENT_CONTEXT_LENGTH } from "../ai/utils";
 import { AILoadingBar, AIMenu } from "../components/ai-menu";
 import { AIAnchorElement, AILeaf } from "../components/ai-node";
 import { useEditorAIChat } from "../hooks/use-chat";
@@ -20,10 +19,6 @@ export const aiChatPlugin: AnyPluginConfig = AIChatPlugin.extend({
   options: {
     chatOptions: {
       api: "/api/chat",
-      body: {
-        maxDocumentContextLength: DEFAULT_MAX_DOCUMENT_CONTEXT_LENGTH,
-        model: "openai/gpt-4o-mini",
-      },
     },
   },
   render: {

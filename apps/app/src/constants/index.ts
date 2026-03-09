@@ -13,6 +13,8 @@ export const SECURITY_CODE_EXPIRE_TIME_MINUTES = 15;
 export const MAX_LENGHT_BASIC_NOTE = 1000;
 export const MAX_LENGHT_ADVANCED_NOTE = 10_000;
 
+export const DEFAULT_MAX_DOCUMENT_CONTEXT_AI_LENGTH = 1000;
+
 export const EDITOR_DEBOUNCE_TIME_MS = 600;
 
 export const LOCAL_NOTE_PREFIX = "dropnote.";

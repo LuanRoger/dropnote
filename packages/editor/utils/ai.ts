@@ -5,25 +5,10 @@ import dedent from "dedent";
 import { KEYS, RangeApi, type SlateEditor } from "platejs";
 import type { ChatMessage } from "../hooks/use-chat";
 
-/** Default maximum character length for document context sent to the AI. */
-export const DEFAULT_MAX_DOCUMENT_CONTEXT_LENGTH = 1000;
-
-/**
- * Serialize the entire document to Markdown and truncate to a maximum character
- * length so that large documents don't exceed the AI model's context window.
- *
- * @param editor - The Slate editor instance (must contain the full document).
- * @param maxLength - Maximum number of characters to keep. Defaults to
- *   {@link DEFAULT_MAX_DOCUMENT_CONTEXT_LENGTH}. Pass `0` or `Infinity` to
- *   disable truncation.
- * @returns The (possibly truncated) Markdown string wrapped in a
- *   `<documentContext>` tag, or an empty string when the document is empty.
- */
 export function getDocumentContext(
   editor: SlateEditor,
-  maxLength: number = DEFAULT_MAX_DOCUMENT_CONTEXT_LENGTH,
+  maxLength: number,
 ): string {
-  // Serialize the full document (all children) to markdown
   const fullMarkdown = serializeMd(editor, { value: editor.children });
 
   if (!fullMarkdown || fullMarkdown.trim().length === 0) {
@@ -43,14 +28,6 @@ export function getDocumentContext(
   return truncated;
 }
 
-/**
- * Tag content split by newlines
- *
- * @example
- *   <tools>
- *   {content}
- *   </tools>
- */
 export const tag = (tag: string, content?: string | null) => {
   if (!content) {
     return "";
@@ -59,12 +36,6 @@ export const tag = (tag: string, content?: string | null) => {
   return [`<${tag}>`, content, `</${tag}>`].join("\n");
 };
 
-/**
- * Tag content inline
- *
- * @example
- *   <tools>{content}</tools>
- */
 export const inlineTag = (tag: string, content?: string | null) => {
   if (!content) {
     return "";
@@ -73,11 +44,9 @@ export const inlineTag = (tag: string, content?: string | null) => {
   return [`<${tag}>`, content, `</${tag}>`].join("");
 };
 
-// Sections split by double newlines
 export const sections = (sections: (boolean | string | null | undefined)[]) =>
   sections.filter(Boolean).join("\n\n");
 
-// List items split by newlines
 export const list = (items: string[] | undefined) =>
   items
     ? items
@@ -88,7 +57,6 @@ export const list = (items: string[] | undefined) =>
 
 export type StructuredPromptSections = {
   context?: string;
-  /** Full document markdown (truncated) so the AI is aware of surrounding content. */
   documentContext?: string;
   examples?: string[] | string;
   history?: string;
@@ -146,7 +114,6 @@ export const buildStructuredPrompt = ({
   const formattedExamples = Array.isArray(examples)
     ? examples
         .map((example) => {
-          // Indent content inside example tag (4 spaces)
           const indentedContent = example
             .split("\n")
             .map((line) => (line ? `    ${line}` : ""))
@@ -193,11 +160,8 @@ export const buildStructuredPrompt = ({
         ${tag("history", history)}
       `,
 
-    // or <reasoningSteps>
     thinking && tag("thinking", thinking),
-    // Not needed with structured output
     outputFormatting && tag("outputFormatting", outputFormatting),
-    // Not needed with structured output
     (prefilledResponse ?? null) !== null &&
       tag("prefilledResponse", prefilledResponse ?? ""),
   ]);
@@ -210,15 +174,10 @@ export function getTextFromMessage(message: UIMessage): string {
     .join("");
 }
 
-/**
- * Format conversation history for prompts. Extracts text from messages and
- * formats as ROLE: text. Returns empty string if only one message (no history needed).
- */
 export function formatTextFromMessages(
   messages: ChatMessage[],
   options?: { limit?: number },
 ): string {
-  // No history needed if no messages or only one message
   if (!messages || messages.length <= 1) {
     return "";
   }
@@ -243,9 +202,6 @@ export function formatTextFromMessages(
     .join("\n");
 }
 
-/**
- * Get the last user message text from messages array.
- */
 export function getLastUserInstruction(messages: ChatMessage[]): string {
   if (!messages || messages.length === 0) {
     return "";
@@ -290,7 +246,6 @@ const removeEscapeSelection = (editor: SlateEditor, text: string) => {
     .replace(`\\${SELECTION_START}`, SELECTION_START)
     .replace(`\\${SELECTION_END}`, SELECTION_END);
 
-  // If the selection is on a void element, inserting the placeholder will fail, and the string must be replaced manually.
   if (!newText.includes(SELECTION_END) && editor.selection) {
     const [, end] = RangeApi.edges(editor.selection);
 
@@ -318,18 +273,15 @@ const removeEscapeSelection = (editor: SlateEditor, text: string) => {
   return newText;
 };
 
-/** Check if the current selection fully covers all top-level blocks. */
 export const isMultiBlocks = (editor: SlateEditor) => {
   const blocks = editor.api.blocks({ mode: "lowest" });
 
   return blocks.length > 1;
 };
 
-/** Get markdown with selection markers */
 export const getMarkdownWithSelection = (editor: SlateEditor) =>
   removeEscapeSelection(editor, getMarkdown(editor, { type: "block" }));
 
-/** Check if the current selection is inside a table cell */
 export const isSelectionInTable = (editor: SlateEditor): boolean => {
   if (!editor.selection) {
     return false;
@@ -343,13 +295,11 @@ export const isSelectionInTable = (editor: SlateEditor): boolean => {
   return !!tableEntry;
 };
 
-/** Check if selection is within a single table cell */
 export const isSingleCellSelection = (editor: SlateEditor): boolean => {
   if (!editor.selection) {
     return false;
   }
 
-  // Get all td blocks in selection
   const cells = Array.from(
     editor.api.nodes({
       at: editor.selection,
