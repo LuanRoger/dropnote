@@ -101,11 +101,9 @@ export async function doesNoteHaveAllFeatures(code: string) {
     throw new NoteNotFoundError(code);
   }
 
-  const isPermanent = Boolean(note.expireAt);
-  const isExtended = note.hasExtendedLimit;
-  const isSecure = note.hasPassword;
+  const { isPermanent, hasExtendedLimit, hasPassword } = note;
 
-  return isPermanent && isExtended && isSecure;
+  return isPermanent && hasExtendedLimit && hasPassword;
 }
 
 export async function ensureCreated(code: string) {
