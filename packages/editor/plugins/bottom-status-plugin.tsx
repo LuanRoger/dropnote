@@ -16,7 +16,7 @@ export const BottomStatusPlugin = createPlatePlugin<
   key: "bottom_status",
   options: {
     maxLength: 10,
-    expireAt: undefined,
+    expireAt: null,
     upgradeButtonHref: undefined,
     badges: [],
   },

@@ -16,6 +16,7 @@ export default function NoSavePage() {
       options={{
         maxLength: MAX_LENGHT_BASIC_NOTE,
         badges: [BADGES_DATA.NO_SAVE],
+        expireAt: null,
       }}
     />
   );

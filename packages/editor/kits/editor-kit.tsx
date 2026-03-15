@@ -18,6 +18,7 @@ type EditorKitOptions = {
   bottomStatus?: {
     maxLength: number;
     expireAt: Date | null;
+    upgradeButtonHref?: string;
     badges: Badge[];
   };
 };

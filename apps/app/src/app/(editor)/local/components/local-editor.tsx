@@ -36,6 +36,7 @@ export default function LocalEditor({ code }: LocalEditorProps) {
       options={{
         maxLength: MAX_LENGHT_BASIC_NOTE,
         badges: [BADGES_DATA.LOCAL],
+        expireAt: null,
       }}
     />
   );
