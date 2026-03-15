@@ -1,17 +1,19 @@
 import { createGateway } from "@ai-sdk/gateway";
 import { createSlateEditor, nanoid, type SlateEditor } from "@repo/editor";
 import {
+  getChooseToolPrompt,
   getCommentPrompt,
   getEditPrompt,
   getGeneratePrompt,
 } from "@repo/editor/ai/prompts";
-import type { ChatMessage } from "@repo/editor/hooks/use-chat";
+import type { ChatMessage, ToolName } from "@repo/editor/hooks/use-chat";
 import { StaticEditorKit } from "@repo/editor/kits/static-editor-kit";
 import { getDocumentContext } from "@repo/editor/utils/ai";
 import { markdownJoinerTransform } from "@repo/editor/utils/markdown-joiner-transform";
 import {
   createUIMessageStream,
   createUIMessageStreamResponse,
+  generateText,
   type LanguageModel,
   Output,
   streamText,
@@ -26,7 +28,7 @@ import { DEFAULT_MAX_DOCUMENT_CONTEXT_AI_LENGTH } from "@/constants";
 export async function POST(req: NextRequest) {
   const { apiKey: key, ctx, messages: messagesRaw = [] } = await req.json();
 
-  const { children, selection, toolName } = ctx;
+  const { children, selection, toolName: toolNameParam } = ctx;
   const apiKey = key || process.env.AI_GATEWAY_API_KEY;
   const model = process.env.AI_MODEL;
 
@@ -61,7 +63,34 @@ export async function POST(req: NextRequest) {
 
   try {
     const stream = createUIMessageStream<ChatMessage>({
-      execute: ({ writer }) => {
+      execute: async ({ writer }) => {
+        let toolName = toolNameParam;
+
+        if (!toolName) {
+          const prompt = getChooseToolPrompt({
+            documentContext,
+            isSelecting,
+            messages: messagesRaw,
+          });
+
+          const enumOptions = isSelecting
+            ? ["generate", "edit", "comment"]
+            : ["generate", "comment"];
+
+          const { output: AIToolName } = await generateText({
+            model: gatewayProvider(model),
+            output: Output.choice({ options: enumOptions }),
+            prompt,
+          });
+
+          writer.write({
+            data: AIToolName as ToolName,
+            type: "data-toolName",
+          });
+
+          toolName = AIToolName;
+        }
+
         const textStream = streamText({
           experimental_transform: markdownJoinerTransform(),
           model: gatewayProvider(model),
