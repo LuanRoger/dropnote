@@ -17,7 +17,7 @@ type EditorKitOptions = {
   };
   bottomStatus?: {
     maxLength: number;
-    expireAt?: Date;
+    expireAt: Date | null;
     badges: Badge[];
   };
 };

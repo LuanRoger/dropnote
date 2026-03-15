@@ -2,7 +2,7 @@
 
 import { AnimatePresence, motion } from "motion/react";
 import { useEditorPlugin, useEditorSelector } from "platejs/react";
-import { useMemo } from "react";
+import { CSSProperties, ReactNode, useMemo } from "react";
 import {
   HoverCard,
   HoverCardContent,
@@ -135,6 +135,22 @@ function NoteExpireAt({ expireAt }: NoteExpireAtProps) {
   );
 }
 
+function FeatureBadge({
+  label,
+  isSpecial,
+  style,
+}: BadgeType & { style?: CSSProperties }) {
+  return (
+    <Badge
+      variant={isSpecial ? "special" : "default"}
+      className={`text-white font-mono uppercase ring-2 ring-background hover:z-10 transition-transform hover:scale-105`}
+      style={style}
+    >
+      {label}
+    </Badge>
+  );
+}
+
 function BadgesStack({
   badges,
   isSpecial,
@@ -144,27 +160,25 @@ function BadgesStack({
 }) {
   return (
     <div className="flex items-center">
-      {badges.map(({ label, color, description }, index) => {
-        const badge = (
-          <Badge
-            variant={isSpecial ? "special" : "default"}
-            className={`text-white font-mono uppercase ring-2 ring-background hover:z-10 transition-transform hover:scale-105`}
+      {badges.map((badge, index) => {
+        const featureBadge = (
+          <FeatureBadge
+            {...badge}
+            isSpecial={isSpecial}
             style={{
-              backgroundColor: color,
+              backgroundColor: badge.color,
               zIndex: badges.length - index,
               marginLeft: index === 0 ? 0 : "-0.3rem",
             }}
-          >
-            {label}
-          </Badge>
+          />
         );
 
         return (
-          <HoverCard key={`badge-${label}`}>
-            <HoverCardTrigger>{badge}</HoverCardTrigger>
+          <HoverCard key={`badge-${badge.label}`}>
+            <HoverCardTrigger>{featureBadge}</HoverCardTrigger>
             <HoverCardContent side="top" className="flex flex-col gap-2">
-              {badge}
-              {description}
+              {featureBadge}
+              {badge.description}
             </HoverCardContent>
           </HoverCard>
         );
