@@ -4,7 +4,8 @@ import type { Badge } from "../types/badge";
 
 type BottomStatusPluginConfig = {
   maxLength: number;
-  expireAt?: Date;
+  expireAt: Date | null;
+  upgradeButtonHref?: string;
   badges: Badge[];
 };
 
@@ -15,7 +16,8 @@ export const BottomStatusPlugin = createPlatePlugin<
   key: "bottom_status",
   options: {
     maxLength: 10,
-    expireAt: undefined,
+    expireAt: null,
+    upgradeButtonHref: undefined,
     badges: [],
   },
   render: {

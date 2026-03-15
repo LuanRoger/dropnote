@@ -95,6 +95,17 @@ export async function tryPasswordAccess(code: string, password: string) {
   redirect(`/${code}`);
 }
 
+export async function doesNoteHaveAllFeatures(code: string) {
+  const note = await getNoteByCodeQuery(code);
+  if (!note) {
+    throw new NoteNotFoundError(code);
+  }
+
+  const { isPermanent, hasExtendedLimit, hasPassword } = note;
+
+  return isPermanent && hasExtendedLimit && hasPassword;
+}
+
 export async function ensureCreated(code: string) {
   const note = await getNoteByCodeQuery(code);
   if (note) {
@@ -167,6 +178,6 @@ export async function setOwnerForNote(code: string, ownerEmail: string) {
   if (note.ownerEmail && note.ownerEmail !== ownerEmail) {
     throw new NoteHasDiferentOwnerEmailError();
   }
-  
+
   await updateOwnerForNote(code, ownerEmail);
 }
