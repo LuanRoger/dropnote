@@ -16,10 +16,10 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import {
   COOKIE_KEYS,
+  DEFAULT_NOTE_EXPIRE_TIME_MS,
   MAX_LENGHT_ADVANCED_NOTE,
   MAX_LENGHT_BASIC_NOTE,
   NOTE_LAST_NOTE_PASSWORD_EXPIRE_TIME_MS,
-  PARTIAL_NOTE_BETA_NOTE_DATA,
 } from "@/constants";
 import {
   CharacterLimitExceededError,
@@ -115,8 +115,7 @@ export async function ensureCreated(code: string) {
   return await createNote({
     code,
     body: [],
-    //TODO: Remove this when the beta phase is over and add expirationDate
-    ...PARTIAL_NOTE_BETA_NOTE_DATA,
+    expireAt: DEFAULT_NOTE_EXPIRE_TIME_MS,
   });
 }
 

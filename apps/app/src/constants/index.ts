@@ -77,12 +77,6 @@ export const SPECIAL_BADGES_DATA: Record<string, Badge> = {
   },
 };
 
-//TODO: Remove this when the beta phase is over
-export const PARTIAL_NOTE_BETA_NOTE_DATA = {
-  badges: [SPECIAL_BADGES_DATA.BETA],
-  isPermanent: true,
-};
-
 export const KNOWN_FEATURES: UpgradeFeature[] = [
   "secure",
   "permanent",
