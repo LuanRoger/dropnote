@@ -1,6 +1,6 @@
 "use client";
 
-import { CheckoutProvider } from "@stripe/react-stripe-js/checkout";
+import { CheckoutElementsProvider } from "@stripe/react-stripe-js/checkout";
 import { LockIcon, ShieldCheckIcon } from "lucide-react";
 import IconContainer from "@/components/icon-container";
 import { stripe as stripePromise } from "@/lib/payments";
@@ -150,7 +150,7 @@ export function CheckoutPanel({
       </div>
 
       <div className="rounded-xl border bg-card p-6 shadow-sm">
-        <CheckoutProvider
+        <CheckoutElementsProvider
           options={{
             clientSecret,
             elementsOptions: {
@@ -160,7 +160,7 @@ export function CheckoutPanel({
           stripe={stripePromise}
         >
           <CheckoutForm ownerEmail={ownerEmail} />
-        </CheckoutProvider>
+        </CheckoutElementsProvider>
       </div>
 
       <p className="flex items-center justify-center gap-1 text-center text-muted-foreground text-xs">

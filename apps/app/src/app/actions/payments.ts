@@ -28,7 +28,7 @@ export async function createCheckoutSession(
 ) {
   const session = await stripe.checkout.sessions.create({
     mode: "payment",
-    ui_mode: "custom",
+    ui_mode: "elements",
     line_items: priceIds.map((priceId) => ({
       price: priceId,
       quantity: 1,

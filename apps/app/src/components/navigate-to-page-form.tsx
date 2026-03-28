@@ -29,8 +29,8 @@ import {
 } from "@/utils/schemas/navigate-to-page-schema";
 import { generateRandomSlug } from "@/utils/slug";
 
-const MotionWriteButton = motion(Button);
-const MotionCopySlugButton = motion(InputGroupButton);
+const MotionWriteButton = motion.create(Button);
+const MotionCopySlugButton = motion.create(InputGroupButton);
 
 export default function NavigateToPageForm() {
   const form = useForm<NavigateToPageSchema>({
