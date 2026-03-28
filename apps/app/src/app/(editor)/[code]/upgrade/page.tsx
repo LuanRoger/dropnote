@@ -8,6 +8,9 @@ import EmptyProducts from "./components/empty-products";
 import { UpgradePageClient } from "./components/upgrade-page-client";
 
 export default async function Page({ params }: PageProps<"/[code]/upgrade">) {
+  // TODO: Uncomment when Stripe is ready
+  notFound();
+
   const { code } = await params;
 
   const [products, note] = await Promise.all([
