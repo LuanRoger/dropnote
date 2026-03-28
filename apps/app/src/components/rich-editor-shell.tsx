@@ -61,13 +61,14 @@ function RichEditorChildren({
   });
   const [isUpgradeDialogOpen, setIsUpgradeDialogOpen] = useState(false);
 
-  useEffect(() => {
-    if (!showUpgradeDialog) {
-      return;
-    }
+  // TODO: Uncomment when Stripe is ready
+  // useEffect(() => {
+  //   if (!showUpgradeDialog) {
+  //     return;
+  //   }
 
-    setIsUpgradeDialogOpen(true);
-  }, [showUpgradeDialog]);
+  //   setIsUpgradeDialogOpen(true);
+  // }, [showUpgradeDialog]);
 
   return (
     <>

@@ -30,7 +30,10 @@ export default function BottomStatus() {
       </div>
       <div className="flex gap-2">
         <NoteBadges />
-        <UpgradeButton />
+        {/*
+          TODO: Uncomment when Stripe is ready
+          <UpgradeButton />
+        */}
       </div>
     </div>
   );
