@@ -17,9 +17,12 @@
         "RESEND_API_KEY",
         "FROM_EMAIL_FIELD",
         "NOTE_PASSWORD_SECURITY_CODE_TEMPLATE_ID",
+        "STRIPE_SECRET_KEY",
+        "STRIPE_WEBHOOK_SECRET",
         "NEXT_PUBLIC_POSTHOG_KEY",
         "NEXT_PUBLIC_POSTHOG_HOST",
-        "NEXT_PUBLIC_APP_URL"
+        "NEXT_PUBLIC_APP_URL",
+        "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY"
       ],
       "outputs": [
         ".next/**",

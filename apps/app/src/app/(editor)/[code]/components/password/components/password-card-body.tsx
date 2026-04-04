@@ -82,18 +82,18 @@ export default function PasswordCardBody({
                   Send security code to email?
                 </AlertDialogTitle>
                 <AlertDialogDescription>
-                  <p>
-                    You will receive a security code that will allow you to
-                    create a new password for the note.
-                    <br />
-                    Do you want to send the security code to the email{" "}
-                    <strong>{obfuscateEmail(obsfuscatedEmail)}</strong>?
-                    <br />
-                    The code will be valid for{" "}
-                    <strong>{SECURITY_CODE_EXPIRE_TIME_MINUTES} minutes</strong>{" "}
-                    and you will not be able to send another code until the
-                    current one expires.
-                  </p>
+                  You will receive a security code that will allow you to create
+                  a new password for the note.
+                  <br />
+                  Do you want to send the security code to the email{" "}
+                  <strong>{obfuscateEmail(obsfuscatedEmail)}</strong>?
+                  <br />
+                  The code will be valid for{" "}
+                  <strong>
+                    {SECURITY_CODE_EXPIRE_TIME_MINUTES} minutes
+                  </strong>{" "}
+                  and you will not be able to send another code until the
+                  current one expires.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>

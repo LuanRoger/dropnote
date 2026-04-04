@@ -4,6 +4,8 @@ import {
   createNote,
   getNoteByCode as getNoteByCodeQuery,
   getNotePasswordByCode,
+  setExtendedLimitForNote,
+  setNoteAsPermanent,
   updateNote,
   updateOwnerForNote,
 } from "@repo/database/queries/notes";
@@ -14,10 +16,10 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import {
   COOKIE_KEYS,
+  DEFAULT_NOTE_EXPIRE_TIME_MS,
   MAX_LENGHT_ADVANCED_NOTE,
   MAX_LENGHT_BASIC_NOTE,
   NOTE_LAST_NOTE_PASSWORD_EXPIRE_TIME_MS,
-  PARTIAL_NOTE_BETA_NOTE_DATA,
 } from "@/constants";
 import {
   CharacterLimitExceededError,
@@ -27,11 +29,13 @@ import {
   NoteNotFoundError,
   OwnerEmailValidationError,
 } from "@/types/errors/notes";
+import type { UpgradeFeature } from "@/types/notes";
 import {
   checkPasswordCookieAccess,
   mountPasswordCookieValue,
 } from "@/utils/cookies";
 import { emailSchema } from "@/utils/schemas/email";
+import { createSecurityCodeForNote } from "./security-code";
 
 export async function getNoteByCode(code: string) {
   return await getNoteByCodeQuery(code);
@@ -91,6 +95,17 @@ export async function tryPasswordAccess(code: string, password: string) {
   redirect(`/${code}`);
 }
 
+export async function doesNoteHaveAllFeatures(code: string) {
+  const note = await getNoteByCodeQuery(code);
+  if (!note) {
+    throw new NoteNotFoundError(code);
+  }
+
+  const { isPermanent, hasExtendedLimit, hasPassword } = note;
+
+  return isPermanent && hasExtendedLimit && hasPassword;
+}
+
 export async function ensureCreated(code: string) {
   const note = await getNoteByCodeQuery(code);
   if (note) {
@@ -100,8 +115,7 @@ export async function ensureCreated(code: string) {
   return await createNote({
     code,
     body: [],
-    //TODO: Remove this when the beta phase is over and add expirationDate
-    ...PARTIAL_NOTE_BETA_NOTE_DATA,
+    expireAt: DEFAULT_NOTE_EXPIRE_TIME_MS,
   });
 }
 
@@ -123,6 +137,30 @@ export async function updateNoteBodyByCode(code: string, body: NoteBody) {
   }
 
   await updateNote(code, body);
+}
+
+export async function applyFeaturesToNote(
+  code: string,
+  ownerEmail: string,
+  features: UpgradeFeature[],
+) {
+  await setOwnerForNote(code, ownerEmail);
+
+  for (const feature of features) {
+    switch (feature) {
+      case "extended":
+        await setExtendedLimitForNote(code, true);
+        break;
+      case "secure":
+        await createSecurityCodeForNote(code, "create", ownerEmail, true);
+        break;
+      case "permanent":
+        await setNoteAsPermanent(code);
+        break;
+      default:
+        break;
+    }
+  }
 }
 
 export async function setOwnerForNote(code: string, ownerEmail: string) {

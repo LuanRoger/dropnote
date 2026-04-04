@@ -2,13 +2,13 @@
 
 import { AnimatePresence, motion } from "motion/react";
 import { useEditorPlugin, useEditorSelector } from "platejs/react";
-import { useMemo } from "react";
+import { CSSProperties, ReactNode, useMemo } from "react";
 import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
 } from "@repo/design-system/components/ui/hover-card";
-import { AlertCircleIcon, ClockAlertIcon } from "lucide-react";
+import { AlertCircleIcon, ClockAlertIcon, RocketIcon } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
@@ -19,6 +19,7 @@ import { countBodyLength } from "../utils/nodes";
 import { Badge } from "@repo/design-system/components/ui/badge";
 import { Separator } from "@repo/design-system/components/ui/separator";
 import type { Badge as BadgeType } from "../types/badge";
+import { Button } from "@repo/design-system/components/ui/button";
 
 export default function BottomStatus() {
   return (
@@ -27,7 +28,13 @@ export default function BottomStatus() {
         <CharactersBlockCount />
         <NoteIndicators />
       </div>
-      <NoteBadges />
+      <div className="flex gap-2">
+        <NoteBadges />
+        {/*
+          TODO: Uncomment when Stripe is ready
+          <UpgradeButton />
+        */}
+      </div>
     </div>
   );
 }
@@ -131,6 +138,22 @@ function NoteExpireAt({ expireAt }: NoteExpireAtProps) {
   );
 }
 
+function FeatureBadge({
+  label,
+  isSpecial,
+  style,
+}: BadgeType & { style?: CSSProperties }) {
+  return (
+    <Badge
+      variant={isSpecial ? "special" : "default"}
+      className={`text-white font-mono uppercase ring-2 ring-background hover:z-10 transition-transform hover:scale-105`}
+      style={style}
+    >
+      {label}
+    </Badge>
+  );
+}
+
 function BadgesStack({
   badges,
   isSpecial,
@@ -140,27 +163,25 @@ function BadgesStack({
 }) {
   return (
     <div className="flex items-center">
-      {badges.map(({ label, color, description }, index) => {
-        const badge = (
-          <Badge
-            variant={isSpecial ? "special" : "default"}
-            className={`text-white font-mono uppercase ring-2 ring-background hover:z-10 transition-transform hover:scale-105`}
+      {badges.map((badge, index) => {
+        const featureBadge = (
+          <FeatureBadge
+            {...badge}
+            isSpecial={isSpecial}
             style={{
-              backgroundColor: color,
+              backgroundColor: badge.color,
               zIndex: badges.length - index,
               marginLeft: index === 0 ? 0 : "-0.3rem",
             }}
-          >
-            {label}
-          </Badge>
+          />
         );
 
         return (
-          <HoverCard key={`badge-${label}`}>
-            <HoverCardTrigger>{badge}</HoverCardTrigger>
+          <HoverCard key={`badge-${badge.label}`}>
+            <HoverCardTrigger>{featureBadge}</HoverCardTrigger>
             <HoverCardContent side="top" className="flex flex-col gap-2">
-              {badge}
-              {description}
+              {featureBadge}
+              {badge.description}
             </HoverCardContent>
           </HoverCard>
         );
@@ -196,5 +217,27 @@ function NoteBadges() {
       )}
       <BadgesStack badges={normalBadges} />
     </div>
+  );
+}
+
+function UpgradeButton() {
+  const { plugin } = useEditorPlugin(BottomStatusPlugin);
+  const upgradeButtonHref = plugin.options.upgradeButtonHref;
+
+  if (!upgradeButtonHref) {
+    return null;
+  }
+
+  return (
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <a href={upgradeButtonHref}>
+          <Button variant="ghost" size="icon-xs">
+            <RocketIcon size={14} />
+          </Button>
+        </a>
+      </TooltipTrigger>
+      <TooltipContent>Upgrade your expirience</TooltipContent>
+    </Tooltip>
   );
 }

@@ -3,15 +3,18 @@ import { createMetadata } from "@repo/seo/metadata";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { checkNoteMultiplayerAccess } from "@/app/actions/multiplayer-server";
-import { resolveNoteAccess } from "@/app/actions/notes";
+import {
+  doesNoteHaveAllFeatures,
+  resolveNoteAccess,
+} from "@/app/actions/notes";
 import { getSecurityCodeByNoteCode } from "@/app/actions/security-code";
 import RichEditorShell from "@/components/rich-editor-shell";
 import { MAX_LENGHT_ADVANCED_NOTE, MAX_LENGHT_BASIC_NOTE } from "@/constants";
 import { NotesDatabaseLoadSource } from "@/lib/sources/notes";
 import { NoteRoomFullError } from "@/types/errors/notes";
-import { mapNotePropertiesToBadges } from "@/utils/badge";
 import { generateRandomHexColor } from "@/utils/color";
 import { generateRandomName } from "@/utils/name";
+import { mapNotePropertiesToBadges } from "@/utils/notes";
 import { validateSlug } from "@/utils/slug";
 import { env } from "~/env";
 import PasswordPage from "./components/password";
@@ -88,6 +91,10 @@ export default async function Page({ params }: PageProps) {
         }
       : undefined;
 
+  const upgradeButtonHref = (await doesNoteHaveAllFeatures(code))
+    ? undefined
+    : `${env.NEXT_PUBLIC_APP_URL}/${code}/upgrade`;
+
   return (
     <RichEditorShell
       code={code}
@@ -98,6 +105,7 @@ export default async function Page({ params }: PageProps) {
         expireAt,
         badges,
         colabration,
+        upgradeButtonHref,
       }}
     />
   );

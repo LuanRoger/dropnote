@@ -65,8 +65,23 @@ export async function setPasswordForNote(code: string, password: string) {
   await Notes.updateOne({ code }, { password, hasPassword: true });
 }
 
-export async function updateOwnerForNote(code: string, owner: string) {
+export async function setNoteAsPermanent(code: string) {
   await ensureConnected();
 
-  await Notes.updateOne({ code }, { owner });
+  await Notes.updateOne({ code }, { isPermanent: true, expireAt: null });
+}
+
+export async function setExtendedLimitForNote(
+  code: string,
+  hasExtendedLimit: boolean,
+) {
+  await ensureConnected();
+
+  await Notes.updateOne({ code }, { hasExtendedLimit });
+}
+
+export async function updateOwnerForNote(code: string, ownerEmail: string) {
+  await ensureConnected();
+
+  await Notes.updateOne({ code }, { ownerEmail });
 }
