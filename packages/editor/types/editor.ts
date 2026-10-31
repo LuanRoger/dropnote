@@ -12,6 +12,5 @@ export type EditorOptions = {
   maxLength: number;
   expireAt: Date | null;
   colabration?: ColaborationOptions;
-  upgradeButtonHref?: string;
   badges?: Badge[];
 };

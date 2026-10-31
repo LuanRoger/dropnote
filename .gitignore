@@ -267,8 +267,6 @@ $RECYCLE.BIN/
 # Database
 packages/database/generated
 
-# react.email
-.react-email
 
 # Sentry
 .sentryclirc
