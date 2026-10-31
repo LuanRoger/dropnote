@@ -1,23 +1,15 @@
 import type { Badge } from "@repo/editor/types/badge";
-import type { UpgradeFeature } from "@/types/notes";
 
 export const TEST_NOTE_EXPIRE_TIME_MS = new Date(Date.now() + 20 * 1000); // 20 seconds
 export const DEFAULT_NOTE_EXPIRE_TIME_MS = new Date(
-  Date.now() + 48 * 60 * 60 * 1000,
+  Date.now() + 48 * 60 * 60 * 1000
 ); // 48 hours
-export const SECURITY_CODE_EXPIRE_TIME_MS = new Date(
-  Date.now() + 15 * 60 * 1000,
-); // 15 minutes
-export const SECURITY_CODE_EXPIRE_TIME_MINUTES = 15;
-
 export const MAX_LENGHT_BASIC_NOTE = 1000;
 export const MAX_LENGHT_ADVANCED_NOTE = 10_000;
 
 export const EDITOR_DEBOUNCE_TIME_MS = 600;
 
 export const LOCAL_NOTE_PREFIX = "dropnote.";
-
-export const SECURITY_CODE_LENGTH = 5;
 
 /**
  * Regex for validating slugs:
@@ -41,11 +33,6 @@ export const BADGES_DATA: Record<string, Badge> = {
     description: "This note will not be saved and will be lost when you leave.",
   },
 
-  SECURE: {
-    label: "Secure",
-    color: "#197A56",
-    description: "This note is protected with a password.",
-  },
   EXTENDED: {
     label: "Extended",
     color: "#6AC1FF",
@@ -75,17 +62,4 @@ export const SPECIAL_BADGES_DATA: Record<string, Badge> = {
     description: "This note was created during the beta testing phase.",
     isSpecial: true,
   },
-};
-
-export const KNOWN_FEATURES: UpgradeFeature[] = [
-  "secure",
-  "permanent",
-  "extended",
-  "team",
-];
-
-export const NOTE_LAST_NOTE_PASSWORD_EXPIRE_TIME_MS = 7 * 24 * 60 * 60; // 7 days in seconds
-
-export const COOKIE_KEYS = {
-  NOTE_LAST_NOTE_PASSWORD: "dropnote.last_note.password",
 };

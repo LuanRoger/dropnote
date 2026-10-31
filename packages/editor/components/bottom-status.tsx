@@ -2,13 +2,13 @@
 
 import { AnimatePresence, motion } from "motion/react";
 import { useEditorPlugin, useEditorSelector } from "platejs/react";
-import { CSSProperties, ReactNode, useMemo } from "react";
+import { CSSProperties, useMemo } from "react";
 import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
 } from "@repo/design-system/components/ui/hover-card";
-import { AlertCircleIcon, ClockAlertIcon, RocketIcon } from "lucide-react";
+import { AlertCircleIcon, ClockAlertIcon } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
@@ -19,7 +19,6 @@ import { countBodyLength } from "../utils/nodes";
 import { Badge } from "@repo/design-system/components/ui/badge";
 import { Separator } from "@repo/design-system/components/ui/separator";
 import type { Badge as BadgeType } from "../types/badge";
-import { Button } from "@repo/design-system/components/ui/button";
 
 export default function BottomStatus() {
   return (
@@ -30,10 +29,6 @@ export default function BottomStatus() {
       </div>
       <div className="flex gap-2">
         <NoteBadges />
-        {/*
-          TODO: Uncomment when Stripe is ready
-          <UpgradeButton />
-        */}
       </div>
     </div>
   );
@@ -217,27 +212,5 @@ function NoteBadges() {
       )}
       <BadgesStack badges={normalBadges} />
     </div>
-  );
-}
-
-function UpgradeButton() {
-  const { plugin } = useEditorPlugin(BottomStatusPlugin);
-  const upgradeButtonHref = plugin.options.upgradeButtonHref;
-
-  if (!upgradeButtonHref) {
-    return null;
-  }
-
-  return (
-    <Tooltip>
-      <TooltipTrigger asChild>
-        <a href={upgradeButtonHref}>
-          <Button variant="ghost" size="icon-xs">
-            <RocketIcon size={14} />
-          </Button>
-        </a>
-      </TooltipTrigger>
-      <TooltipContent>Upgrade your expirience</TooltipContent>
-    </Tooltip>
   );
 }

@@ -18,13 +18,12 @@ type EditorKitOptions = {
   bottomStatus?: {
     maxLength: number;
     expireAt: Date | null;
-    upgradeButtonHref?: string;
     badges: Badge[];
   };
 };
 
 export const EditorKit: (options: EditorKitOptions) => AnyPluginConfig[] = (
-  options: EditorKitOptions,
+  options: EditorKitOptions
 ) => {
   const { yjs, bottomStatus } = options;
 
@@ -43,13 +42,7 @@ export const EditorKit: (options: EditorKitOptions) => AnyPluginConfig[] = (
 };
 
 export function createEditor(options: EditorOptions, initialValue: NoteBody) {
-  const {
-    maxLength,
-    badges = [],
-    upgradeButtonHref,
-    colabration,
-    expireAt,
-  } = options;
+  const { maxLength, badges = [], colabration, expireAt } = options;
 
   return createPlateEditor({
     plugins: EditorKit({
@@ -57,7 +50,6 @@ export function createEditor(options: EditorOptions, initialValue: NoteBody) {
       bottomStatus: {
         maxLength,
         expireAt,
-        upgradeButtonHref,
         badges,
       },
     }),

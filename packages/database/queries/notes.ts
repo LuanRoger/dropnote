@@ -5,19 +5,13 @@ import { type NoteModel, Notes } from "../schemas/notes";
 export async function getNoteByCode(code: string): Promise<NoteModel | null> {
   await ensureConnected();
 
-  const note = await Notes.findOne({ code }).lean();
+  const note = await Notes.findOne({ code })
+    .select(
+      "code body isPermanent hasExtendedLimit aiCredits badges expireAt createdAt updatedAt"
+    )
+    .lean();
 
   return note;
-}
-
-export async function getNotePasswordByCode(
-  code: string,
-): Promise<string | null> {
-  await ensureConnected();
-
-  const note = await Notes.findOne({ code }).select("password").lean();
-
-  return note?.password || null;
 }
 
 export async function createNote(data: {
@@ -51,18 +45,16 @@ export async function updateNote(code: string, body: any) {
 export async function createOrUpdateNoteBody(code: string, body: any) {
   await ensureConnected();
 
-  const note = await Notes.findOne({ code }).lean();
+  const note = await Notes.findOne({ code })
+    .select(
+      "code body isPermanent hasExtendedLimit aiCredits badges expireAt createdAt updatedAt"
+    )
+    .lean();
   if (note) {
     await Notes.updateOne({ code }, { body });
   } else {
     await Notes.create({ code, body });
   }
-}
-
-export async function setPasswordForNote(code: string, password: string) {
-  await ensureConnected();
-
-  await Notes.updateOne({ code }, { password, hasPassword: true });
 }
 
 export async function setNoteAsPermanent(code: string) {
@@ -73,15 +65,9 @@ export async function setNoteAsPermanent(code: string) {
 
 export async function setExtendedLimitForNote(
   code: string,
-  hasExtendedLimit: boolean,
+  hasExtendedLimit: boolean
 ) {
   await ensureConnected();
 
   await Notes.updateOne({ code }, { hasExtendedLimit });
-}
-
-export async function updateOwnerForNote(code: string, ownerEmail: string) {
-  await ensureConnected();
-
-  await Notes.updateOne({ code }, { ownerEmail });
 }

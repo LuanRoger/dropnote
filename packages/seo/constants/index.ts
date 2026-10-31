@@ -37,7 +37,6 @@ export const jsonLd: WithContext<WebApplication> = {
     "Real-time collaboration",
     "AI writing assistant",
     "Open-source",
-    "Password protection",
   ],
   browserRequirements: "Requires JavaScript. Requires HTML5.",
   creator: {
