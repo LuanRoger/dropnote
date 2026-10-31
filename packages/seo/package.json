@@ -7,11 +7,11 @@
     "typecheck": "tsc --noEmit --emitDeclarationOnly false"
   },
   "dependencies": {
-    "@takumi-rs/image-response": "^0.69.2",
-    "@takumi-rs/wasm": "^0.69.2",
+    "@takumi-rs/image-response": "^0.69.5",
+    "@takumi-rs/wasm": "^0.69.5",
     "lodash.merge": "^4.6.2",
     "react": "19.2.4",
-    "schema-dts": "^2.0.0"
+    "schema-dts": "^2.1.0"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",

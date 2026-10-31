@@ -24,7 +24,6 @@ export const notesSchema = new mongoose.Schema(
     body: Object,
     isPermanent: { type: Boolean, default: false },
     hasExtendedLimit: { type: Boolean, default: false },
-    aiCredits: { type: Number, default: 0 },
     badges: {
       type: [
         {
