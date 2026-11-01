@@ -1,5 +1,5 @@
-import withBundleAnalyzer from "@next/bundle-analyzer";
 import type { NextConfig } from "next";
+import { varlockNextConfigPlugin } from '@varlock/nextjs-integration/plugin';
 
 export const config: NextConfig = {
   reactCompiler: true,
@@ -35,5 +35,4 @@ export const config: NextConfig = {
   skipTrailingSlashRedirect: true,
 };
 
-export const withAnalyzer = (sourceConfig: NextConfig): NextConfig =>
-  withBundleAnalyzer()(sourceConfig);
+export const withVarlock = varlockNextConfigPlugin();
