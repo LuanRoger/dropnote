@@ -1,4 +1,4 @@
-# dependencies (bun install)
+# dependencies
 node_modules
 
 # output
@@ -26,6 +26,10 @@ report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
 .eslintcache
 .cache
 *.tsbuildinfo
+.wrangler
+worker-configuration.d.ts
+.dev.vars
+.dev.vars.*
 
 # IntelliJ based IDEs
 .idea

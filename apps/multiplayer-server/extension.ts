@@ -4,37 +4,17 @@ import type {
   onAuthenticatePayload,
   onAwarenessUpdatePayload,
   onConnectPayload,
-  onDestroyPayload,
   onDisconnectPayload,
-  onListenPayload,
 } from "@hocuspocus/server";
 import { isAuthValid } from "./utils/auth";
 
 export class DropnoteMultiplayerServerExtension implements Extension {
-  private readonly serverName: string;
-  private readonly address: string;
   private readonly apiKey: string;
   private readonly maxUsersPerRoom: number;
 
-  constructor(
-    serverName: string,
-    address: string,
-    apiKey: string,
-    maxUsersPerRoom: number
-  ) {
-    this.serverName = serverName;
-    this.address = address;
+  constructor(apiKey: string, maxUsersPerRoom: number) {
     this.apiKey = apiKey;
     this.maxUsersPerRoom = maxUsersPerRoom;
-  }
-
-  onListen(data: onListenPayload): Promise<void> {
-    console.log(
-      `🚀 ${this.serverName} is listening on ${this.address}:${data.port}`
-    );
-    console.log(`IPv6 enabled: ${this.address}`);
-
-    return Promise.resolve();
   }
 
   onConnect(data: onConnectPayload): Promise<void> {
@@ -75,7 +55,7 @@ export class DropnoteMultiplayerServerExtension implements Extension {
   }
 
   onAwarenessUpdate(data: onAwarenessUpdatePayload): Promise<void> {
-    const activeUsers = data.states.length;
+    const activeUsers = data.awareness.getStates().size;
     console.log(
       `👥 Active users in room ${data.documentName}: ${activeUsers}/${this.maxUsersPerRoom}`
     );
@@ -85,12 +65,6 @@ export class DropnoteMultiplayerServerExtension implements Extension {
 
   onDisconnect(data: onDisconnectPayload): Promise<void> {
     console.log(`📤 Client disconnected from room: ${data.documentName}`);
-
-    return Promise.resolve();
-  }
-
-  onDestroy(_: onDestroyPayload): Promise<void> {
-    console.log(`🛑 ${this.serverName} is shutting down`);
 
     return Promise.resolve();
   }
