@@ -1,5 +1,5 @@
-import { ImageResponse } from "@takumi-rs/image-response/wasm";
 import { productionUrl } from "../../constants";
+import { createOpenGraphImage } from "../response";
 
 function Component({ code }: { code: string }) {
   return (
@@ -10,6 +10,7 @@ function Component({ code }: { code: string }) {
         width: "100%",
         height: "100%",
         color: "white",
+        fontFamily: "Geist",
         padding: "60px",
         justifyContent: "space-between",
         backgroundImage: "linear-gradient(90deg, #000 70%, #fff 100%)",
@@ -35,10 +36,6 @@ function Component({ code }: { code: string }) {
   );
 }
 
-export function generateEditorCodeImage(code: string) {
-  return new ImageResponse(<Component code={code} />, {
-    module: import("@takumi-rs/wasm/next"),
-    width: 1200,
-    height: 630,
-  });
+export function generateEditorCodeImage(code: string, font: ArrayBuffer) {
+  return createOpenGraphImage(<Component code={code} />, font);
 }

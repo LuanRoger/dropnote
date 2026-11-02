@@ -1,4 +1,4 @@
-import { ImageResponse } from "@takumi-rs/image-response/wasm";
+import { createOpenGraphImage } from "../response";
 
 function Component() {
   return (
@@ -11,6 +11,7 @@ function Component() {
         width: "100%",
         height: "100%",
         color: "white",
+        fontFamily: "Geist",
         backgroundColor: "black",
       }}
     >
@@ -43,10 +44,6 @@ function Component() {
   );
 }
 
-export function generateHomeImage() {
-  return new ImageResponse(<Component />, {
-    module: import("@takumi-rs/wasm/next"),
-    width: 1200,
-    height: 630,
-  });
+export function generateHomeImage(font: ArrayBuffer) {
+  return createOpenGraphImage(<Component />, font);
 }
