@@ -2,7 +2,7 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "main": ".open-next/worker.js",
   "name": "dropnote-app",
-  "compatibility_date": "2026-11-01",
+  "compatibility_date": "2026-10-30",
   "compatibility_flags": [
     "nodejs_compat",
     "global_fetch_strictly_public",
