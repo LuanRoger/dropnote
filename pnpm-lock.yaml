@@ -185,15 +185,15 @@ importers:
 
   packages/database:
     dependencies:
-      '@t3-oss/env-nextjs':
-        specifier: ^0.13.11
-        version: 0.13.11(arktype@2.1.20)(typescript@6.0.2)(zod@4.6.7)
       mongoose:
         specifier: ^9.11.4
         version: 9.11.4(socks@2.8.7)
       server-only:
         specifier: ^0.0.1
         version: 0.0.1
+      varlock:
+        specifier: ^1.24.0
+        version: 1.24.0
       zod:
         specifier: ^4.6.7
         version: 4.6.7
@@ -12523,24 +12523,10 @@ snapshots:
     dependencies:
       tslib: 2.9.1
 
-  '@t3-oss/env-core@0.13.11(arktype@2.1.20)(typescript@6.0.2)(zod@4.6.7)':
-    optionalDependencies:
-      arktype: 2.1.20
-      typescript: 6.0.2
-      zod: 4.6.7
-
   '@t3-oss/env-core@0.13.11(arktype@2.1.20)(typescript@6.0.3)(zod@4.6.7)':
     optionalDependencies:
       arktype: 2.1.20
       typescript: 6.0.3
-      zod: 4.6.7
-
-  '@t3-oss/env-nextjs@0.13.11(arktype@2.1.20)(typescript@6.0.2)(zod@4.6.7)':
-    dependencies:
-      '@t3-oss/env-core': 0.13.11(arktype@2.1.20)(typescript@6.0.2)(zod@4.6.7)
-    optionalDependencies:
-      arktype: 2.1.20
-      typescript: 6.0.2
       zod: 4.6.7
 
   '@t3-oss/env-nextjs@0.13.11(arktype@2.1.20)(typescript@6.0.3)(zod@4.6.7)':
