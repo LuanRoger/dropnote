@@ -3,6 +3,7 @@ packages:
   - packages/*
 
 onlyBuiltDependencies:
+  - bufferutil
   - core-js
   - esbuild
   - msw
@@ -10,4 +11,4 @@ onlyBuiltDependencies:
   - workerd
 
 overrides:
-  "@next/env": "npm:@varlock/nextjs-integration"
+  '@next/env': npm:@varlock/nextjs-integration
