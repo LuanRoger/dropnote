@@ -49,27 +49,35 @@ function CharactersBlockCount() {
     <div className="flex items-center gap-2 font-mono upercase">
       <HoverCard>
         <HoverCardTrigger>
-          <AnimatePresence initial={false} mode="popLayout">
-            <motion.span
-              key={`textLenght-${textLenght}`}
-              initial={{ y: 10, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              exit={{ y: 10, opacity: 0 }}
-              transition={{ duration: 0.22, ease: "easeOut" }}
-            >
-              {textLenght}
-            </motion.span>
-            <span>:</span>
-            <motion.span
-              key={`nodeCount-${nodeCount}`}
-              initial={{ y: 10, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              exit={{ y: 10, opacity: 0 }}
-              transition={{ duration: 0.22, ease: "easeOut" }}
-            >
-              {nodeCount}
-            </motion.span>
-          </AnimatePresence>
+          <span className="relative inline-block">
+            <AnimatePresence initial={false} mode="popLayout">
+              <motion.span
+                className="inline-block"
+                key={`textLenght-${textLenght}`}
+                initial={{ y: 10, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ y: 10, opacity: 0 }}
+                transition={{ duration: 0.22, ease: "easeOut" }}
+              >
+                {textLenght}
+              </motion.span>
+            </AnimatePresence>
+          </span>
+          <span>:</span>
+          <span className="relative inline-block">
+            <AnimatePresence initial={false} mode="popLayout">
+              <motion.span
+                className="inline-block"
+                key={`nodeCount-${nodeCount}`}
+                initial={{ y: 10, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ y: 10, opacity: 0 }}
+                transition={{ duration: 0.22, ease: "easeOut" }}
+              >
+                {nodeCount}
+              </motion.span>
+            </AnimatePresence>
+          </span>
         </HoverCardTrigger>
         <HoverCardContent side="top" align="start">
           <p className="flex flex-col">
