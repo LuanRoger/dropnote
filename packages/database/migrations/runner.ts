@@ -1,22 +1,17 @@
 import "dotenv/config";
 import mongoose from "mongoose";
-import { keys } from "../keys";
 import limits from "./1-limits";
-import ownerEmail from "./2-owner-email";
+import { ENV } from "varlock/env";
 
 type Migration = {
   name: string;
   fn: (db: mongoose.mongo.Db) => Promise<void>;
 };
 
-const migrations: Migration[] = [
-  { name: "1-limits", fn: limits },
-  { name: "2-owner-email", fn: ownerEmail },
-];
+const migrations: Migration[] = [{ name: "1-limits", fn: limits }];
 
 async function runner() {
-  const env = keys();
-  const { DATABASE_URL } = env;
+  const { DATABASE_URL } = ENV;
 
   console.log("🔌 Connecting to database...");
   await mongoose.connect(DATABASE_URL);

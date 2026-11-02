@@ -262,7 +262,7 @@ export const initialize = async (options: {
     s.stop("Project initialized successfully!");
 
     outro(
-      "Please make sure you install the Mintlify CLI and Stripe CLI before starting the project."
+      "Please make sure you install the Mintlify CLI before starting the project."
     );
   } catch (error) {
     const message =

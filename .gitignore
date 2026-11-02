@@ -65,6 +65,11 @@ yarn-error.log*
 # vercel
 .vercel
 
+# cloudflare
+.dev.*
+.open-next/
+.wrangler
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
@@ -267,8 +272,6 @@ $RECYCLE.BIN/
 # Database
 packages/database/generated
 
-# react.email
-.react-email
 
 # Sentry
 .sentryclirc

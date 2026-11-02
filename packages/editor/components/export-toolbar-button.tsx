@@ -9,6 +9,7 @@ import type { SlatePlugin } from "platejs";
 import { createSlateEditor } from "platejs";
 import { useEditorRef } from "platejs/react";
 import { serializeHtml } from "platejs/static";
+import { ENV } from "varlock/env";
 
 import {
   DropdownMenu,
@@ -22,7 +23,6 @@ import { StaticEditorKit } from "../kits/static-editor-kit";
 import { EditorStatic } from "./editor-static";
 import { ToolbarButton } from "./toolbar";
 import { DocxExportKit } from "../plugins/docx-export-kit";
-import { keys as env } from "../keys";
 
 const fileName = "dropnote";
 
@@ -121,7 +121,7 @@ export function ExportToolbarButton(
       props: { style: { padding: "0 calc(50% - 350px)", paddingBottom: "" } },
     });
 
-    const siteUrl = env().NEXT_PUBLIC_APP_URL;
+    const siteUrl = ENV.NEXT_PUBLIC_APP_URL;
     const tailwindCss = `<link rel="stylesheet" href="${siteUrl}/tailwind.css">`;
     const katexCss = `<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.18/dist/katex.css" integrity="sha384-9PvLvaiSKCPkFKB1ZsEoTjgnJn+O3KvEwtsz37/XrkYft3DTk2gHdYvd9oWgW3tV" crossorigin="anonymous">`;
 

@@ -1,23 +1,26 @@
 /** biome-ignore-all lint/suspicious/noExplicitAny: The body of the note can be any, since we don't know the structure of the note */
-import { ensureConnected } from "../client";
-import { type NoteModel, Notes } from "../schemas/notes";
+import type { Model } from "mongoose";
+import { withDatabaseConnection } from "../client";
+import { getNotesModel, type NoteModel } from "../schemas/notes";
 
-export async function getNoteByCode(code: string): Promise<NoteModel | null> {
-  await ensureConnected();
-
-  const note = await Notes.findOne({ code }).lean();
-
-  return note;
+async function withNotes<T>(
+  operation: (notes: Model<NoteModel>) => Promise<T>
+): Promise<T> {
+  return withDatabaseConnection(async (connection) => {
+    const notes = getNotesModel(connection);
+    await notes.init();
+    return await operation(notes);
+  });
 }
 
-export async function getNotePasswordByCode(
-  code: string,
-): Promise<string | null> {
-  await ensureConnected();
-
-  const note = await Notes.findOne({ code }).select("password").lean();
-
-  return note?.password || null;
+export async function getNoteByCode(code: string): Promise<NoteModel | null> {
+  return withNotes(async (notes) => {
+    return await notes.findOne({ code })
+      .select(
+        "code body isPermanent hasExtendedLimit aiCredits badges expireAt createdAt updatedAt"
+      )
+      .lean();
+  });
 }
 
 export async function createNote(data: {
@@ -33,55 +36,44 @@ export async function createNote(data: {
   hasExtendedLimit?: boolean;
   expireAt?: Date;
 }): Promise<NoteModel> {
-  await ensureConnected();
-
-  const created = await Notes.create(data);
-
-  const obj = created.toObject<NoteModel>();
-
-  return obj;
+  return withNotes(async (notes) => {
+    const created = await notes.create(data);
+    return created.toObject<NoteModel>();
+  });
 }
 
 export async function updateNote(code: string, body: any) {
-  await ensureConnected();
-
-  await Notes.updateOne({ code }, { body });
+  await withNotes(async (notes) => {
+    await notes.updateOne({ code }, { body });
+  });
 }
 
 export async function createOrUpdateNoteBody(code: string, body: any) {
-  await ensureConnected();
-
-  const note = await Notes.findOne({ code }).lean();
-  if (note) {
-    await Notes.updateOne({ code }, { body });
-  } else {
-    await Notes.create({ code, body });
-  }
-}
-
-export async function setPasswordForNote(code: string, password: string) {
-  await ensureConnected();
-
-  await Notes.updateOne({ code }, { password, hasPassword: true });
+  await withNotes(async (notes) => {
+    const note = await notes.findOne({ code })
+      .select(
+        "code body isPermanent hasExtendedLimit aiCredits badges expireAt createdAt updatedAt"
+      )
+      .lean();
+    if (note) {
+      await notes.updateOne({ code }, { body });
+    } else {
+      await notes.create({ code, body });
+    }
+  });
 }
 
 export async function setNoteAsPermanent(code: string) {
-  await ensureConnected();
-
-  await Notes.updateOne({ code }, { isPermanent: true, expireAt: null });
+  await withNotes(async (notes) => {
+    await notes.updateOne({ code }, { isPermanent: true, expireAt: null });
+  });
 }
 
 export async function setExtendedLimitForNote(
   code: string,
-  hasExtendedLimit: boolean,
+  hasExtendedLimit: boolean
 ) {
-  await ensureConnected();
-
-  await Notes.updateOne({ code }, { hasExtendedLimit });
-}
-
-export async function updateOwnerForNote(code: string, ownerEmail: string) {
-  await ensureConnected();
-
-  await Notes.updateOne({ code }, { ownerEmail });
+  await withNotes(async (notes) => {
+    await notes.updateOne({ code }, { hasExtendedLimit });
+  });
 }

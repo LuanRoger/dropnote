@@ -1,5 +1,6 @@
 import { generateHomeImage } from "@repo/seo/opengraph/images/home";
+import { loadImageFont } from "@/lib/image-font";
 
-export default function Image() {
-  return generateHomeImage();
+export default async function Image() {
+  return generateHomeImage(await loadImageFont());
 }

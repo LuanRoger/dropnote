@@ -10,7 +10,6 @@ Structure of how project files are setup. Making changes to files should be in t
 | api       | Contains serverless functions designed to run separately from the main app e.g. webhooks and cron jobs. |
 | app       | The main application, featuring a shadcn/ui template.                      |
 | docs      | The documentation, which contains the documentation for the app e.g. guides and tutorials. |
-| email     | The email preview server from react.email.                                 |
 | storybook | The storybook, which contains the storybook for the app.                   |
 | studio    | Prisma Studio, which is a graphical editor for the database.              |
 | web       | The website, featuring a twblocks template.                                |

@@ -9,6 +9,7 @@ import { BlockSelection } from "../components/block-selection";
 export const BlockSelectionKit = [
   BlockSelectionPlugin.configure(({ editor }) => ({
     options: {
+      disableSelectAll: true,
       enableContextMenu: true,
       isSelectable: (element) =>
         !getPluginTypes(editor, [KEYS.column, KEYS.codeLine, KEYS.td]).includes(

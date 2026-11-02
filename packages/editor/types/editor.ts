@@ -5,13 +5,12 @@ export type ColaborationOptions = {
   color: string;
   roomName: string;
   wssUrl: string;
-  token: string;
+  token: string | (() => Promise<string>);
 };
 
 export type EditorOptions = {
   maxLength: number;
   expireAt: Date | null;
   colabration?: ColaborationOptions;
-  upgradeButtonHref?: string;
   badges?: Badge[];
 };

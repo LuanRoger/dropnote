@@ -10,9 +10,7 @@ export default async function migrate(db: mongo.Db): Promise<void> {
     {
       $set: {
         isPermanent: false,
-        hasPassword: false,
         hasExtendedLimit: false,
-        password: null,
         aiCredits: 0,
         badges: [],
       },

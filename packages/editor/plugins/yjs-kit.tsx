@@ -15,7 +15,7 @@ export const YjsKit = ({
   color: string;
   roomName: string;
   wssUrl: string;
-  token: string;
+  token: string | (() => Promise<string>);
 }): AnyPluginConfig[] => [
   YjsPlugin.configure({
     render: {

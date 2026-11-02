@@ -1,3 +1,13 @@
 packages:
-  - "apps/*"
-  - "packages/*"
+  - apps/*
+  - packages/*
+
+onlyBuiltDependencies:
+  - core-js
+  - esbuild
+  - msw
+  - sharp
+  - workerd
+
+overrides:
+  "@next/env": "npm:@varlock/nextjs-integration"
