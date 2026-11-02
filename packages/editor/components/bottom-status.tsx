@@ -135,12 +135,12 @@ function NoteExpireAt({ expireAt }: NoteExpireAtProps) {
 
 function FeatureBadge({
   label,
-  isSpecial,
+  isSpecial: _isSpecial,
   style,
 }: BadgeType & { style?: CSSProperties }) {
   return (
     <Badge
-      variant={isSpecial ? "special" : "default"}
+      variant={"default"}
       className={`text-white font-mono uppercase ring-2 ring-background hover:z-10 transition-transform hover:scale-105`}
       style={style}
     >
