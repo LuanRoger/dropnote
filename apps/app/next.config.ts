@@ -3,7 +3,7 @@ import type { NextConfig } from "next";
 
 let nextConfig: NextConfig = {
   ...config,
-  serverExternalPackages: ["mongoose", "@takumi-rs/image-response"],
+  serverExternalPackages: ["mongoose"],
 };
 
 export default withVarlock(nextConfig);

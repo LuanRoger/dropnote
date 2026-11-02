@@ -1,4 +1,4 @@
-import { ImageResponse } from "@takumi-rs/image-response";
+import { ImageResponse } from "@takumi-rs/image-response/wasm";
 import { productionUrl } from "../../constants";
 
 function Component({ code }: { code: string }) {
@@ -37,6 +37,7 @@ function Component({ code }: { code: string }) {
 
 export function generateEditorCodeImage(code: string) {
   return new ImageResponse(<Component code={code} />, {
+    module: import("@takumi-rs/wasm/next"),
     width: 1200,
     height: 630,
   });

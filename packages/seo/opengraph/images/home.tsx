@@ -1,4 +1,4 @@
-import ImageResponse from "@takumi-rs/image-response";
+import { ImageResponse } from "@takumi-rs/image-response/wasm";
 
 function Component() {
   return (
@@ -45,6 +45,7 @@ function Component() {
 
 export function generateHomeImage() {
   return new ImageResponse(<Component />, {
+    module: import("@takumi-rs/wasm/next"),
     width: 1200,
     height: 630,
   });

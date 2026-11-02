@@ -35,4 +35,4 @@ export const config: NextConfig = {
   skipTrailingSlashRedirect: true,
 };
 
-export const withVarlock = varlockNextConfigPlugin();
+export const withVarlock = varlockNextConfigPlugin({ freezeIntoBundle: true });
