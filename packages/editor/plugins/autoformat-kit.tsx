@@ -1,8 +1,12 @@
 'use client';
 
+import { BlockquoteRules } from '@platejs/basic-nodes';
+import { insertEmptyCodeBlock } from '@platejs/code-block';
+import { BulletedListRules, OrderedListRules, TaskListRules } from '@platejs/list';
 import type { SlateEditor } from 'platejs';
 
 import {
+  createBlockStartInputRule,
   createSlatePlugin,
   createTextSubstitutionInputRule,
   KEYS,
@@ -105,6 +109,8 @@ const operatorsRule = createAutoformatTextSubstitutionRule({
 
 const punctuationRule = createAutoformatTextSubstitutionRule({
   patterns: [
+    { format: '—', match: '--' },
+    { format: '…', match: '...' },
     { format: '»', match: '>>' },
     { format: '«', match: '<<' },
   ],
@@ -162,9 +168,60 @@ const superscriptSymbolsRule = createAutoformatTextSubstitutionRule({
   ],
 });
 
+// Plate v53 removed the legacy AutoformatPlugin rules. Keep the historical
+// block shortcuts here alongside text substitutions, using explicit input rules.
+const blockRules = [
+  ...KEYS.heading.map((node, index) =>
+    createBlockStartInputRule({
+      enabled: ({ editor }) => !isTextSubstitutionBlocked(editor),
+      match: '#'.repeat(index + 1),
+      node,
+      trigger: ' ',
+    })
+  ),
+  BlockquoteRules.markdown(),
+  createBlockStartInputRule({
+    enabled: ({ editor }) => !isTextSubstitutionBlocked(editor),
+    match: '``',
+    trigger: '`',
+    priority: 100,
+    apply: ({ editor }, match) => {
+      editor.tf.delete({ at: match.range });
+      insertEmptyCodeBlock(editor, {
+        defaultType: KEYS.p,
+        insertNodesOptions: { select: true },
+      });
+      return true;
+    },
+  }),
+  ...[
+    { match: /^(--|—)$/, trigger: '-' },
+    { match: '___', trigger: ' ' },
+  ].map(({ match, trigger }) =>
+    createBlockStartInputRule({
+      enabled: ({ editor }) => !isTextSubstitutionBlocked(editor),
+      match,
+      trigger,
+      apply: ({ editor }, match) => {
+        editor.tf.delete({ at: match.range });
+        editor.tf.setNodes({ type: editor.getType(KEYS.hr) });
+        editor.tf.insertNodes({ children: [{ text: '' }], type: editor.getType(KEYS.p) });
+        return true;
+      },
+    })
+  ),
+  BulletedListRules.markdown({ variant: '*' }),
+  BulletedListRules.markdown({ variant: '-' }),
+  OrderedListRules.markdown({ variant: '.' }),
+  OrderedListRules.markdown({ variant: ')' }),
+  TaskListRules.markdown({ checked: false }),
+  TaskListRules.markdown({ checked: true }),
+];
+
 const AutoformatShortcutsPlugin = createSlatePlugin({
   key: 'autoformatShortcuts',
   inputRules: [
+    ...blockRules,
     legalRule,
     legalHtmlRule,
     arrowsRule,

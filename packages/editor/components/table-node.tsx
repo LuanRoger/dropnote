@@ -1273,7 +1273,7 @@ function RowDropLine() {
   return (
     <div
       className={cn(
-        'absolute inset-x-0 left-2 z-50 h-0.5 bg-brand/50',
+        'absolute inset-x-0 left-2 z-50 h-0.5 bg-primary/50',
         dropLine === 'top' ? '-top-px' : '-bottom-px'
       )}
     />
