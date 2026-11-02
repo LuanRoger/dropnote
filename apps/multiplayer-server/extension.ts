@@ -6,7 +6,7 @@ import type {
   onConnectPayload,
   onDisconnectPayload,
 } from "@hocuspocus/server";
-import { isAuthValid } from "./utils/auth";
+import { isRoomTokenValid } from "./utils/tokens";
 
 export class DropnoteMultiplayerServerExtension implements Extension {
   private readonly apiKey: string;
@@ -23,9 +23,13 @@ export class DropnoteMultiplayerServerExtension implements Extension {
     return Promise.resolve();
   }
 
-  onAuthenticate(data: onAuthenticatePayload): Promise<void> {
+  async onAuthenticate(data: onAuthenticatePayload): Promise<void> {
     const { token } = data;
-    const isAuthenticated = isAuthValid(this.apiKey, token);
+    const isAuthenticated = await isRoomTokenValid(
+      this.apiKey,
+      data.documentName,
+      token
+    );
 
     if (isAuthenticated) {
       console.log(
@@ -35,7 +39,7 @@ export class DropnoteMultiplayerServerExtension implements Extension {
     }
 
     console.log(`❌ Authentication failed for room: ${data.documentName}`);
-    throw new Error("Invalid API key.");
+    throw new Error("Invalid or expired room token.");
   }
 
   beforeHandleMessage(data: beforeHandleMessagePayload): Promise<void> {

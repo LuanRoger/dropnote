@@ -7,8 +7,8 @@ import { getServerConfig } from "./config";
 import { DropnoteMultiplayerServerExtension } from "./extension";
 import { isAuthValid } from "./utils/auth";
 import { getRoomUserCount } from "./utils/documents";
-
-const serverName = "dropnote-multiplayer-server";
+import { createRoomToken } from "./utils/tokens";
+import { ROOM_ROUTE_PATTERN, SERVER_NAME } from "./constants";
 
 export class MultiplayerServer extends DurableObject<Cloudflare.Env> {
   private readonly server: Hocuspocus;
@@ -18,7 +18,7 @@ export class MultiplayerServer extends DurableObject<Cloudflare.Env> {
     super(ctx, env);
 
     this.server = new Hocuspocus({
-      name: serverName,
+      name: SERVER_NAME,
       timeout: this.config.TIMEOUT,
       debounce: this.config.DEBOUNCE,
       maxDebounce: this.config.MAX_DEBOUNCE,
@@ -38,16 +38,17 @@ export class MultiplayerServer extends DurableObject<Cloudflare.Env> {
       return this.handleWebSocket(request);
     }
 
-    const roomPath = new URL(request.url).pathname.match(
-      /^\/rooms\/([^/]+)$/
-    )?.[1];
+    const route = new URL(request.url).pathname.match(ROOM_ROUTE_PATTERN);
+    const roomPath = route?.[1];
+    const isTokenRequest = route?.[2] === "/token";
     if (!roomPath) {
       return new Response("Not found", { status: 404 });
     }
-    if (request.method !== "GET") {
+    const allowedMethod = isTokenRequest ? "POST" : "GET";
+    if (request.method !== allowedMethod) {
       return new Response("Method not allowed", {
         status: 405,
-        headers: { Allow: "GET" },
+        headers: { Allow: allowedMethod },
       });
     }
     if (
@@ -66,6 +67,14 @@ export class MultiplayerServer extends DurableObject<Cloudflare.Env> {
       return new Response("Invalid room name", { status: 400 });
     }
 
+    if (isTokenRequest) {
+      const token = await createRoomToken(this.config.API_KEY, room);
+      return Response.json(
+        { token },
+        { headers: { "Cache-Control": "no-store" } }
+      );
+    }
+
     const count = getRoomUserCount(this.server, room);
     const maxUsers = this.config.MAX_USERS_PER_ROOM;
     return Response.json(
@@ -77,8 +86,6 @@ export class MultiplayerServer extends DurableObject<Cloudflare.Env> {
   private handleWebSocket(request: Request): Response {
     const pair = new WebSocketPair();
     const [client, socket] = [pair[0], pair[1]];
-
-    // Throttle uses x-real-ip, not Cloudflare's trusted client IP header.
     const headers = new Headers(request.headers);
     headers.set(
       "x-real-ip",
@@ -86,8 +93,6 @@ export class MultiplayerServer extends DurableObject<Cloudflare.Env> {
     );
     const connectionRequest = new Request(request, { headers });
 
-    // Hocuspocus keeps live document/connection state, so use standard sockets,
-    // not the Durable Object hibernation API.
     socket.binaryType = "arraybuffer";
     socket.accept();
     const connection = this.server.handleConnection(socket, connectionRequest);
@@ -130,15 +135,10 @@ export default {
   fetch(request, env) {
     const isWebSocket =
       request.headers.get("Upgrade")?.toLowerCase() === "websocket";
-    if (
-      !isWebSocket &&
-      !/^\/rooms\/[^/]+$/.test(new URL(request.url).pathname)
-    ) {
+    if (!isWebSocket && !ROOM_ROUTE_PATTERN.test(new URL(request.url).pathname)) {
       return new Response("Not found", { status: 404 });
     }
 
-    // A single shared instance preserves the existing URL and Hocuspocus
-    // multiplexing: document names are carried in frames, not in the URL.
-    return env.MULTIPLAYER.getByName(serverName).fetch(request);
+    return env.MULTIPLAYER.getByName(SERVER_NAME).fetch(request);
   },
 } satisfies ExportedHandler<Cloudflare.Env>;

@@ -39,7 +39,17 @@ Point the app at this Worker:
 - `HOCUSPOCUS_API_URL`: the same Worker's HTTP URL (`https://` in production, `http://` locally).
 - `HOCUSPOCUS_API_KEY`: the same value as this server's `API_KEY`.
 
-WebSocket upgrades still work at the existing base URL. Authentication still uses the Hocuspocus provider's `token`. `GET /rooms/:id` still requires the `api-key` header and returns `{ room, count, maxUsers, isFull }`; its responses are not cacheable. Counts represent document connections, not unique people.
+WebSocket upgrades still work at the existing base URL. `GET /rooms/:id` requires the `api-key` header and returns `{ room, count, maxUsers, isFull }`; its responses are not cacheable. Counts represent document connections, not unique people.
+
+### Authentication
+
+`API_KEY` / `HOCUSPOCUS_API_KEY` is a **server-to-server secret**. Never pass it to a client component or use it directly as the Hocuspocus provider's token. Keep it sensitive in Varlock.
+
+The app passes a bound server action as the provider's async `token` callback. On authentication/reconnect, that action validates the note code and calls `POST /rooms/:id/token` with the secret in the `api-key` header. The endpoint returns `{ token }` with `Cache-Control: no-store`.
+
+WebSocket tokens are HMAC-SHA256 signed, valid for five minutes, and restricted to one room. Only the scoped token reaches the browser; it cannot authorize HTTP API requests or another room. Expiration is checked when authenticating, not used to disconnect an already authenticated editor. The callback obtains a fresh token on reconnect.
+
+Deploy/restart the app and multiplayer server together for this change: raw API keys are no longer accepted as WebSocket credentials. Both servers still use the same existing secret; no additional environment variables are required. Rotate that secret if it was exposed by the previous client-prop implementation.
 
 All requests route to **one named Durable Object** so every Worker instance sees the same rooms. This deliberately preserves the existing URL and multiplexing behavior: Hocuspocus document names are carried inside protocol frames, not the request path. A per-room Durable Object design would require room-specific client URLs and rejecting frames for other rooms; this migration does not introduce that client/protocol change.
 
@@ -56,9 +66,9 @@ All requests route to **one named Durable Object** so every Worker instance sees
 ```sh
 pnpm --filter multiplayer-server typecheck
 pnpm --filter multiplayer-server build
-pnpm --filter multiplayer-server test
+pnpm --filter multiplayer-server test:auth
 ```
 
 `typecheck` generates Worker/runtime declarations before running TypeScript. Generated `worker-configuration.d.ts` and `.wrangler` state are ignored. `build` bundles with `wrangler deploy --dry-run` and does not upload or deploy.
 
-The Node test runner uses Wrangler's local Workers runtime, a synthetic resolved Varlock environment, and no Cloudflare account. Tests cover HTTP authentication/routing, WebSocket authentication, document updates shared between clients, multiplexing, connection counts, disconnect cleanup, and rejection of text frames.
+The authentication tests use the Node test runner, Wrangler's local Workers runtime, a synthetic resolved Varlock environment, and no Cloudflare account. They cover token issuance, expiration, signature tampering, malformed claims, backend-only token creation, and WebSocket rejection of raw master keys and tokens for other rooms.
