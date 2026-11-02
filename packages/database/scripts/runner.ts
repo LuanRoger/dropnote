@@ -1,7 +1,7 @@
 import "dotenv/config";
 import mongoose from "mongoose";
-import { keys } from "../keys";
 import betaNotes from "./1-beta-notes";
+import { ENV } from "varlock/env";
 
 type Script = {
   name: string;
@@ -11,8 +11,7 @@ type Script = {
 const scripts: Script[] = [{ name: "1-beta-notes", fn: betaNotes }];
 
 async function runner() {
-  const env = keys();
-  const { DATABASE_URL } = env;
+  const { DATABASE_URL } = ENV;
 
   console.log("🔌 Connecting to database...");
   await mongoose.connect(DATABASE_URL);

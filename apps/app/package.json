@@ -22,7 +22,6 @@
     "@repo/next-config": "workspace:*",
     "@repo/product": "workspace:*",
     "@repo/seo": "workspace:*",
-    "@t3-oss/env-nextjs": "^0.13.11",
     "@varlock/nextjs-integration": "^2.0.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

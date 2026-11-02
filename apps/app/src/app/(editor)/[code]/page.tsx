@@ -2,7 +2,10 @@ import type { ColaborationOptions } from "@repo/editor/types/editor";
 import { createMetadata } from "@repo/seo/metadata";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { checkNoteMultiplayerAccess } from "@/app/actions/multiplayer-server";
+import {
+  checkNoteMultiplayerAccess,
+  getNoteMultiplayerToken,
+} from "@/app/actions/multiplayer-server";
 import RichEditorShell from "@/components/rich-editor-shell";
 import { MAX_LENGHT_ADVANCED_NOTE, MAX_LENGHT_BASIC_NOTE } from "@/constants";
 import { NotesDatabaseLoadSource } from "@/lib/sources/notes";
@@ -44,7 +47,6 @@ export default async function Page({ params }: PageProps) {
   }
 
   const multiplayerServerWssUrl = env.HOCUSPOCUS_WSS_URL;
-  const multiplayerServerApiKey = env.HOCUSPOCUS_API_KEY;
 
   const loader = new NotesDatabaseLoadSource(code);
   const note = await loader.loadNote();
@@ -56,16 +58,15 @@ export default async function Page({ params }: PageProps) {
   const expireAt = note.expireAt;
   const badges = mapNotePropertiesToBadges(note);
 
-  const colabration: ColaborationOptions | undefined =
-    multiplayerServerWssUrl && multiplayerServerApiKey
-      ? {
-          wssUrl: multiplayerServerWssUrl,
-          name: generateRandomName(),
-          color: generateRandomHexColor(),
-          roomName: code,
-          token: multiplayerServerApiKey,
-        }
-      : undefined;
+  const colabration: ColaborationOptions | undefined = multiplayerServerWssUrl
+    ? {
+        wssUrl: multiplayerServerWssUrl,
+        name: generateRandomName(),
+        color: generateRandomHexColor(),
+        roomName: code,
+        token: getNoteMultiplayerToken.bind(null, code),
+      }
+    : undefined;
 
   return (
     <RichEditorShell

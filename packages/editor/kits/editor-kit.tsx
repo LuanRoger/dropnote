@@ -13,7 +13,7 @@ type EditorKitOptions = {
     color: string;
     roomName: string;
     wssUrl: string;
-    token: string;
+    token: string | (() => Promise<string>);
   };
   bottomStatus?: {
     maxLength: number;
