@@ -445,9 +445,6 @@ importers:
       '@slate-yjs/react':
         specifier: ^1.1.0
         version: 1.1.0(@slate-yjs/core@1.0.2(slate@0.124.0)(yjs@13.6.33))(react@19.2.4)(slate-react@0.124.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(slate-dom@0.124.0(slate@0.124.0))(slate@0.124.0))(slate@0.124.0)(yjs@13.6.33)
-      '@t3-oss/env-nextjs':
-        specifier: ^0.13.11
-        version: 0.13.11(arktype@2.1.20)(typescript@6.0.3)(zod@4.6.7)
       '@udecode/cn':
         specifier: ^52.3.4
         version: 52.3.4(@types/react@19.3.0)(class-variance-authority@0.7.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(tailwind-merge@3.7.0)
@@ -538,6 +535,9 @@ importers:
       sonner:
         specifier: ^2.0.8
         version: 2.0.8(@types/react@19.3.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      varlock:
+        specifier: ^1.24.0
+        version: 1.24.0
       zod:
         specifier: ^4.6.7
         version: 4.6.7
@@ -601,14 +601,11 @@ importers:
   packages/product:
     dependencies:
       '@next/third-parties':
-        specifier: 16.4.3
-        version: 16.4.3(next@16.4.3(@opentelemetry/api@1.9.0)(@types/node@25.5.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(sass@1.51.0)(varlock@1.24.0))(react@19.3.1)
-      '@t3-oss/env-nextjs':
-        specifier: ^0.13.11
-        version: 0.13.11(arktype@2.1.20)(typescript@6.0.3)(zod@4.6.7)
+        specifier: 16.4.4
+        version: 16.4.4(next@16.4.3(@opentelemetry/api@1.9.0)(@types/node@25.5.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(sass@1.51.0)(varlock@1.24.0))(react@19.3.1)
       posthog-js:
-        specifier: ^1.444.0
-        version: 1.444.0(@types/react@19.3.0)(react@19.3.1)
+        specifier: ^1.444.1
+        version: 1.444.1(@types/react@19.3.0)(react@19.3.1)
       posthog-node:
         specifier: ^5.61.1
         version: 5.61.1(@opentelemetry/api@1.9.0)
@@ -618,6 +615,9 @@ importers:
       server-only:
         specifier: ^0.0.1
         version: 0.0.1
+      varlock:
+        specifier: ^1.24.0
+        version: 1.24.0
       zod:
         specifier: ^4.6.7
         version: 4.6.7
@@ -2603,8 +2603,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@next/third-parties@16.4.3':
-    resolution: {integrity: sha512-sBjXxFRJtW1UAnQT24vcevIvlvce6bOGXroL6+NVqoTMrb8bQvUgXkxACjbEO2rGKfFOzbq5CYjYQTBNK3vFiA==}
+  '@next/third-parties@16.4.4':
+    resolution: {integrity: sha512-dIdxOALEfAnOs2yU0RmYfHgz0SvlLbzp8QOL8+q7TcFWb24vwPsL7i+MLiHK1Drt7C3oecTczs5ysMoaZpY5iA==}
     peerDependencies:
       next: ^13.0.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
       react: ^18.2.0 || 19.0.0-rc-de68d2f4-20241204 || ^19.0.0
@@ -7303,8 +7303,8 @@ packages:
     resolution: {integrity: sha512-LJlKCCAUFKOuZxipUdYw1NzIITEsPcgyOG9LkvRJvuKj/bRzbuRY0ARXvL0pWGpsZvn8jku+LMep2eU0seHp8g==}
     engines: {node: ^10 || ^12 || >=14}
 
-  posthog-js@1.444.0:
-    resolution: {integrity: sha512-4m+QsAFi1h5Zt8eFq6ciJGD8bcLMt1P/O1cLlo26RrX5F4oMOIKZsNIlf1SIMZWlRNNCFemSpzn6HhwtkZMrnA==}
+  posthog-js@1.444.1:
+    resolution: {integrity: sha512-O8Bje+1x3hbbFgM/Me0f8GoJE1EnCG8RKpMysjT6cQZ5qnRgnst88Bviygn99yZzWD60QIFC7r196qdXOoEbaw==}
     peerDependencies:
       '@types/react': '>=16.8.0'
       react: '>=16.8.0'
@@ -10698,7 +10698,7 @@ snapshots:
   '@next/swc-win32-x64-msvc@16.4.3':
     optional: true
 
-  '@next/third-parties@16.4.3(next@16.4.3(@opentelemetry/api@1.9.0)(@types/node@25.5.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(sass@1.51.0)(varlock@1.24.0))(react@19.3.1)':
+  '@next/third-parties@16.4.4(next@16.4.3(@opentelemetry/api@1.9.0)(@types/node@25.5.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(sass@1.51.0)(varlock@1.24.0))(react@19.3.1)':
     dependencies:
       next: 16.4.3(@opentelemetry/api@1.9.0)(@types/node@25.5.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(sass@1.51.0)(varlock@1.24.0)
       react: 19.3.1
@@ -16137,7 +16137,7 @@ snapshots:
       picocolors: 1.1.1
       source-map-js: 1.2.2
 
-  posthog-js@1.444.0(@types/react@19.3.0)(react@19.3.1):
+  posthog-js@1.444.1(@types/react@19.3.0)(react@19.3.1):
     dependencies:
       '@posthog/browser-common': 0.10.2
       '@posthog/core': 1.62.0

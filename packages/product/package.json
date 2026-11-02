@@ -3,16 +3,17 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "env:codegen": "varlock codegen",
     "clean": "git clean -xdf .cache .turbo dist node_modules",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false"
   },
   "dependencies": {
-    "@next/third-parties": "16.4.3",
-    "@t3-oss/env-nextjs": "^0.13.11",
-    "posthog-js": "^1.444.0",
+    "@next/third-parties": "16.4.4",
+    "posthog-js": "^1.444.1",
     "posthog-node": "^5.61.1",
     "react": "19.3.1",
     "server-only": "^0.0.1",
+    "varlock": "^1.24.0",
     "zod": "^4.6.7"
   },
   "devDependencies": {

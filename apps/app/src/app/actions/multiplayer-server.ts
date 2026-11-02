@@ -1,13 +1,13 @@
 "use server";
 
+import { ENV } from "varlock/env";
 import { CheckMultiplayerAccessError } from "@/types/errors/multiplayer-server";
 import type { NoteRoomInformation } from "@/types/multiplayer-server";
 import { validateSlug } from "@/utils/slug";
-import { env } from "~/env";
 
 export async function checkNoteMultiplayerAccess(code: string) {
-  const apiUrl = env.HOCUSPOCUS_API_URL;
-  const apiKey = env.HOCUSPOCUS_API_KEY;
+  const apiUrl = ENV.HOCUSPOCUS_API_URL;
+  const apiKey = ENV.HOCUSPOCUS_API_KEY;
 
   const response = await fetch(`${apiUrl}/rooms/${code}`, {
     headers: {
@@ -28,10 +28,10 @@ export async function getNoteMultiplayerToken(code: string): Promise<string> {
   }
 
   const response = await fetch(
-    `${env.HOCUSPOCUS_API_URL}/rooms/${encodeURIComponent(code)}/token`,
+    `${ENV.HOCUSPOCUS_API_URL}/rooms/${encodeURIComponent(code)}/token`,
     {
       method: "POST",
-      headers: { "api-key": env.HOCUSPOCUS_API_KEY },
+      headers: { "api-key": ENV.HOCUSPOCUS_API_KEY },
       cache: "no-store",
     }
   );

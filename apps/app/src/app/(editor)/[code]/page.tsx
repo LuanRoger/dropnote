@@ -2,6 +2,7 @@ import type { ColaborationOptions } from "@repo/editor/types/editor";
 import { createMetadata } from "@repo/seo/metadata";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { ENV } from "varlock/env";
 import {
   checkNoteMultiplayerAccess,
   getNoteMultiplayerToken,
@@ -14,7 +15,6 @@ import { generateRandomHexColor } from "@/utils/color";
 import { generateRandomName } from "@/utils/name";
 import { mapNotePropertiesToBadges } from "@/utils/notes";
 import { validateSlug } from "@/utils/slug";
-import { env } from "~/env";
 
 type PageProps = {
   params: Promise<{
@@ -46,7 +46,7 @@ export default async function Page({ params }: PageProps) {
     throw new NoteRoomFullError(code);
   }
 
-  const multiplayerServerWssUrl = env.HOCUSPOCUS_WSS_URL;
+  const multiplayerServerWssUrl = ENV.HOCUSPOCUS_WSS_URL;
 
   const loader = new NotesDatabaseLoadSource(code);
   const note = await loader.loadNote();

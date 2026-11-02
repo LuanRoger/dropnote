@@ -3,7 +3,7 @@ import { Logger } from "@hocuspocus/extension-logger";
 import { Throttle } from "@hocuspocus/extension-throttle";
 import { Hocuspocus } from "@hocuspocus/server";
 import { DurableObject } from "cloudflare:workers";
-import { getServerConfig } from "./config";
+import { ENV } from "varlock/env";
 import { DropnoteMultiplayerServerExtension } from "./extension";
 import { isAuthValid } from "./utils/auth";
 import { getRoomUserCount } from "./utils/documents";
@@ -12,22 +12,22 @@ import { ROOM_ROUTE_PATTERN, SERVER_NAME } from "./constants";
 
 export class MultiplayerServer extends DurableObject<Cloudflare.Env> {
   private readonly server: Hocuspocus;
-  private readonly config = getServerConfig();
 
   constructor(ctx: DurableObjectState, env: Cloudflare.Env) {
     super(ctx, env);
+    const { API_KEY, TIMEOUT, DEBOUNCE, MAX_DEBOUNCE, MAX_USERS_PER_ROOM } = ENV;
 
     this.server = new Hocuspocus({
       name: SERVER_NAME,
-      timeout: this.config.TIMEOUT,
-      debounce: this.config.DEBOUNCE,
-      maxDebounce: this.config.MAX_DEBOUNCE,
+      timeout: TIMEOUT,
+      debounce: DEBOUNCE,
+      maxDebounce: MAX_DEBOUNCE,
       extensions: [
         new Throttle({ throttle: 10, banTime: 10 }),
         new Logger(),
         new DropnoteMultiplayerServerExtension(
-          this.config.API_KEY,
-          this.config.MAX_USERS_PER_ROOM
+          API_KEY,
+          MAX_USERS_PER_ROOM
         ),
       ],
     });
@@ -44,6 +44,7 @@ export class MultiplayerServer extends DurableObject<Cloudflare.Env> {
     if (!roomPath) {
       return new Response("Not found", { status: 404 });
     }
+
     const allowedMethod = isTokenRequest ? "POST" : "GET";
     if (request.method !== allowedMethod) {
       return new Response("Method not allowed", {
@@ -53,7 +54,7 @@ export class MultiplayerServer extends DurableObject<Cloudflare.Env> {
     }
     if (
       !isAuthValid(
-        this.config.API_KEY,
+        ENV.API_KEY,
         request.headers.get("api-key") ?? undefined
       )
     ) {
@@ -68,7 +69,7 @@ export class MultiplayerServer extends DurableObject<Cloudflare.Env> {
     }
 
     if (isTokenRequest) {
-      const token = await createRoomToken(this.config.API_KEY, room);
+      const token = await createRoomToken(ENV.API_KEY, room);
       return Response.json(
         { token },
         { headers: { "Cache-Control": "no-store" } }
@@ -76,7 +77,7 @@ export class MultiplayerServer extends DurableObject<Cloudflare.Env> {
     }
 
     const count = getRoomUserCount(this.server, room);
-    const maxUsers = this.config.MAX_USERS_PER_ROOM;
+    const { MAX_USERS_PER_ROOM: maxUsers } = ENV;
     return Response.json(
       { room, count, maxUsers, isFull: count >= maxUsers },
       { headers: { "Cache-Control": "no-store" } }
