@@ -1,4 +1,5 @@
 import { generateEditorCodeImage } from "@repo/seo/opengraph/images/editor-code";
+import { loadImageFont } from "@/lib/image-font";
 
 export default async function Image({
   params,
@@ -7,5 +8,5 @@ export default async function Image({
 }) {
   const { code } = await params;
 
-  return generateEditorCodeImage(code);
+  return generateEditorCodeImage(code, await loadImageFont());
 }

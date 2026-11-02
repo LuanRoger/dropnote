@@ -1,13 +1,11 @@
-import { readFile } from "node:fs/promises";
-import { join } from "node:path";
+
 import { ImageResponse } from "next/og";
+import { loadImageFont } from "@/lib/image-font";
 
 export const contentType = "image/png";
 
 export default async function Icon() {
-  const geistFont = await readFile(
-    join(process.cwd(), "public", "Geist-Bold.ttf")
-  );
+  const geistFont = await loadImageFont();
 
   return new ImageResponse(
     <div

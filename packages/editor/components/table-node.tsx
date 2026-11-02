@@ -1168,11 +1168,18 @@ export function TableRowElement({
   const { isDragging, nodeRef, previewRef, handleRef } = useDraggable({
     element,
     type: element.type,
-    canDropNode: ({ dragEntry, dropEntry }) =>
-      PathApi.equals(
-        PathApi.parent(dragEntry[1]),
-        PathApi.parent(dropEntry[1])
-      ),
+    canDropNode: ({ dragEntry, dropEntry }) => {
+      if (!dragEntry) {
+        return false;
+      }
+
+      const dragEntryPath = dragEntry[1];
+      const dropEntryPath = dropEntry[1];
+      return PathApi.equals(
+        PathApi.parent(dragEntryPath),
+        PathApi.parent(dropEntryPath)
+      );
+    },
     onDropHandler: (_, { dragItem }) => {
       const dragElement = (dragItem as { element: TElement }).element;
 
@@ -1266,7 +1273,7 @@ function RowDropLine() {
   return (
     <div
       className={cn(
-        'absolute inset-x-0 left-2 z-50 h-0.5 bg-brand/50',
+        'absolute inset-x-0 left-2 z-50 h-0.5 bg-primary/50',
         dropLine === 'top' ? '-top-px' : '-bottom-px'
       )}
     />

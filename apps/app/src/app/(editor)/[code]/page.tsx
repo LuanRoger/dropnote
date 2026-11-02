@@ -2,7 +2,11 @@ import type { ColaborationOptions } from "@repo/editor/types/editor";
 import { createMetadata } from "@repo/seo/metadata";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { checkNoteMultiplayerAccess } from "@/app/actions/multiplayer-server";
+import { ENV } from "varlock/env";
+import {
+  checkNoteMultiplayerAccess,
+  getNoteMultiplayerToken,
+} from "@/app/actions/multiplayer-server";
 import RichEditorShell from "@/components/rich-editor-shell";
 import { MAX_LENGHT_ADVANCED_NOTE, MAX_LENGHT_BASIC_NOTE } from "@/constants";
 import { NotesDatabaseLoadSource } from "@/lib/sources/notes";
@@ -11,7 +15,6 @@ import { generateRandomHexColor } from "@/utils/color";
 import { generateRandomName } from "@/utils/name";
 import { mapNotePropertiesToBadges } from "@/utils/notes";
 import { validateSlug } from "@/utils/slug";
-import { env } from "~/env";
 
 type PageProps = {
   params: Promise<{
@@ -43,8 +46,7 @@ export default async function Page({ params }: PageProps) {
     throw new NoteRoomFullError(code);
   }
 
-  const multiplayerServerWssUrl = env.HOCUSPOCUS_WSS_URL;
-  const multiplayerServerApiKey = env.HOCUSPOCUS_API_KEY;
+  const multiplayerServerWssUrl = ENV.HOCUSPOCUS_WSS_URL;
 
   const loader = new NotesDatabaseLoadSource(code);
   const note = await loader.loadNote();
@@ -56,16 +58,15 @@ export default async function Page({ params }: PageProps) {
   const expireAt = note.expireAt;
   const badges = mapNotePropertiesToBadges(note);
 
-  const colabration: ColaborationOptions | undefined =
-    multiplayerServerWssUrl && multiplayerServerApiKey
-      ? {
-          wssUrl: multiplayerServerWssUrl,
-          name: generateRandomName(),
-          color: generateRandomHexColor(),
-          roomName: code,
-          token: multiplayerServerApiKey,
-        }
-      : undefined;
+  const colabration: ColaborationOptions | undefined = multiplayerServerWssUrl
+    ? {
+        wssUrl: multiplayerServerWssUrl,
+        name: generateRandomName(),
+        color: generateRandomHexColor(),
+        roomName: code,
+        token: getNoteMultiplayerToken.bind(null, code),
+      }
+    : undefined;
 
   return (
     <RichEditorShell

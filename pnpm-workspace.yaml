@@ -7,3 +7,7 @@ onlyBuiltDependencies:
   - esbuild
   - msw
   - sharp
+  - workerd
+
+overrides:
+  "@next/env": "npm:@varlock/nextjs-integration"

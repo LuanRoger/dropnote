@@ -5,7 +5,7 @@ export type ColaborationOptions = {
   color: string;
   roomName: string;
   wssUrl: string;
-  token: string;
+  token: string | (() => Promise<string>);
 };
 
 export type EditorOptions = {

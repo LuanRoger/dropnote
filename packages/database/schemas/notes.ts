@@ -40,6 +40,11 @@ export const notesSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export const Notes =
-  (mongoose.models.Notes as mongoose.Model<NoteModel>) ||
-  mongoose.model<NoteModel>("Notes", notesSchema);
+export function getNotesModel(
+  connection: mongoose.Connection
+): mongoose.Model<NoteModel> {
+  return (
+    (connection.models.Notes as mongoose.Model<NoteModel>) ||
+    connection.model<NoteModel>("Notes", notesSchema)
+  );
+}
