@@ -8,7 +8,7 @@
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
-    "next": "16.4.4"
+    "next": "16.4.5"
   },
   "dependencies": {
     "@varlock/nextjs-integration": "^2.0.0",
